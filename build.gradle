@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+group 'org.codesai'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    useJUnitPlatform()
+}
+
+dependencies {
+    compile("com.sparkjava:spark-core:2.8.0")
+    compile("org.json:json:20090211")
+
+    // Testing
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.5.2")
+    testCompile("org.junit.jupiter:junit-jupiter-engine:5.5.2")
+    testCompile("io.rest-assured:rest-assured:3.0.2")
+    implementation("org.assertj:assertj-core:3.14.0")
+
+    // Dependencies to compile
+    compile("jakarta.xml.bind:jakarta.xml.bind-api:2.3.2")
+    compile("org.glassfish.jaxb:jaxb-runtime:2.3.2")
+}
