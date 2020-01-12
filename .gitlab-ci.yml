@@ -3,7 +3,8 @@ services:
   - docker:dind
 
 before_script:
-    - apk add -U make
+    - apk add -U make py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
+    - pip install docker-compose
 
 test:
   stage: test
