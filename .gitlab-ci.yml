@@ -2,6 +2,9 @@ image: docker:latest
 services:
   - docker:dind
 
+before_script:
+    - apk add -U make
+
 test:
   stage: test
   script:
