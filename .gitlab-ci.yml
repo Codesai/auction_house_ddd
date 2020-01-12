@@ -1,0 +1,8 @@
+image: docker:latest
+services:
+  - docker:dind
+
+test:
+  stage: test
+  script:
+    - make test
