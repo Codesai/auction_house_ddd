@@ -1,5 +1,6 @@
 package acceptance;
 
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ public class AuctionHouseApiShould {
     @BeforeAll
     static void startServer() {
         Routes();
+        RestAssured.baseURI = String.format("http://localhost:%s", PORT);
         awaitInitialization();
     }
 
@@ -27,7 +29,7 @@ public class AuctionHouseApiShould {
     public void return_an_okay_when_is_running_on_the_status_route() {
         given().
         when().
-            get(String.format("http://localhost:%s/status", PORT)).
+            get("/status").
         then().
             assertThat().
             statusCode(200).
