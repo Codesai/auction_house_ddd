@@ -1,9 +1,12 @@
 package acceptance;
 
 import io.restassured.RestAssured;
+import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDate;
 
 import static com.codesai.auction_house.infrastructure.Routing.PORT;
 import static com.codesai.auction_house.infrastructure.Routing.Routes;
@@ -35,4 +38,30 @@ public class AuctionHouseApiShould {
             statusCode(200).
             body(equalTo("OK"));
     }
+
+   @Test
+   public void create_a_new_auction() throws Exception {
+       String auctionJson = new JSONObject()
+               .put("item", new JSONObject()
+                        .put("name", "anyItem")
+                        .put("description", "anyDescription")
+               )
+               .put("price", new JSONObject()
+                       .put("init", 19.99)
+                       .put("buy", 99.99)
+               )
+               .put("endDate", LocalDate.now().plusDays(10))
+               .toString();
+
+       given().
+       when().
+            body(auctionJson).
+            post("/auction").
+       then().
+            assertThat().
+            statusCode(201).
+            header("Location", RestAssured.baseURI + "/auction/anyItem" );
+   }
+
+
 }
