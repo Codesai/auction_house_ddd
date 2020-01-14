@@ -1,0 +1,83 @@
+swagger: "2.0"
+info:
+  description: "API Description of an auction house crafted with DDD practices"
+  version: "1.0.0"
+  title: "Auction House DDD Style"
+host: "localhost:9001"
+basePath: "/api"
+tags:
+  - name: "auction"
+    description: "Every operation to operates with auctions"
+schemes:
+  - "http"
+paths:
+  /auction:
+    post:
+      tags:
+        - "auction"
+      summary: "Creates a new auction"
+      description: ""
+      operationId: "addPet"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Auction object that needs to be auctioned"
+          required: true
+          schema:
+            $ref: "#/definitions/Auction"
+      responses:
+        405:
+          description: "Invalid input"
+        201:
+          description: "Created."
+  /auction/{auction_id}:
+    get:
+      tags:
+        - "auction"
+      summary: "Finds auction by id"
+      operationId: "findAuctionById"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            items:
+              $ref: "#/definitions/Auction"
+        400:
+          description: "Invalid status value"
+definitions:
+  Auction:
+    type: "object"
+    required:
+      - item
+      - initial_bid
+      - end_date
+    properties:
+      item:
+        type: object
+        required:
+          - name
+        properties:
+          name:
+            type: string
+            example: "DDD. Tackling complexity in the heart of code. Eric Evans"
+          description:
+            type: string
+            example: "An insight book to understand how to express our code near to the domain of our business"
+      initial_bid:
+        type: number
+        example: 10.5
+      conquer_price:
+        type: number
+        example: 50
+      end_date:
+        type: string
+        example: 2020/06/24
+      minimum_overbidding_price:
+        type: number
+        example: 1
