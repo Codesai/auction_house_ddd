@@ -19,7 +19,7 @@ public class AuctionHouseApiShould {
     @BeforeAll
     static void startServer() {
         Routes();
-        RestAssured.baseURI = String.format("http://localhost:%s", PORT);
+        RestAssured.baseURI = String.format("http://localhost:%s/api/", PORT);
         awaitInitialization();
     }
 
@@ -32,7 +32,7 @@ public class AuctionHouseApiShould {
     public void return_an_okay_when_is_running_on_the_status_route() {
         given().
         when().
-            get("/status").
+            get("status").
         then().
             assertThat().
             statusCode(200).
@@ -56,11 +56,11 @@ public class AuctionHouseApiShould {
        given().
        when().
             body(auctionJson).
-            post("/auction").
+            post("auction").
        then().
             assertThat().
             statusCode(201).
-            header("Location", RestAssured.baseURI + "/auction/anyItem" );
+            header("Location", RestAssured.baseURI + "auction/anyItem" );
    }
 
 
