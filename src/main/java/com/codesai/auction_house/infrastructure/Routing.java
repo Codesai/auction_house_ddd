@@ -12,11 +12,6 @@ public class Routing {
         Spark.port(PORT);
 
         get("/status", (req, res) -> "OK");
-
-        post("/auction", (req, res) -> {
-            res.status(201);
-            res.header("Location", "http://localhost:9001/auction/anyItem");
-            return res;
-        });
+        post("/auction", AuctionHouseAPI::createAuction);
     }
 }
