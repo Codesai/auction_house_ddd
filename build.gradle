@@ -5,7 +5,7 @@ plugins {
 group 'org.codesai'
 version '1.0'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.11
 
 repositories {
     mavenCentral()
@@ -20,6 +20,7 @@ dependencies {
     compile("org.json:json:20090211")
 
     // Testing
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.2.4'
     testCompile("org.junit.jupiter:junit-jupiter-api:5.5.2")
     testCompile("org.junit.jupiter:junit-jupiter-engine:5.5.2")
     testCompile("io.rest-assured:rest-assured:3.0.2")
