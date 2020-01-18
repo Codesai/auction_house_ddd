@@ -32,6 +32,9 @@ paths:
       responses:
         422:
           description: "Invalid input"
+          schema:
+            items:
+              $ref: "#/definitions/ErrorResponse"
         201:
           description: "Created."
           headers:
@@ -55,7 +58,22 @@ paths:
               $ref: "#/definitions/Auction"
         400:
           description: "Invalid status value"
+
 definitions:
+  ErrorResponse:
+    type: "object"
+    required:
+      - name
+      - description
+    properties:
+      name:
+        type: string
+        example: invalid auction data
+        description: error name
+      description:
+        type: string
+        example: initial bid must be greater than conquer_price
+        description: a more detailed error description
   Auction:
     type: "object"
     required:
