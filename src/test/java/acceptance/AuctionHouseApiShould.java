@@ -6,11 +6,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
-
+import static matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
 import static com.codesai.auction_house.infrastructure.Routing.PORT;
 import static com.codesai.auction_house.infrastructure.Routing.Routes;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static spark.Spark.awaitInitialization;
 import static spark.Spark.awaitStop;
@@ -43,14 +43,13 @@ public class AuctionHouseApiShould {
    public void create_a_new_auction() throws Exception {
        String auctionJson = new JSONObject()
                .put("item", new JSONObject()
-                        .put("name", "anyItem")
-                        .put("description", "anyDescription")
+                        .put("name", "DDD. Tackling complexity in the heart of code. Eric Evans")
+                        .put("description", "An insight book to understand how to express our code near to the domain of our business")
                )
-               .put("price", new JSONObject()
-                       .put("init", 19.99)
-                       .put("buy", 99.99)
-               )
-               .put("endDate", LocalDate.now().plusDays(10))
+               .put("initial_bid", 10.5)
+               .put("conquer_price", 50)
+               .put("end_date", "2020/06/24")
+               .put("minimum_overbidding_price", 1)
                .toString();
 
        given().
@@ -60,8 +59,11 @@ public class AuctionHouseApiShould {
        then().
             assertThat().
             statusCode(201).
-            header("Location", RestAssured.baseURI + "auction/anyItem" );
+            header("Location", allOf(
+                    startsWith(RestAssured.baseURI + "auction/"),
+                    urlEndsWithValidUUID()
+            ));
    }
-
-
 }
+
+
