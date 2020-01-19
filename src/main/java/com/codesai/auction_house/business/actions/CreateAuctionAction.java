@@ -15,7 +15,7 @@ public class CreateAuctionAction {
         this.repository = repository;
     }
 
-    public UUID execute(CreateAuctionCommand command) {
+    public String execute(CreateAuctionCommand command) {
         final var auction = new Auction(
                 new Item(command.name, command.description),
                 money(command.initialBid),
@@ -24,6 +24,6 @@ public class CreateAuctionAction {
                 money(command.minimumOverbiddingPrice)
         );
         repository.save(auction);
-        return UUID.randomUUID();
+        return auction.id;
     }
 }

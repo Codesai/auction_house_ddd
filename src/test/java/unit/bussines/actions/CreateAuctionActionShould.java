@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -38,10 +39,11 @@ public class CreateAuctionActionShould {
                 expectedAuction.minimumOverbiddingPrice.amount
         );
 
-        new CreateAuctionAction(auctionRepository).execute(createAuctionCommand);
+        var actualId = new CreateAuctionAction(auctionRepository).execute(createAuctionCommand);
 
-        verify(auctionRepository).save(this.captor.capture());
-        assertIsTheSameAs(this.captor.getValue(), expectedAuction);
+        verify(auctionRepository).save(captor.capture());
+        assertThat(actualId.toString()).isEqualTo(captor.getValue().id);
+        assertIsTheSameAs(captor.getValue(), expectedAuction);
     }
 
     private Auction givenAnAuction() {
