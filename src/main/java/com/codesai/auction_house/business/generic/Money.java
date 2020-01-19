@@ -1,9 +1,6 @@
 package com.codesai.auction_house.business.generic;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-public class Money {
+public class Money extends ValueObject {
     public final double amount;
     private final Currency currency;
 
@@ -14,23 +11,5 @@ public class Money {
     private Money(double amount) {
         this.amount = amount;
         this.currency = Currency.EUR;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        return EqualsBuilder.reflectionEquals(this, o);
-    }
-
-    @Override
-    public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
-    }
-
-    @Override
-    public String toString() {
-        return "Money{" +
-                "amount=" + amount +
-                ", currency=" + currency +
-                '}';
     }
 }

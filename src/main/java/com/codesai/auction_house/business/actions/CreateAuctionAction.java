@@ -4,8 +4,6 @@ import com.codesai.auction_house.business.Auction;
 import com.codesai.auction_house.business.AuctionRepository;
 import com.codesai.auction_house.business.auction.Item;
 
-import java.util.UUID;
-
 import static com.codesai.auction_house.business.generic.Money.money;
 
 public class CreateAuctionAction {

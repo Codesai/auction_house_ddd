@@ -29,6 +29,7 @@ public class CreateAuctionActionShould {
     @Test public void
     create_an_auction() {
         var expectedAuction = givenAnAuction();
+        System.out.println(expectedAuction);
         var createAuctionCommand = new CreateAuctionCommand(
                 expectedAuction.item.name,
                 expectedAuction.item.description,

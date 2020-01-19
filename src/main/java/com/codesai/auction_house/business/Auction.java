@@ -2,6 +2,8 @@ package com.codesai.auction_house.business;
 
 import com.codesai.auction_house.business.auction.Item;
 import com.codesai.auction_house.business.generic.Money;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -21,5 +23,10 @@ public class Auction {
         this.conquerPrice = conquerPrice;
         this.expirationDate = expirationDate;
         this.minimumOverbiddingPrice = minimumOverbiddingPrice;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 }
