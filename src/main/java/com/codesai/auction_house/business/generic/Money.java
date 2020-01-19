@@ -1,6 +1,6 @@
 package com.codesai.auction_house.business.generic;
 
-public class Money extends ValueObject {
+public final class Money extends ValueObject {
     public final double amount;
     private final Currency currency;
 
