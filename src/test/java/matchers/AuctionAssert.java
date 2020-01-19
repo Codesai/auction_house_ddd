@@ -3,8 +3,6 @@ package matchers;
 import com.codesai.auction_house.business.auction.Auction;
 import org.assertj.core.api.AbstractAssert;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class AuctionAssert extends AbstractAssert<AuctionAssert, Auction> {
     public AuctionAssert(Auction auction) {
         super(auction, AuctionAssert.class);
