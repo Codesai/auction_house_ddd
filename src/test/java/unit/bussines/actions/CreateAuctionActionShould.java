@@ -42,7 +42,7 @@ public class CreateAuctionActionShould {
         var actualId = new CreateAuctionAction(auctionRepository).execute(createAuctionCommand);
 
         verify(auctionRepository).save(captor.capture());
-        assertThat(actualId.toString()).isEqualTo(captor.getValue().id);
+        assertThat(actualId).isEqualTo(captor.getValue().id);
         assertIsTheSameAs(captor.getValue(), expectedAuction);
     }
 
