@@ -1,6 +1,5 @@
 package com.codesai.auction_house.business.auction;
 
-import com.codesai.auction_house.business.auction.Item;
 import com.codesai.auction_house.business.generic.Money;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;

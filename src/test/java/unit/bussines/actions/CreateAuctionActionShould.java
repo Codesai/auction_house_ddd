@@ -6,6 +6,7 @@ import com.codesai.auction_house.business.actions.CreateAuctionAction;
 import com.codesai.auction_house.business.actions.CreateAuctionCommand;
 import com.codesai.auction_house.business.auction.Item;
 import com.codesai.auction_house.business.generic.Money;
+import matchers.AuctionAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -41,7 +42,7 @@ public class CreateAuctionActionShould {
 
         verify(auctionRepository, times(1)).save(captor.capture());
         assertThat(actualId).isEqualTo(captor.getValue().id);
-        assertIsTheSameAs(captor.getValue(), expectedAuction);
+        AuctionAssert.assertThat(captor.getValue()).isEqualTo(expectedAuction);
     }
 
     private Auction givenAnAuction() {
