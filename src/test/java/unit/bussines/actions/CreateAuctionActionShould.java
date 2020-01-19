@@ -1,7 +1,7 @@
 package unit.bussines.actions;
 
-import com.codesai.auction_house.business.Auction;
-import com.codesai.auction_house.business.AuctionRepository;
+import com.codesai.auction_house.business.auction.Auction;
+import com.codesai.auction_house.business.auction.AuctionRepository;
 import com.codesai.auction_house.business.actions.CreateAuctionAction;
 import com.codesai.auction_house.business.actions.CreateAuctionCommand;
 import com.codesai.auction_house.business.auction.Item;
@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -29,7 +28,6 @@ public class CreateAuctionActionShould {
     @Test public void
     create_an_auction() {
         var expectedAuction = givenAnAuction();
-        System.out.println(expectedAuction);
         var createAuctionCommand = new CreateAuctionCommand(
                 expectedAuction.item.name,
                 expectedAuction.item.description,
