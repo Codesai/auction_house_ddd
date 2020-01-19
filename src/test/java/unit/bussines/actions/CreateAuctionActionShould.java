@@ -14,8 +14,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class CreateAuctionActionShould {
 
@@ -41,7 +40,7 @@ public class CreateAuctionActionShould {
 
         var actualId = new CreateAuctionAction(auctionRepository).execute(createAuctionCommand);
 
-        verify(auctionRepository).save(captor.capture());
+        verify(auctionRepository, times(1)).save(captor.capture());
         assertThat(actualId).isEqualTo(captor.getValue().id);
         assertIsTheSameAs(captor.getValue(), expectedAuction);
     }
