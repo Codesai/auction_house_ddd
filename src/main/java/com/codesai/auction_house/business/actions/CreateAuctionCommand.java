@@ -8,9 +8,9 @@ public class CreateAuctionCommand {
     final double initialBid;
     final double conquerPrice;
     final LocalDate expirationDate;
-    final int minimumOverbiddingPrice;
+    final double minimumOverbiddingPrice;
 
-    public CreateAuctionCommand(String name, String description, double initialBid, double conquerPrice, LocalDate expirationDate, int minimumOverbiddingPrice) {
+    public CreateAuctionCommand(String name, String description, double initialBid, double conquerPrice, LocalDate expirationDate, double minimumOverbiddingPrice) {
         this.name = name;
         this.description = description;
         this.initialBid = initialBid;

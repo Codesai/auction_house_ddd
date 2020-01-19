@@ -4,11 +4,11 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Item {
-    private final String item;
-    private final String description;
+    public final String name;
+    public final String description;
 
-    public Item(String item, String description) {
-        this.item = item;
+    public Item(String name, String description) {
+        this.name = name;
         this.description = description;
     }
 
@@ -25,7 +25,7 @@ public class Item {
     @Override
     public String toString() {
         return "Item{" +
-                "item='" + item + '\'' +
+                "item='" + name + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }

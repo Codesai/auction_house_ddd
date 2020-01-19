@@ -4,7 +4,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Money {
-    private final double amount;
+    public final double amount;
     private final Currency currency;
 
     public static Money money(double amount) {
