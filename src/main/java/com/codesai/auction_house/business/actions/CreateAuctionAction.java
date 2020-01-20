@@ -15,7 +15,7 @@ public class CreateAuctionAction {
 
     public String execute(CreateAuctionCommand command) {
         final var auction = new Auction(
-                new Item(command.name, command.description),
+                Item.item(command.name, command.description),
                 money(command.initialBid),
                 money(command.conquerPrice),
                 command.expirationDate,

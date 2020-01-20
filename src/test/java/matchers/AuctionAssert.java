@@ -8,7 +8,7 @@ public class AuctionAssert extends AbstractAssert<AuctionAssert, Auction> {
         super(auction, AuctionAssert.class);
     }
 
-    public static AuctionAssert assertThat(Auction actual) {
+    public static AuctionAssert assertAuction(Auction actual) {
         return new AuctionAssert(actual);
     }
 
