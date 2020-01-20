@@ -4,7 +4,6 @@ import com.codesai.auction_house.business.actions.CreateAuctionAction;
 import com.codesai.auction_house.business.actions.CreateAuctionCommand;
 import com.codesai.auction_house.business.auction.Auction;
 import com.codesai.auction_house.business.auction.AuctionRepository;
-import com.codesai.auction_house.business.generic.Money;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -12,6 +11,7 @@ import org.mockito.ArgumentCaptor;
 import java.time.LocalDate;
 
 import static com.codesai.auction_house.business.auction.Item.item;
+import static com.codesai.auction_house.business.generic.Money.money;
 import static matchers.AuctionAssert.assertAuction;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -48,9 +48,9 @@ public class CreateAuctionActionShould {
     private Auction givenAnAuction() {
         return new Auction(
                 item("anyItem", "anyDescription"),
-                Money.money(10.5), Money.money(50),
+                money(10.5), money(50),
                 LocalDate.now().plusDays(15),
-                Money.money(1)
+                money(1)
             );
     }
 
