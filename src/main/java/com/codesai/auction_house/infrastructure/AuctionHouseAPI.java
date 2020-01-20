@@ -7,49 +7,36 @@ import spark.Request;
 import spark.Response;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class AuctionHouseAPI {
-    public static Object createAuction(Request request, Response response) {
-        try {
-            var command = createAuctionCommandFrom(request.body());
-            var auctionId = ActionFactory.createAuction().execute(command);
+    public static String createAuction(Request request, Response response) {
+        var command = createAuctionCommandFrom(request.body());
+        if (command.isPresent()) {
+            var auctionId = ActionFactory.createAuction().execute(command.get());
             response.status(201);
             response.header("Content-type", "application/json");
             response.header("Location", request.url() + "/" + auctionId);
+            response.body(auctionId);
             return auctionId;
-        } catch (IllegalArgumentException e) {
-            response.status(422);
-            return "The field " + e.getMessage() + " value is not valid";
         }
+        response.status(422);
+        return "The auction body is not well formed.";
     }
 
-    private static CreateAuctionCommand createAuctionCommandFrom(String body) {
-        var json = new Gson().fromJson(body, JsonObject.class);
-        return new CreateAuctionCommand(
-                json.get("item").getAsJsonObject().get("name").getAsString(),
-                json.get("item").getAsJsonObject().get("description").getAsString(),
-                getInitialBid(json),
-                json.get("conquer_price").getAsDouble(),
-                getExpirationDate(json),
-                json.get("minimum_overbidding_price").getAsDouble()
-        );
-    }
-
-    private static double getInitialBid(JsonObject json) {
-        var fieldName = "initial_bid";
+    private static Optional<CreateAuctionCommand> createAuctionCommandFrom(String body) {
         try {
-            return json.get(fieldName).getAsDouble();
+            var json = new Gson().fromJson(body, JsonObject.class);
+            return Optional.of(new CreateAuctionCommand(
+                    json.get("item").getAsJsonObject().get("name").getAsString(),
+                    json.get("item").getAsJsonObject().get("description").getAsString(),
+                    json.get("initial_bid").getAsDouble(),
+                    json.get("conquer_price").getAsDouble(),
+                    LocalDate.parse(json.get("expiration_date").getAsString()),
+                    json.get("minimum_overbidding_price").getAsDouble()
+            ));
         } catch (Exception e) {
-            throw new IllegalArgumentException(fieldName, e);
-        }
-    }
-
-    private static LocalDate getExpirationDate(JsonObject json) throws IllegalArgumentException {
-        var fieldName = "expiration_date";
-        try {
-            return LocalDate.parse(json.get(fieldName).getAsString());
-        } catch (Exception e) {
-            throw new IllegalArgumentException(fieldName, e);
+            return Optional.empty();
         }
     }
 }

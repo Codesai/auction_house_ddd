@@ -94,6 +94,6 @@ public class AuctionHouseApiShould {
        then().
             assertThat().
             statusCode(422).
-            body(equalTo("The field initial_bid value is not valid"));
+            body(equalTo("The auction body is not well formed."));
    }
 }
