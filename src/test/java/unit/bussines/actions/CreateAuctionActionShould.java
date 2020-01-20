@@ -1,9 +1,9 @@
 package unit.bussines.actions;
 
-import com.codesai.auction_house.business.auction.Auction;
-import com.codesai.auction_house.business.auction.AuctionRepository;
 import com.codesai.auction_house.business.actions.CreateAuctionAction;
 import com.codesai.auction_house.business.actions.CreateAuctionCommand;
+import com.codesai.auction_house.business.auction.Auction;
+import com.codesai.auction_house.business.auction.AuctionRepository;
 import com.codesai.auction_house.business.auction.Item;
 import com.codesai.auction_house.business.generic.Money;
 import matchers.AuctionAssert;
@@ -52,15 +52,6 @@ public class CreateAuctionActionShould {
                     LocalDate.now().plusDays(15),
                     Money.money(1)
             );
-    }
-
-    private void assertIsTheSameAs(Auction actualAuction, Auction expectedAuction) {
-        assertThat(actualAuction.id).matches("[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}");
-        assertThat(actualAuction.item).isEqualTo(expectedAuction.item);
-        assertThat(actualAuction.initialBid).isEqualTo(expectedAuction.initialBid);
-        assertThat(actualAuction.conquerPrice).isEqualTo(expectedAuction.conquerPrice);
-        assertThat(actualAuction.expirationDate).isEqualTo(expectedAuction.expirationDate);
-        assertThat(actualAuction.minimumOverbiddingPrice).isEqualTo(expectedAuction.minimumOverbiddingPrice);
     }
 
 
