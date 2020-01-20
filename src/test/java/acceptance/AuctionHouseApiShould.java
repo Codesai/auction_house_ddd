@@ -19,6 +19,12 @@ import static spark.Spark.awaitInitialization;
 import static spark.Spark.awaitStop;
 
 public class AuctionHouseApiShould {
+    private static final String ANY_NAME = "Any name";
+    private static final String ANY_DESCRIPTION = "Any description";
+    private static final double ANY_PRICE = 10.5;
+    private static final LocalDate ANY_EXPIRATION_DATE = LocalDate.now().plusDays(7);
+    private static final double ANY_MINIMUM_OVERBIDDING_PRICE = 1;
+
     @BeforeAll
     static void startServer() {
         Routes();
@@ -67,5 +73,27 @@ public class AuctionHouseApiShould {
                     startsWith(RestAssured.baseURI + "auction/"),
                     urlEndsWithValidUUID()
             ));
+   }
+
+   @Test public void
+   should_not_create_an_auction_when_the_input_is_incorrect() throws Exception {
+       var auctionJson = new JSONObject()
+               .put("item", new JSONObject()
+                        .put("name", ANY_NAME)
+                        .put("description", ANY_DESCRIPTION)
+               )
+               .put("initial_bid", "A invalid input")
+               .put("conquer_price", ANY_PRICE)
+               .put("expiration_date", ANY_EXPIRATION_DATE)
+               .put("minimum_overbidding_price", ANY_MINIMUM_OVERBIDDING_PRICE)
+               .toString();
+       given().
+       when().
+            body(auctionJson).
+            post("auction").
+       then().
+            assertThat().
+            statusCode(422).
+            body(equalTo("The field initial_bid value is not valid"));
    }
 }
