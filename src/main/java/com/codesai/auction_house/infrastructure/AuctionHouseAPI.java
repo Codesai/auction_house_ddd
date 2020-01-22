@@ -2,6 +2,7 @@ package com.codesai.auction_house.infrastructure;
 
 import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
+import com.codesai.auction_house.business.model.auction.Auction;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.json.JSONException;
@@ -24,7 +25,6 @@ public class AuctionHouseAPI {
             response.status(CREATED_201);
             response.header("Content-type", "application/json");
             response.header("Location", request.url() + "/" + auctionId);
-            response.body(auctionId);
             return auctionId;
         }
         response.status(422);
@@ -38,19 +38,24 @@ public class AuctionHouseAPI {
             var auction = optionalAuction.get();
             response.header("Content-type", "application/json");
             response.status(OK_200);
-            return new JSONObject()
-                    .put("item", new JSONObject()
-                            .put("name", auction.item.name)
-                            .put("description", auction.item.description)
-                    )
-                    .put("initial_bid", auction.initialBid.amount)
-                    .put("conquer_price", auction.conquerPrice.amount)
-                    .put("expiration_date", auction.expirationDate.toString())
-                    .put("minimum_overbidding_price", auction.minimumOverbiddingPrice.amount)
-                    .toString();
+            return createAuctionJsonFrom(auction);
+        } else {
+            response.status(NOT_FOUND_404);
+            return "An auction with that id does not exists.";
         }
-        response.status(NOT_FOUND_404);
-        return "An auction with that id does not exists.";
+    }
+
+    private static String createAuctionJsonFrom(Auction auction) throws JSONException {
+        return new JSONObject()
+                .put("item", new JSONObject()
+                        .put("name", auction.item.name)
+                        .put("description", auction.item.description)
+                )
+                .put("initial_bid", auction.initialBid.amount)
+                .put("conquer_price", auction.conquerPrice.amount)
+                .put("expiration_date", auction.expirationDate.toString())
+                .put("minimum_overbidding_price", auction.minimumOverbiddingPrice.amount)
+                .toString();
     }
 
     private static Optional<CreateAuctionCommand> createAuctionCommandFrom(String body) {
