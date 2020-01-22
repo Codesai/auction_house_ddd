@@ -4,32 +4,49 @@ import com.codesai.auction_house.business.actions.CreateAuctionAction;
 import com.codesai.auction_house.business.actions.CreateAuctionCommand;
 import com.codesai.auction_house.business.auction.Auction;
 import com.codesai.auction_house.business.auction.AuctionRepository;
-import org.junit.jupiter.api.BeforeEach;
+import com.codesai.auction_house.business.auction.InitialBidIsGreaterThanConquerPrice;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import java.time.LocalDate;
-
-import static com.codesai.auction_house.business.auction.Item.item;
-import static com.codesai.auction_house.business.generic.Money.money;
+import static com.codesai.auction_house.business.generic.Money.*;
+import static helpers.builder.AuctionBuilder.anAuction;
 import static matchers.AuctionAssert.assertAuction;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 public class CreateAuctionActionShould {
 
-    private AuctionRepository auctionRepository = mock(AuctionRepository.class);
-    private ArgumentCaptor<Auction> captor;
-
-    @BeforeEach
-    void setUp() {
-        captor = ArgumentCaptor.forClass(Auction.class);
-    }
+    AuctionRepository auctionRepository = mock(AuctionRepository.class);
+    ArgumentCaptor<Auction> captor = ArgumentCaptor.forClass(Auction.class);
+    CreateAuctionAction action = new CreateAuctionAction(auctionRepository);
 
     @Test public void
     create_an_auction() {
-        var expectedAuction = givenAnAuction();
-        var createAuctionCommand = new CreateAuctionCommand(
+        var expectedAuction = anAuction().build();
+        var createAuctionCommand = commandFrom(expectedAuction);
+
+        var actualId = action.execute(createAuctionCommand);
+
+        verify(auctionRepository, times(1)).save(captor.capture());
+        assertThat(actualId).isEqualTo(captor.getValue().id);
+        assertAuction(captor.getValue()).isEqualTo(expectedAuction);
+    }
+
+    @Test public void
+    not_create_an_auction_when_conquer_price_is_greater_than_initial_bid() {
+        var auction = anAuction()
+                        .setConquerPrice(money(10f))
+                        .setInitialBid(money(11f))
+                        .build();
+        CreateAuctionCommand command = commandFrom(auction);
+
+        assertThatThrownBy(() -> action.execute(command))
+                .isInstanceOf(InitialBidIsGreaterThanConquerPrice.class);
+    }
+
+    private CreateAuctionCommand commandFrom(Auction expectedAuction) {
+        return new CreateAuctionCommand(
                 expectedAuction.item.name,
                 expectedAuction.item.description,
                 expectedAuction.initialBid.amount,
@@ -37,21 +54,6 @@ public class CreateAuctionActionShould {
                 expectedAuction.expirationDate,
                 expectedAuction.minimumOverbiddingPrice.amount
         );
-
-        var actualId = new CreateAuctionAction(auctionRepository).execute(createAuctionCommand);
-
-        verify(auctionRepository, times(1)).save(captor.capture());
-        assertThat(actualId).isEqualTo(captor.getValue().id);
-        assertAuction(captor.getValue()).isEqualTo(expectedAuction);
-    }
-
-    private Auction givenAnAuction() {
-        return new Auction(
-                item("anyItem", "anyDescription"),
-                money(10.5), money(50),
-                LocalDate.now().plusDays(15),
-                money(1)
-            );
     }
 
 }

@@ -3,18 +3,22 @@ package com.codesai.auction_house.infrastructure;
 import com.codesai.auction_house.business.actions.CreateAuctionCommand;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
 import spark.Response;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static org.eclipse.jetty.http.HttpStatus.CREATED_201;
+
+
 public class AuctionHouseAPI {
     public static String createAuction(Request request, Response response) {
         var command = createAuctionCommandFrom(request.body());
         if (command.isPresent()) {
             var auctionId = ActionFactory.createAuction().execute(command.get());
-            response.status(201);
+            response.status(CREATED_201);
             response.header("Content-type", "application/json");
             response.header("Location", request.url() + "/" + auctionId);
             response.body(auctionId);
