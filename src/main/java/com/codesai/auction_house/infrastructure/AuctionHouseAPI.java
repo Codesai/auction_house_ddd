@@ -4,6 +4,8 @@ import com.codesai.auction_house.business.actions.CreateAuctionCommand;
 import com.codesai.auction_house.business.actions.RetrieveAuctionCommand;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import org.json.JSONException;
+import org.json.JSONObject;
 import spark.Request;
 import spark.Response;
 
@@ -30,11 +32,24 @@ public class AuctionHouseAPI {
         return "The auction body is not well formed.";
     }
 
-    public static String retrieveAuction(Request request, Response response) {
-        response.header("Content-type", "application/json");
-        response.status(OK_200);
-        var auctionId = request.params().get("id");
-        var auction = retrieveAuctionAction().execute(new RetrieveAuctionCommand(auctionId));
+    public static String retrieveAuction(Request request, Response response) throws JSONException {
+        var auctionId = request.params("id");
+        var optionalAuction = retrieveAuctionAction().execute(new RetrieveAuctionCommand(auctionId));
+        if (optionalAuction.isPresent()) {
+            var auction = optionalAuction.get();
+            response.header("Content-type", "application/json");
+            response.status(OK_200);
+            return new JSONObject()
+                    .put("item", new JSONObject()
+                            .put("name", auction.item.name)
+                            .put("description", auction.item.description)
+                    )
+                    .put("initial_bid", auction.initialBid.amount)
+                    .put("conquer_price", auction.conquerPrice.amount)
+                    .put("expiration_date", auction.expirationDate.toString())
+                    .put("minimum_overbidding_price", auction.minimumOverbiddingPrice.amount)
+                    .toString();
+        }
         return "";
     }
 
