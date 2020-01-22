@@ -18,14 +18,14 @@ public class CreateAuctionAction {
     }
 
     public String execute(CreateAuctionCommand command) {
-        if (command.conquerPrice < command.initialBid) throw new InitialBidIsGreaterThanConquerPrice();
-        if (command.minimumOverbiddingPrice < MINIMUM_MONEY_TO_OVERBID.amount) throw new MinimumOverbiddingPriceIsNotAllowed();
+        if (command.conquerPrice.isLessThan(command.initialBid)) throw new InitialBidIsGreaterThanConquerPrice();
+        if (command.minimumOverbiddingPrice.isLessThan(MINIMUM_MONEY_TO_OVERBID)) throw new MinimumOverbiddingPriceIsNotAllowed();
         var auction = new Auction(
                 item(command.name, command.description),
-                money(command.initialBid),
-                money(command.conquerPrice),
+                command.initialBid,
+                command.conquerPrice,
                 command.expirationDate,
-                money(command.minimumOverbiddingPrice)
+                command.minimumOverbiddingPrice
         );
         repository.save(auction);
         return auction.id;

@@ -12,4 +12,8 @@ public final class Money extends ValueObject {
         this.amount = amount;
         this.currency = Currency.EUR;
     }
+
+    public boolean isLessThan(Money money) {
+        return this.amount < money.amount;
+    }
 }
