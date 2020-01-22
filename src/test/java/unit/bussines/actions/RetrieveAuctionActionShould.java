@@ -1,8 +1,8 @@
 package unit.bussines.actions;
 
 import com.codesai.auction_house.business.actions.RetrieveAuctionAction;
-import com.codesai.auction_house.business.actions.RetrieveAuctionCommand;
-import com.codesai.auction_house.business.auction.AuctionRepository;
+import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
+import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

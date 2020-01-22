@@ -1,12 +1,16 @@
 package unit.bussines.actions;
 
 import com.codesai.auction_house.business.actions.CreateAuctionAction;
-import com.codesai.auction_house.business.actions.CreateAuctionCommand;
-import com.codesai.auction_house.business.auction.*;
+import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
+import com.codesai.auction_house.business.model.auction.Auction;
+import com.codesai.auction_house.business.model.auction.AuctionRepository;
+import com.codesai.auction_house.business.model.auction.exceptions.ExpirationDayIsTooFar;
+import com.codesai.auction_house.business.model.auction.exceptions.InitialBidIsGreaterThanConquerPrice;
+import com.codesai.auction_house.business.model.auction.exceptions.MinimumOverbiddingPriceIsNotAllowed;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static com.codesai.auction_house.business.generic.Money.money;
+import static com.codesai.auction_house.business.model.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
 import static java.time.LocalDate.now;
 import static matchers.AuctionAssert.assertThatAuction;

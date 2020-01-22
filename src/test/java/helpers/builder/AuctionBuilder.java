@@ -1,13 +1,13 @@
 package helpers.builder;
 
-import com.codesai.auction_house.business.auction.Auction;
-import com.codesai.auction_house.business.auction.Item;
-import com.codesai.auction_house.business.generic.Money;
+import com.codesai.auction_house.business.model.auction.Auction;
+import com.codesai.auction_house.business.model.auction.Item;
+import com.codesai.auction_house.business.model.generic.Money;
 
 import java.time.LocalDate;
 
-import static com.codesai.auction_house.business.auction.Item.item;
-import static com.codesai.auction_house.business.generic.Money.money;
+import static com.codesai.auction_house.business.model.auction.Item.item;
+import static com.codesai.auction_house.business.model.generic.Money.money;
 import static java.time.LocalDate.now;
 
 public class AuctionBuilder {

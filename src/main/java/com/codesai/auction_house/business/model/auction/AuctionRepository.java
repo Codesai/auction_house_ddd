@@ -1,4 +1,4 @@
-package com.codesai.auction_house.business.auction;
+package com.codesai.auction_house.business.model.auction;
 
 import java.util.Optional;
 

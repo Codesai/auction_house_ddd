@@ -1,6 +1,6 @@
 package acceptance;
 
-import com.codesai.auction_house.business.auction.Auction;
+import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.infrastructure.ActionFactory;
 import com.codesai.auction_house.infrastructure.repository.InMemoryAuctionRepository;
 import io.restassured.RestAssured;

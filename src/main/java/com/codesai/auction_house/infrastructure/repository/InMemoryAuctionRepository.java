@@ -1,7 +1,7 @@
 package com.codesai.auction_house.infrastructure.repository;
 
-import com.codesai.auction_house.business.auction.Auction;
-import com.codesai.auction_house.business.auction.AuctionRepository;
+import com.codesai.auction_house.business.model.auction.Auction;
+import com.codesai.auction_house.business.model.auction.AuctionRepository;
 
 import java.util.HashMap;
 import java.util.Map;

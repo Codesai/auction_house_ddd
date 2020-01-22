@@ -1,4 +1,4 @@
-package com.codesai.auction_house.business.actions;
+package com.codesai.auction_house.business.actions.commands;
 
 public class RetrieveAuctionCommand {
     public final String auctionId;

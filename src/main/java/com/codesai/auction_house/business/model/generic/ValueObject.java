@@ -1,4 +1,4 @@
-package com.codesai.auction_house.business.generic;
+package com.codesai.auction_house.business.model.generic;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;

@@ -1,7 +1,7 @@
 package com.codesai.auction_house.infrastructure;
 
-import com.codesai.auction_house.business.actions.CreateAuctionCommand;
-import com.codesai.auction_house.business.actions.RetrieveAuctionCommand;
+import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
+import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.json.JSONException;
