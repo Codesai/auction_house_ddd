@@ -1,13 +1,11 @@
 package com.codesai.auction_house.business.actions;
 
-import com.codesai.auction_house.business.auction.Auction;
-import com.codesai.auction_house.business.auction.AuctionRepository;
-import com.codesai.auction_house.business.auction.InitialBidIsGreaterThanConquerPrice;
-import com.codesai.auction_house.business.auction.MinimumOverbiddingPriceIsNotAllowed;
+import com.codesai.auction_house.business.auction.*;
 import com.codesai.auction_house.business.generic.Money;
 
 import static com.codesai.auction_house.business.auction.Item.item;
 import static com.codesai.auction_house.business.generic.Money.money;
+import static java.time.LocalDate.now;
 
 public class CreateAuctionAction {
     private static final Money MINIMUM_MONEY_TO_OVERBID = money(1);
@@ -20,6 +18,7 @@ public class CreateAuctionAction {
     public String execute(CreateAuctionCommand command) {
         if (command.conquerPrice.isLessThan(command.initialBid)) throw new InitialBidIsGreaterThanConquerPrice();
         if (command.minimumOverbiddingPrice.isLessThan(MINIMUM_MONEY_TO_OVERBID)) throw new MinimumOverbiddingPriceIsNotAllowed();
+        if (command.expirationDate.isAfter(now().plusWeeks(2))) throw new ExpirationDayIsTooFar();
         var auction = new Auction(
                 item(command.name, command.description),
                 command.initialBid,

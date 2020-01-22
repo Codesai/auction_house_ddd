@@ -2,15 +2,13 @@ package unit.bussines.actions;
 
 import com.codesai.auction_house.business.actions.CreateAuctionAction;
 import com.codesai.auction_house.business.actions.CreateAuctionCommand;
-import com.codesai.auction_house.business.auction.Auction;
-import com.codesai.auction_house.business.auction.AuctionRepository;
-import com.codesai.auction_house.business.auction.InitialBidIsGreaterThanConquerPrice;
-import com.codesai.auction_house.business.auction.MinimumOverbiddingPriceIsNotAllowed;
+import com.codesai.auction_house.business.auction.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import static com.codesai.auction_house.business.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
+import static java.time.LocalDate.now;
 import static matchers.AuctionAssert.assertAuction;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -55,6 +53,17 @@ public class CreateAuctionActionShould {
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(MinimumOverbiddingPriceIsNotAllowed.class);
+    }
+
+    @Test public void
+    not_create_an_auction_when_the_expiration_date_is_more_than_2_weeks_from_today() {
+        var auction = anAuction()
+                        .setExpirationDay(now().plusDays(15))
+                        .build();
+        CreateAuctionCommand command = commandFrom(auction);
+
+        assertThatThrownBy(() -> action.execute(command))
+                .isInstanceOf(ExpirationDayIsTooFar.class);
     }
 
     private CreateAuctionCommand commandFrom(Auction expectedAuction) {
