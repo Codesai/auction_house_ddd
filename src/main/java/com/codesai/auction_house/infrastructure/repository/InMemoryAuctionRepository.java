@@ -17,7 +17,7 @@ public class InMemoryAuctionRepository implements AuctionRepository {
 
     @Override
     public Optional<Auction> retrieveById(String id) {
-        return Optional.of(auctions.get(id));
+        return Optional.ofNullable(auctions.get(id));
     }
 
     public void clean() {

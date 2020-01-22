@@ -13,8 +13,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static com.codesai.auction_house.infrastructure.ActionFactory.retrieveAuctionAction;
-import static org.eclipse.jetty.http.HttpStatus.CREATED_201;
-import static org.eclipse.jetty.http.HttpStatus.OK_200;
+import static org.eclipse.jetty.http.HttpStatus.*;
 
 
 public class AuctionHouseAPI {
@@ -50,7 +49,8 @@ public class AuctionHouseAPI {
                     .put("minimum_overbidding_price", auction.minimumOverbiddingPrice.amount)
                     .toString();
         }
-        return "";
+        response.status(NOT_FOUND_404);
+        return "An auction with that id does not exists.";
     }
 
     private static Optional<CreateAuctionCommand> createAuctionCommandFrom(String body) {

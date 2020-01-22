@@ -99,13 +99,23 @@ public class AuctionHouseApiShould {
 
        given().
        when().
-            body(auctionJson).
             get("auction/{id}", expectedAuction.id).
        then().
             assertThat().
             statusCode(200).
             header("Content-type", "application/json").
             body(equalTo(auctionJson.toString()));
+   }
+
+   @Test public void
+   should_get_a_404_when_the_auction_does_not_exists() {
+       given().
+       when().
+            get("auction/{id}", "non-existing-auction-id").
+       then().
+            assertThat().
+            statusCode(404).
+            body(equalTo("An auction with that id does not exists."));
    }
 
     private JSONObject createJsonFrom(Auction expectedAuction) throws JSONException {
