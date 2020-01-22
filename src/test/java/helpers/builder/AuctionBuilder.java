@@ -12,6 +12,7 @@ public class AuctionBuilder {
 
     private Money conquerPrice = money(50);
     private Money initialBid = money(10.5);
+    private Money minimumOverbiddingPrice = money(1);
 
     public static AuctionBuilder anAuction() {
         return new AuctionBuilder();
@@ -33,7 +34,12 @@ public class AuctionBuilder {
                 initialBid,
                 conquerPrice,
                 LocalDate.now().plusDays(15),
-                money(1)
+                minimumOverbiddingPrice
         );
+    }
+
+    public AuctionBuilder setMinimumOverbiddingPrice(Money minimumOverbiddingPrice) {
+        this.minimumOverbiddingPrice = minimumOverbiddingPrice;
+        return this;
     }
 }

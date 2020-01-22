@@ -5,10 +5,11 @@ import com.codesai.auction_house.business.actions.CreateAuctionCommand;
 import com.codesai.auction_house.business.auction.Auction;
 import com.codesai.auction_house.business.auction.AuctionRepository;
 import com.codesai.auction_house.business.auction.InitialBidIsGreaterThanConquerPrice;
+import com.codesai.auction_house.business.auction.MinimumOverbiddingPriceIsNotAllowed;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static com.codesai.auction_house.business.generic.Money.*;
+import static com.codesai.auction_house.business.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
 import static matchers.AuctionAssert.assertAuction;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,6 +44,17 @@ public class CreateAuctionActionShould {
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(InitialBidIsGreaterThanConquerPrice.class);
+    }
+
+    @Test public void
+    not_create_an_auction_when_the_minimum_overbidding_price_is_less_than_an_euro() {
+        var auction = anAuction()
+                        .setMinimumOverbiddingPrice(money(0.9))
+                        .build();
+        CreateAuctionCommand command = commandFrom(auction);
+
+        assertThatThrownBy(() -> action.execute(command))
+                .isInstanceOf(MinimumOverbiddingPriceIsNotAllowed.class);
     }
 
     private CreateAuctionCommand commandFrom(Auction expectedAuction) {
