@@ -1,8 +1,10 @@
 package acceptance;
 
+import com.codesai.auction_house.business.auction.Auction;
 import com.codesai.auction_house.infrastructure.ActionFactory;
 import com.codesai.auction_house.infrastructure.repository.InMemoryAuctionRepository;
 import io.restassured.RestAssured;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -60,20 +62,9 @@ public class AuctionHouseApiShould {
 
    @Test public void
    create_a_new_auction() throws Exception {
-       String auctionJson = new JSONObject()
-               .put("item", new JSONObject()
-                        .put("name", "DDD. Tackling complexity in the heart of code. Eric Evans")
-                        .put("description", "An insight book to understand how to express our code near to the domain of our business")
-               )
-               .put("initial_bid", 10.5)
-               .put("conquer_price", 50)
-               .put("expiration_date", LocalDate.now().plusDays(7))
-               .put("minimum_overbidding_price", 1)
-               .toString();
-
        given().
        when().
-            body(auctionJson).
+            body(createJsonFrom(anAuction().build()).toString()).
             post("auction").
        then().
             assertThat().
@@ -87,19 +78,12 @@ public class AuctionHouseApiShould {
 
    @Test public void
    should_not_create_an_auction_when_the_input_is_incorrect() throws Exception {
-       var auctionJson = new JSONObject()
-               .put("item", new JSONObject()
-                        .put("name", ANY_NAME)
-                        .put("description", ANY_DESCRIPTION)
-               )
-               .put("initial_bid", "A invalid input")
-               .put("conquer_price", ANY_PRICE)
-               .put("expiration_date", ANY_EXPIRATION_DATE)
-               .put("minimum_overbidding_price", ANY_MINIMUM_OVERBIDDING_PRICE)
-               .toString();
+
        given().
        when().
-            body(auctionJson).
+            body(createJsonFrom(anAuction().build())
+                    .put("initial_bid", "an invalid value")
+                    .toString()).
             post("auction").
        then().
             assertThat().
@@ -111,16 +95,8 @@ public class AuctionHouseApiShould {
    should_get_an_auction_by_its_id() throws Exception {
        var expectedAuction = anAuction().build();
        this.auctionRepository.save(expectedAuction);
+       var auctionJson = createJsonFrom(expectedAuction);
 
-       var auctionJson = new JSONObject()
-               .put("item", new JSONObject()
-                        .put("name", expectedAuction.item.name)
-                        .put("description", expectedAuction.item.description)
-               )
-               .put("initial_bid", expectedAuction.initialBid.amount)
-               .put("conquer_price", expectedAuction.conquerPrice.amount)
-               .put("expiration_date", expectedAuction.expirationDate.toString())
-               .put("minimum_overbidding_price", expectedAuction.minimumOverbiddingPrice.amount);
        given().
        when().
             body(auctionJson).
@@ -131,4 +107,16 @@ public class AuctionHouseApiShould {
             header("Content-type", "application/json").
             body(equalTo(auctionJson.toString()));
    }
+
+    private JSONObject createJsonFrom(Auction expectedAuction) throws JSONException {
+        return new JSONObject()
+                .put("item", new JSONObject()
+                         .put("name", expectedAuction.item.name)
+                         .put("description", expectedAuction.item.description)
+                )
+                .put("initial_bid", expectedAuction.initialBid.amount)
+                .put("conquer_price", expectedAuction.conquerPrice.amount)
+                .put("expiration_date", expectedAuction.expirationDate.toString())
+                .put("minimum_overbidding_price", expectedAuction.minimumOverbiddingPrice.amount);
+    }
 }
