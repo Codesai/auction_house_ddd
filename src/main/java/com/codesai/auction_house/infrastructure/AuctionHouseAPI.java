@@ -1,16 +1,18 @@
 package com.codesai.auction_house.infrastructure;
 
 import com.codesai.auction_house.business.actions.CreateAuctionCommand;
+import com.codesai.auction_house.business.actions.RetrieveAuctionCommand;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
 import spark.Response;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static com.codesai.auction_house.infrastructure.ActionFactory.retrieveAuctionAction;
 import static org.eclipse.jetty.http.HttpStatus.CREATED_201;
+import static org.eclipse.jetty.http.HttpStatus.OK_200;
 
 
 public class AuctionHouseAPI {
@@ -26,6 +28,14 @@ public class AuctionHouseAPI {
         }
         response.status(422);
         return "The auction body is not well formed.";
+    }
+
+    public static String retrieveAuction(Request request, Response response) {
+        response.header("Content-type", "application/json");
+        response.status(OK_200);
+        var auctionId = request.params().get("id");
+        var auction = retrieveAuctionAction().execute(new RetrieveAuctionCommand(auctionId));
+        return "";
     }
 
     private static Optional<CreateAuctionCommand> createAuctionCommandFrom(String body) {

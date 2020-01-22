@@ -1,15 +1,19 @@
 package acceptance;
 
+import com.codesai.auction_house.infrastructure.ActionFactory;
+import com.codesai.auction_house.infrastructure.repository.InMemoryAuctionRepository;
 import io.restassured.RestAssured;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 
 import static com.codesai.auction_house.infrastructure.Routing.PORT;
 import static com.codesai.auction_house.infrastructure.Routing.Routes;
+import static helpers.builder.AuctionBuilder.anAuction;
 import static io.restassured.RestAssured.given;
 import static matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
 import static org.hamcrest.Matchers.allOf;
@@ -24,6 +28,12 @@ public class AuctionHouseApiShould {
     private static final double ANY_PRICE = 10.5;
     private static final LocalDate ANY_EXPIRATION_DATE = LocalDate.now().plusDays(7);
     private static final double ANY_MINIMUM_OVERBIDDING_PRICE = 1;
+    private final InMemoryAuctionRepository auctionRepository = ActionFactory.auctionRepository();
+
+    @BeforeEach
+    public void setUp() {
+        auctionRepository.clean();
+    }
 
     @BeforeAll
     static void startServer() {
@@ -95,5 +105,30 @@ public class AuctionHouseApiShould {
             assertThat().
             statusCode(422).
             body(equalTo("The auction body is not well formed."));
+   }
+
+   @Test public void
+   should_get_an_auction_by_its_id() throws Exception {
+       var expectedAuction = anAuction().build();
+       this.auctionRepository.save(expectedAuction);
+
+       var auctionJson = new JSONObject()
+               .put("item", new JSONObject()
+                        .put("name", expectedAuction.item.name)
+                        .put("description", expectedAuction.item.description)
+               )
+               .put("initial_bid", expectedAuction.initialBid.amount)
+               .put("conquer_price", expectedAuction.conquerPrice.amount)
+               .put("expiration_date", expectedAuction.expirationDate.toString())
+               .put("minimum_overbidding_price", expectedAuction.minimumOverbiddingPrice.amount);
+       given().
+       when().
+            body(auctionJson).
+            get("auction/{id}", expectedAuction.id).
+       then().
+            assertThat().
+            statusCode(200).
+            header("Content-type", "application/json").
+            body(equalTo(auctionJson.toString()));
    }
 }

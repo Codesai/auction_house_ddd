@@ -9,7 +9,7 @@ import org.mockito.ArgumentCaptor;
 import static com.codesai.auction_house.business.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
 import static java.time.LocalDate.now;
-import static matchers.AuctionAssert.assertAuction;
+import static matchers.AuctionAssert.assertThatAuction;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
@@ -29,7 +29,7 @@ public class CreateAuctionActionShould {
 
         verify(auctionRepository, times(1)).save(captor.capture());
         assertThat(actualId).isEqualTo(captor.getValue().id);
-        assertAuction(captor.getValue()).isEqualTo(expectedAuction);
+        assertThatAuction(captor.getValue()).isEqualTo(expectedAuction);
     }
 
     @Test public void

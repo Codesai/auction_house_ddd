@@ -13,6 +13,7 @@ public class Routing {
 
         path("api/", () -> {
             get("status", (req, res) -> "OK");
+            get("auction/:id", AuctionHouseAPI::retrieveAuction);
             post("auction", AuctionHouseAPI::createAuction);
         });
     }

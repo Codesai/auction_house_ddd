@@ -1,23 +1,20 @@
 package com.codesai.auction_house.infrastructure;
 
 import com.codesai.auction_house.business.actions.CreateAuctionAction;
-import com.codesai.auction_house.business.auction.Auction;
-import com.codesai.auction_house.business.auction.AuctionRepository;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.codesai.auction_house.business.actions.RetrieveAuctionAction;
+import com.codesai.auction_house.infrastructure.repository.InMemoryAuctionRepository;
+import org.apache.commons.lang3.NotImplementedException;
 
 public class ActionFactory {
     public static CreateAuctionAction createAuction() {
-        return new CreateAuctionAction(new InMemoryAuctionRepository());
+        return new CreateAuctionAction(auctionRepository());
     }
 
-    private static class InMemoryAuctionRepository implements AuctionRepository {
-        private Map<String, Auction> auctions = new HashMap<>();
+    public static InMemoryAuctionRepository auctionRepository() {
+        return new InMemoryAuctionRepository();
+    }
 
-        @Override
-        public void save(Auction auction) {
-            auctions.put(auction.id, auction);
-        }
+    public static RetrieveAuctionAction retrieveAuctionAction() {
+        throw new NotImplementedException("Retrieve Auction is not implemented");
     }
 }
