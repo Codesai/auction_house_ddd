@@ -8,7 +8,7 @@ public class ActionFactory {
 
     private static final InMemoryAuctionRepository repository = new InMemoryAuctionRepository();
 
-    public static CreateAuctionAction createAuction() {
+    public static CreateAuctionAction createAuctionAction() {
         return new CreateAuctionAction(auctionRepository());
     }
 

@@ -13,6 +13,7 @@ import spark.Response;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import static com.codesai.auction_house.infrastructure.ActionFactory.createAuctionAction;
 import static com.codesai.auction_house.infrastructure.ActionFactory.retrieveAuctionAction;
 import static org.eclipse.jetty.http.HttpStatus.*;
 
@@ -21,7 +22,7 @@ public class AuctionHouseAPI {
     public static String createAuction(Request request, Response response) {
         var command = createAuctionCommandFrom(request.body());
         if (command.isPresent()) {
-            var auctionId = ActionFactory.createAuction().execute(command.get());
+            var auctionId = createAuctionAction().execute(command.get());
             response.status(CREATED_201);
             response.header("Content-type", "application/json");
             response.header("Location", request.url() + "/" + auctionId);
