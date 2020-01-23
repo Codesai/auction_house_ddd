@@ -24,7 +24,6 @@ public class AuctionHouseAPI {
         if (command.isPresent()) {
             var auctionId = createAuctionAction().execute(command.get());
             response.status(CREATED_201);
-            response.header("Content-type", "application/json");
             response.header("Location", request.url() + "/" + auctionId);
             return auctionId;
         }
@@ -71,6 +70,7 @@ public class AuctionHouseAPI {
                     json.get("minimum_overbidding_price").getAsDouble()
             ));
         } catch (Exception e) {
+            e.printStackTrace();
             return Optional.empty();
         }
     }

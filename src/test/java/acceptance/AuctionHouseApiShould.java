@@ -69,7 +69,6 @@ public class AuctionHouseApiShould {
        then().
             assertThat().
             statusCode(201).
-            contentType("application/json").
             header("Location", allOf(
                     startsWith(RestAssured.baseURI + "auction/"),
                     urlEndsWithValidUUID()

@@ -21,7 +21,7 @@ paths:
       consumes:
         - "application/json"
       produces:
-        - "application/json"
+        - "text/html"
       parameters:
         - in: "body"
           name: "body"
@@ -44,6 +44,14 @@ paths:
                 description: Url of the newly created auction
   /auction/{auction_id}:
     get:
+      parameters:
+        - in: path
+          name: auction_id
+          required: true
+          schema:
+            type: string
+            maximum: 1
+          description: Auction Id
       tags:
         - "auction"
       summary: "Finds auction by id"
@@ -97,10 +105,10 @@ definitions:
         example: 10.5
       conquer_price:
         type: number
-        example: 50
-      end_date:
+        example: 50.0
+      expiration_date:
         type: string
-        example: 2020/06/24
+        example: "2020-01-24"
       minimum_overbidding_price:
         type: number
-        example: 1
+        example: 1.0
