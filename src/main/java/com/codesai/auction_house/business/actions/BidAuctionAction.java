@@ -16,6 +16,5 @@ public class BidAuctionAction {
             auction.bid(new Bid(command.bidMoney));
             repository.save(auction);
         });
-
     }
 }

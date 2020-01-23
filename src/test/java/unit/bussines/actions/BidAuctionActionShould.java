@@ -18,19 +18,21 @@ import static org.mockito.Mockito.*;
 
 public class BidAuctionActionShould {
 
+    AuctionRepository repository = mock(AuctionRepository.class);
+    BidAuctionAction action = new BidAuctionAction(this.repository);
+    ArgumentCaptor<Auction> captor = ArgumentCaptor.forClass(Auction.class);
+
     @Test
     public void
     bid_an_auction_when_is_greater_than_the_current_bid() {
         var auctionId = "anAuctionId";
         var expectedAmount = 50.0;
-        var repository = mock(AuctionRepository.class);
-        when(repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().build()));
+        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().build()));
 
-        new BidAuctionAction(repository).execute(new BidAuctionCommand(auctionId, expectedAmount));
+        action.execute(new BidAuctionCommand(auctionId, expectedAmount));
 
-        var captor = ArgumentCaptor.forClass(Auction.class);
-        verify(repository, times(1)).save(captor.capture());
-        assertThat(captor.getValue().bids).hasSize(1);
-        assertThatBid(captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount)));
+        verify(this.repository, times(1)).save(this.captor.capture());
+        assertThat(this.captor.getValue().bids).hasSize(1);
+        assertThatBid(this.captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount)));
     }
 }
