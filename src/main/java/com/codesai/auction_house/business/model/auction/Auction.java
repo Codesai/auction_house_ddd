@@ -9,6 +9,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
@@ -23,6 +25,7 @@ public class Auction {
     public Money conquerPrice;
     public LocalDate expirationDate;
     public Money minimumOverbiddingPrice;
+    public List<Bid> bids;
 
     public Auction(Item item, Money initialBid, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice) {
         if (conquerPrice.isLessThan(initialBid)) throw new InitialBidIsGreaterThanConquerPrice();
@@ -35,10 +38,15 @@ public class Auction {
         this.conquerPrice = conquerPrice;
         this.expirationDate = expirationDate;
         this.minimumOverbiddingPrice = minimumOverbiddingPrice;
+        this.bids = new LinkedList<>();
     }
 
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    }
+
+    public void bid(Bid bid) {
+        this.bids.add(0, bid);
     }
 }
