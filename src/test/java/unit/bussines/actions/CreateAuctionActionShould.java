@@ -12,7 +12,7 @@ import org.mockito.ArgumentCaptor;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
-import static helpers.builder.CreateAuctionCommandBuilder.anCreateAuctionCommand;
+import static helpers.builder.CreateAuctionCommandBuilder.aCreateAuctionCommand;
 import static java.time.LocalDate.now;
 import static matchers.AuctionAssert.assertThatAuction;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +28,7 @@ public class CreateAuctionActionShould {
     @Test public void
     create_an_auction() {
         var expectedAuction = anAuction().build();
-        var createAuctionCommand = anCreateAuctionCommand()
+        var createAuctionCommand = aCreateAuctionCommand()
                 .withName(expectedAuction.item.name)
                 .withDescription(expectedAuction.item.description)
                 .withInitialBid(expectedAuction.initialBid)
@@ -46,7 +46,7 @@ public class CreateAuctionActionShould {
 
     @Test public void
     not_create_an_auction_when_conquer_price_is_greater_than_initial_bid() {
-        var command = anCreateAuctionCommand()
+        var command = aCreateAuctionCommand()
                         .withInitialBidGreaterThanConquerPrice()
                         .build();
 
@@ -56,7 +56,7 @@ public class CreateAuctionActionShould {
 
     @Test public void
     not_create_an_auction_when_the_minimum_overbidding_price_is_less_than_an_euro() {
-        var command = anCreateAuctionCommand()
+        var command = aCreateAuctionCommand()
                         .withMinimumOverbiddingPrice(money(0.5))
                         .build();
 
@@ -66,7 +66,7 @@ public class CreateAuctionActionShould {
 
     @Test public void
     not_create_an_auction_when_the_expiration_date_is_more_than_2_weeks_from_today() {
-        var command = anCreateAuctionCommand()
+        var command = aCreateAuctionCommand()
                         .withExpirationDay(now().plusDays(15))
                         .build();
 
@@ -76,8 +76,9 @@ public class CreateAuctionActionShould {
 
     @Test public void
     not_create_an_auction_when_the_expiration_date_is_before_than_today() {
-        var command = anCreateAuctionCommand()
-                        .withPassedExpirationDay().build();
+        var command = aCreateAuctionCommand()
+                        .withPassedExpirationDay()
+                        .build();
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(ExpirationDayAlreadyPassed.class);

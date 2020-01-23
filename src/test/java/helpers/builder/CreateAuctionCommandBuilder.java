@@ -19,7 +19,7 @@ public class CreateAuctionCommandBuilder {
     private CreateAuctionCommandBuilder() {
     }
 
-    public static CreateAuctionCommandBuilder anCreateAuctionCommand() {
+    public static CreateAuctionCommandBuilder aCreateAuctionCommand() {
         return new CreateAuctionCommandBuilder();
     }
 
