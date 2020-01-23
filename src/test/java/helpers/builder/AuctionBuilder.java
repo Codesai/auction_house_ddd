@@ -22,6 +22,11 @@ public class AuctionBuilder {
         return new AuctionBuilder();
     }
 
+    public AuctionBuilder withInitialBid(double amount) {
+        this.initialBid = money(amount);
+        return this;
+    }
+
     public Auction build() {
         return new Auction(
                 item,

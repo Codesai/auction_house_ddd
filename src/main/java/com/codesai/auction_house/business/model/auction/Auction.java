@@ -39,6 +39,7 @@ public class Auction {
         this.expirationDate = expirationDate;
         this.minimumOverbiddingPrice = minimumOverbiddingPrice;
         this.bids = new LinkedList<>();
+        bid(new Bid(initialBid));
     }
 
     @Override
@@ -48,5 +49,9 @@ public class Auction {
 
     public void bid(Bid bid) {
         this.bids.add(0, bid);
+    }
+
+    public Bid currentBid() {
+        return this.bids.get(0);
     }
 }
