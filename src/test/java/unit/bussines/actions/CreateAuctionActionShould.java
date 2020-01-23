@@ -4,6 +4,7 @@ import com.codesai.auction_house.business.actions.CreateAuctionAction;
 import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
+import com.codesai.auction_house.business.model.auction.exceptions.ExpirationDayAlreadyPassed;
 import com.codesai.auction_house.business.model.auction.exceptions.ExpirationDayIsTooFar;
 import com.codesai.auction_house.business.model.auction.exceptions.InitialBidIsGreaterThanConquerPrice;
 import com.codesai.auction_house.business.model.auction.exceptions.MinimumOverbiddingPriceIsNotAllowed;
@@ -68,6 +69,17 @@ public class CreateAuctionActionShould {
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(ExpirationDayIsTooFar.class);
+    }
+
+    @Test public void
+    not_create_an_auction_when_the_expiration_date_is_before_than_today() {
+        var auction = anAuction()
+                        .setExpirationDay(now().minusDays(1))
+                        .build();
+        CreateAuctionCommand command = commandFrom(auction);
+
+        assertThatThrownBy(() -> action.execute(command))
+                .isInstanceOf(ExpirationDayAlreadyPassed.class);
     }
 
     private CreateAuctionCommand commandFrom(Auction expectedAuction) {

@@ -3,6 +3,7 @@ package com.codesai.auction_house.business.actions;
 import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
+import com.codesai.auction_house.business.model.auction.exceptions.ExpirationDayAlreadyPassed;
 import com.codesai.auction_house.business.model.auction.exceptions.ExpirationDayIsTooFar;
 import com.codesai.auction_house.business.model.auction.exceptions.InitialBidIsGreaterThanConquerPrice;
 import com.codesai.auction_house.business.model.auction.exceptions.MinimumOverbiddingPriceIsNotAllowed;
@@ -24,6 +25,7 @@ public class CreateAuctionAction {
         if (command.conquerPrice.isLessThan(command.initialBid)) throw new InitialBidIsGreaterThanConquerPrice();
         if (command.minimumOverbiddingPrice.isLessThan(MINIMUM_MONEY_TO_OVERBID)) throw new MinimumOverbiddingPriceIsNotAllowed();
         if (command.expirationDate.isAfter(now().plusWeeks(2))) throw new ExpirationDayIsTooFar();
+        if (command.expirationDate.isBefore(now())) throw new ExpirationDayAlreadyPassed();
         var auction = new Auction(
                 item(command.name, command.description),
                 command.initialBid,
