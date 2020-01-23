@@ -1,7 +1,6 @@
 package unit.bussines.actions;
 
 import com.codesai.auction_house.business.actions.CreateAuctionAction;
-import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.exceptions.ExpirationDayAlreadyPassed;
@@ -13,6 +12,7 @@ import org.mockito.ArgumentCaptor;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
+import static helpers.builder.CreateAuctionCommandBuilder.anCreateAuctionCommand;
 import static java.time.LocalDate.now;
 import static matchers.AuctionAssert.assertThatAuction;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +28,14 @@ public class CreateAuctionActionShould {
     @Test public void
     create_an_auction() {
         var expectedAuction = anAuction().build();
-        var createAuctionCommand = commandFrom(expectedAuction);
+        var createAuctionCommand = anCreateAuctionCommand()
+                .withName(expectedAuction.item.name)
+                .withDescription(expectedAuction.item.description)
+                .withInitialBid(expectedAuction.initialBid)
+                .withConquerPrice(expectedAuction.conquerPrice)
+                .withExpirationDay(expectedAuction.expirationDate)
+                .withMinimumOverbiddingPrice(expectedAuction.minimumOverbiddingPrice)
+                .build();
 
         var actualId = action.execute(createAuctionCommand);
 
@@ -39,11 +46,9 @@ public class CreateAuctionActionShould {
 
     @Test public void
     not_create_an_auction_when_conquer_price_is_greater_than_initial_bid() {
-        var auction = anAuction()
-                        .setConquerPrice(money(10f))
-                        .setInitialBid(money(11f))
+        var command = anCreateAuctionCommand()
+                        .withInitialBidGreaterThanConquerPrice()
                         .build();
-        CreateAuctionCommand command = commandFrom(auction);
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(InitialBidIsGreaterThanConquerPrice.class);
@@ -51,10 +56,9 @@ public class CreateAuctionActionShould {
 
     @Test public void
     not_create_an_auction_when_the_minimum_overbidding_price_is_less_than_an_euro() {
-        var auction = anAuction()
-                        .setMinimumOverbiddingPrice(money(0.9))
+        var command = anCreateAuctionCommand()
+                        .withMinimumOverbiddingPrice(money(0.5))
                         .build();
-        CreateAuctionCommand command = commandFrom(auction);
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(MinimumOverbiddingPriceIsNotAllowed.class);
@@ -62,10 +66,9 @@ public class CreateAuctionActionShould {
 
     @Test public void
     not_create_an_auction_when_the_expiration_date_is_more_than_2_weeks_from_today() {
-        var auction = anAuction()
-                        .setExpirationDay(now().plusDays(15))
+        var command = anCreateAuctionCommand()
+                        .withExpirationDay(now().plusDays(15))
                         .build();
-        CreateAuctionCommand command = commandFrom(auction);
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(ExpirationDayIsTooFar.class);
@@ -73,24 +76,11 @@ public class CreateAuctionActionShould {
 
     @Test public void
     not_create_an_auction_when_the_expiration_date_is_before_than_today() {
-        var auction = anAuction()
-                        .setExpirationDay(now().minusDays(1))
-                        .build();
-        CreateAuctionCommand command = commandFrom(auction);
+        var command = anCreateAuctionCommand()
+                        .withPassedExpirationDay().build();
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(ExpirationDayAlreadyPassed.class);
-    }
-
-    private CreateAuctionCommand commandFrom(Auction expectedAuction) {
-        return new CreateAuctionCommand(
-                expectedAuction.item.name,
-                expectedAuction.item.description,
-                expectedAuction.initialBid.amount,
-                expectedAuction.conquerPrice.amount,
-                expectedAuction.expirationDate,
-                expectedAuction.minimumOverbiddingPrice.amount
-        );
     }
 
 }

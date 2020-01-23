@@ -22,31 +22,6 @@ public class AuctionBuilder {
         return new AuctionBuilder();
     }
 
-    public AuctionBuilder setItem(Item item) {
-        this.item = item;
-        return this;
-    }
-
-    public AuctionBuilder setInitialBid(Money initialBid) {
-        this.initialBid = initialBid;
-        return this;
-    }
-
-    public AuctionBuilder setConquerPrice(Money conquerPrice) {
-        this.conquerPrice = conquerPrice;
-        return this;
-    }
-
-    public AuctionBuilder setExpirationDay(LocalDate expirationDay) {
-        this.expirationDay = expirationDay;
-        return this;
-    }
-
-    public AuctionBuilder setMinimumOverbiddingPrice(Money minimumOverbiddingPrice) {
-        this.minimumOverbiddingPrice = minimumOverbiddingPrice;
-        return this;
-    }
-
     public Auction build() {
         return new Auction(
                 item,
