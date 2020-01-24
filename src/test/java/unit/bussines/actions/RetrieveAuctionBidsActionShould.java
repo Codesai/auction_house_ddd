@@ -10,15 +10,14 @@ import java.util.Optional;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
-import static matchers.BidAssert.assertThatBid;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class RetrieveAuctionBidsActionShould {
 
-    private AuctionRepository repository = mock(AuctionRepository.class);
-    private RetrieveAuctionBidsAction action = new RetrieveAuctionBidsAction(this.repository);
+    AuctionRepository repository = mock(AuctionRepository.class);
+    RetrieveAuctionBidsAction action = new RetrieveAuctionBidsAction(this.repository);
 
     @Test
     public void
@@ -38,10 +37,7 @@ public class RetrieveAuctionBidsActionShould {
         var result = action.execute(new RetrieveAuctionBidsActionCommand(auction.id));
 
         assertThat(result).hasSize(4);
-        assertThatBid(result.get(0)).isEqualTo(fourthBid);
-        assertThatBid(result.get(1)).isEqualTo(thirdBid);
-        assertThatBid(result.get(2)).isEqualTo(secondBid);
-        assertThatBid(result.get(3)).isEqualTo(firstBid);
+        assertThat(result).containsExactlyInAnyOrder(firstBid, secondBid, thirdBid, fourthBid);
     }
 
 }
