@@ -30,7 +30,7 @@ public class BidAuctionActionShould {
     bid_an_auction_when_is_greater_than_the_current_bid() {
         var auctionId = "anAuctionId";
         var expectedAmount = 50.0;
-        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(money(20)).build()));
+        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(new Bid(money(20))).build()));
 
         action.execute(new BidAuctionCommand(auctionId, expectedAmount));
 
@@ -43,7 +43,7 @@ public class BidAuctionActionShould {
     not_allow_to_bid_an_auction_when_the_amount_is_the_same() {
         var auctionId = "anAuctionId";
         var expectedAmount = 50;
-        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(money(50)).build()));
+        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(new Bid(money(50))).build()));
 
         assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auctionId, expectedAmount)))
                 .isInstanceOf(CurrentBidIsGreater.class);
@@ -54,7 +54,7 @@ public class BidAuctionActionShould {
     not_allow_to_bid_an_auction_when_is_lesser_than_the_current_bid() {
         var auctionId = "anAuctionId";
         var amount = 10;
-        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(money(amount)).build()));
+        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(new Bid(money(amount))).build()));
 
         assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auctionId, amount)))
                 .isInstanceOf(BidAmountCannotBeTheSameAsTheCurrentOne.class);

@@ -17,6 +17,9 @@ import static org.mockito.Mockito.when;
 
 public class RetrieveAuctionBidsActionShould {
 
+    private AuctionRepository repository = mock(AuctionRepository.class);
+    private RetrieveAuctionBidsAction action = new RetrieveAuctionBidsAction(this.repository);
+
     @Test
     public void
     return_all_the_bids_from_an_auction() {
@@ -25,15 +28,14 @@ public class RetrieveAuctionBidsActionShould {
         var thirdBid = new Bid(money(15));
         var fourthBid = new Bid(money(20));
         var auction = anAuction()
-                .withInitialBid(firstBid.money)
+                .withInitialBid(firstBid)
                 .withBid(secondBid)
                 .withBid(thirdBid)
                 .withBid(fourthBid)
                 .build();
-        var repository = mock(AuctionRepository.class);
-        when(repository.retrieveById(auction.id)).thenReturn(Optional.of(auction));
+        when(this.repository.retrieveById(auction.id)).thenReturn(Optional.of(auction));
 
-        var result = new RetrieveAuctionBidsAction(repository).execute(new RetrieveAuctionBidsActionCommand(auction.id));
+        var result = action.execute(new RetrieveAuctionBidsActionCommand(auction.id));
 
         assertThat(result).hasSize(4);
         assertThatBid(result.get(0)).isEqualTo(fourthBid);

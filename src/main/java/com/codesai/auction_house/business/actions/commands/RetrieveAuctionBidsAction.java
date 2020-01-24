@@ -5,6 +5,8 @@ import com.codesai.auction_house.business.model.auction.Bid;
 
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 public class RetrieveAuctionBidsAction {
     private AuctionRepository repository;
 
@@ -15,6 +17,6 @@ public class RetrieveAuctionBidsAction {
     public List<Bid> execute(RetrieveAuctionBidsActionCommand command) {
         return repository.retrieveById(command.auctionId)
                 .map(value -> value.bids)
-                .orElse(null);
+                .orElse(emptyList());
     }
 }
