@@ -5,6 +5,7 @@ import com.codesai.auction_house.business.actions.commands.BidAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.Bid;
+import com.codesai.auction_house.business.model.auction.exceptions.BidAmountCannotBeTheSameAsTheCurrentOne;
 import com.codesai.auction_house.business.model.auction.exceptions.CurrentBidIsGreater;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -39,12 +40,23 @@ public class BidAuctionActionShould {
     }
     @Test
     public void
-    not_allow_to_bid_an_auction_when_is_lesser_than_the_current_bid() {
+    not_allow_to_bid_an_auction_when_the_amount_is_the_same() {
         var auctionId = "anAuctionId";
-        var expectedAmount = 10;
+        var expectedAmount = 50;
         when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(50).build()));
 
         assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auctionId, expectedAmount)))
                 .isInstanceOf(CurrentBidIsGreater.class);
+    }
+
+    @Test
+    public void
+    not_allow_to_bid_an_auction_when_is_lesser_than_the_current_bid() {
+        var auctionId = "anAuctionId";
+        var amount = 10;
+        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(amount).build()));
+
+        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auctionId, amount)))
+                .isInstanceOf(BidAmountCannotBeTheSameAsTheCurrentOne.class);
     }
 }
