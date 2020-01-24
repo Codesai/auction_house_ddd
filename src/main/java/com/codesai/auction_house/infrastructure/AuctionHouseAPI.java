@@ -1,5 +1,6 @@
 package com.codesai.auction_house.infrastructure;
 
+import com.codesai.auction_house.business.actions.commands.BidAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
@@ -13,8 +14,7 @@ import spark.Response;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.codesai.auction_house.infrastructure.ActionFactory.createAuctionAction;
-import static com.codesai.auction_house.infrastructure.ActionFactory.retrieveAuctionAction;
+import static com.codesai.auction_house.infrastructure.ActionFactory.*;
 import static org.eclipse.jetty.http.HttpStatus.*;
 
 
@@ -43,6 +43,16 @@ public class AuctionHouseAPI {
             response.status(NOT_FOUND_404);
             return "An auction with that id does not exists.";
         }
+    }
+
+    public static Object bidAuction(Request request, Response response) {
+        var auctionId = request.params("id");
+        var body = request.body();
+        var bodyAsJson = new Gson().fromJson(body, JsonObject.class);
+        var amount = bodyAsJson.get("amount").getAsDouble();
+        bidAuctionAction().execute(new BidAuctionCommand(auctionId, amount));
+        response.status(CREATED_201);
+        return "OK";
     }
 
     private static String createAuctionJsonFrom(Auction auction) throws JSONException {

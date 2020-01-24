@@ -15,6 +15,7 @@ public class Routing {
             get("status", (req, res) -> "OK");
             get("auction/:id", AuctionHouseAPI::retrieveAuction);
             post("auction", AuctionHouseAPI::createAuction);
+            post("auction/:id/bid", AuctionHouseAPI::bidAuction);
         });
 
         before((request, response) -> {
