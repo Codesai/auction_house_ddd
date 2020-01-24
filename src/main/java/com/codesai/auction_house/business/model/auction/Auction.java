@@ -15,6 +15,7 @@ import java.util.UUID;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
 import static java.time.LocalDate.now;
+import static java.util.Collections.singletonList;
 
 public class Auction {
     private static final Money MINIMUM_MONEY_TO_OVERBID = money(1);
@@ -38,8 +39,7 @@ public class Auction {
         this.conquerPrice = conquerPrice;
         this.expirationDate = expirationDate;
         this.minimumOverbiddingPrice = minimumOverbiddingPrice;
-        this.bids = new LinkedList<>();
-        bid(initialBid);
+        this.bids = new LinkedList<>(singletonList(initialBid));
     }
 
 

@@ -43,10 +43,10 @@ public class BidAuctionActionShould {
     not_allow_to_bid_an_auction_when_the_amount_is_the_same() {
         var auctionId = "anAuctionId";
         var expectedAmount = 50;
-        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(new Bid(money(50))).build()));
+        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(new Bid(money(expectedAmount))).build()));
 
         assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auctionId, expectedAmount)))
-                .isInstanceOf(CurrentBidIsGreater.class);
+                .isInstanceOf(BidAmountCannotBeTheSameAsTheCurrentOne.class);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class BidAuctionActionShould {
         var amount = 10;
         when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(new Bid(money(amount))).build()));
 
-        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auctionId, amount)))
-                .isInstanceOf(BidAmountCannotBeTheSameAsTheCurrentOne.class);
+        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auctionId, 5)))
+                .isInstanceOf(CurrentBidIsGreater.class);
     }
 }

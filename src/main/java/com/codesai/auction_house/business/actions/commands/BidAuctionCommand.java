@@ -6,10 +6,10 @@ import static com.codesai.auction_house.business.model.generic.Money.money;
 
 public class BidAuctionCommand {
     public final String auctionId;
-    public final Money bidMoney;
+    public final Money biddingAmount;
 
     public BidAuctionCommand(String auctionId, double bidAmount) {
         this.auctionId = auctionId;
-        this.bidMoney = money(bidAmount);
+        this.biddingAmount = money(bidAmount);
     }
 }
