@@ -51,11 +51,11 @@ public class AuctionHouseApiShould {
     return_an_okay_when_is_running_on_the_status_route() {
         given().
                 when().
-                get("status").
+                    get("status").
                 then().
-                assertThat().
-                statusCode(200).
-                body(equalTo("OK"));
+                    assertThat().
+                    statusCode(200).
+                    body(equalTo("OK"));
     }
 
     @Test
@@ -63,15 +63,15 @@ public class AuctionHouseApiShould {
     create_a_new_auction() throws Exception {
         given().
                 when().
-                body(createJsonFrom(anAuction().build()).toString()).
-                post("auction").
+                    body(createJsonFrom(anAuction().build()).toString()).
+                    post("auction").
                 then().
-                assertThat().
-                statusCode(201).
-                header("Location", allOf(
-                        startsWith(RestAssured.baseURI + "auction/"),
-                        urlEndsWithValidUUID()
-                ));
+                    assertThat().
+                    statusCode(201).
+                    header("Location", allOf(
+                            startsWith(RestAssured.baseURI + "auction/"),
+                            urlEndsWithValidUUID()
+                    ));
     }
 
     @Test
@@ -80,14 +80,14 @@ public class AuctionHouseApiShould {
 
         given().
                 when().
-                body(createJsonFrom(anAuction().build())
+                    body(createJsonFrom(anAuction().build())
                         .put("initial_bid", "an invalid value")
                         .toString()).
-                post("auction").
+                    post("auction").
                 then().
-                assertThat().
-                statusCode(422).
-                body(equalTo("The auction body is not well formed."));
+                    assertThat().
+                    statusCode(422).
+                    body(equalTo("The auction body is not well formed."));
     }
 
     @Test
@@ -98,12 +98,12 @@ public class AuctionHouseApiShould {
 
         given().
                 when().
-                get("auction/{id}", expectedAuction.id).
+                    get("auction/{id}", expectedAuction.id).
                 then().
-                assertThat().
-                statusCode(200).
-                header("Content-type", "application/json").
-                body(equalTo(auctionJson.toString()));
+                    assertThat().
+                    statusCode(200).
+                    header("Content-type", "application/json").
+                    body(equalTo(auctionJson.toString()));
     }
 
     @Test
@@ -111,11 +111,11 @@ public class AuctionHouseApiShould {
     get_a_404_when_the_auction_does_not_exists() {
         given().
                 when().
-                get("auction/{id}", "non-existing-auction-id").
+                    get("auction/{id}", "non-existing-auction-id").
                 then().
-                assertThat().
-                statusCode(404).
-                body(equalTo("An auction with that id does not exists."));
+                    assertThat().
+                    statusCode(404).
+                    body(equalTo("An auction with that id does not exists."));
     }
 
     @Test
@@ -126,21 +126,23 @@ public class AuctionHouseApiShould {
 
         given().
                 when().
-                body(
-                        new JSONObject()
-                                .put("amount", expectedBid.money.amount)
-                                .toString()
-                ).
-                post("auction/{id}/bid", givenAuctionId).
+                    body(createBidJsonFrom(expectedBid)).
+                    post("auction/{id}/bid", givenAuctionId).
                 then().
-                assertThat().
-                statusCode(201).
-                body(equalTo("OK"));
+                    assertThat().
+                    statusCode(201).
+                    body(equalTo("OK"));
 
         var actualAuction = auctionRepository().retrieveById(givenAuctionId);
         assertThat(actualAuction).isNotEmpty();
         assertThat(actualAuction.get().bids).hasSize(2);
         assertThatBid(actualAuction.get().currentBid()).isEqualTo(expectedBid);
+    }
+
+    private String createBidJsonFrom(Bid bid) throws JSONException {
+        return new JSONObject()
+                .put("amount", bid.money.amount)
+                .toString();
     }
 
     private Auction givingAnExistingAuction() {
