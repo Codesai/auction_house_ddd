@@ -15,7 +15,7 @@ public class CreateAuctionAction {
     }
 
     public String execute(CreateAuctionCommand command) {
-        var auction = new Auction(item(command.name, command.description), new Bid(command.initialBid), command.conquerPrice, command.expirationDate, command.minimumOverbiddingPrice);
+        var auction = new Auction(item(command.name, command.description), new Bid(command.startingPrice), command.conquerPrice, command.expirationDate, command.minimumOverbiddingPrice);
         repository.save(auction);
         return auction.id;
     }

@@ -41,4 +41,9 @@ public class AuctionBuilder {
         this.bids.forEach(auction::bid);
         return auction;
     }
+
+    public AuctionBuilder withExpirationDate(LocalDate expirationDate) {
+        this.expirationDay = expirationDate;
+        return this;
+    }
 }

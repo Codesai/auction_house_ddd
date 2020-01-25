@@ -38,6 +38,7 @@ public class BidAuctionActionShould {
         assertThat(this.captor.getValue().bids).hasSize(2);
         assertThatBid(this.captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount)));
     }
+
     @Test
     public void
     not_allow_to_bid_an_auction_when_the_amount_is_the_same() {

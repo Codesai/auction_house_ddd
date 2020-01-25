@@ -9,12 +9,17 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.UUID;
 
 public class Bid {
-    public final String id;
+    public final String id = UUID.randomUUID().toString();
     public Money money;
+    public String userId;
 
     public Bid(Money money) {
-        this.id = UUID.randomUUID().toString();
         this.money = money;
+    }
+
+    public Bid(Money conquerPrice, String userId) {
+        money = conquerPrice;
+        this.userId = userId;
     }
 
     @Override

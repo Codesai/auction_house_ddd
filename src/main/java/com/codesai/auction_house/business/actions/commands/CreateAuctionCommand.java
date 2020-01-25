@@ -9,20 +9,20 @@ import static com.codesai.auction_house.business.model.generic.Money.money;
 public class CreateAuctionCommand {
     public final String name;
     public final String description;
-    public final Money initialBid;
+    public final Money startingPrice;
     public final Money conquerPrice;
     public final LocalDate expirationDate;
     public final Money minimumOverbiddingPrice;
 
     public CreateAuctionCommand(String name,
                                 String description,
-                                double initialBid,
+                                double startingPrice,
                                 double conquerPrice,
                                 LocalDate expirationDate,
                                 double minimumOverbiddingPrice) {
         this.name = name;
         this.description = description;
-        this.initialBid = money(initialBid);
+        this.startingPrice = money(startingPrice);
         this.conquerPrice = money(conquerPrice);
         this.expirationDate = expirationDate;
         this.minimumOverbiddingPrice = money(minimumOverbiddingPrice);

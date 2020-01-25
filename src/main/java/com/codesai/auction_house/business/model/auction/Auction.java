@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
@@ -27,6 +28,7 @@ public class Auction {
     public LocalDate expirationDate;
     public Money minimumOverbiddingPrice;
     public List<Bid> bids;
+    public AuctionState state = AuctionState.LIVE;
 
     public Auction(Item item, Bid initialBid, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice) {
         if (conquerPrice.isLessThan(initialBid.money)) throw new InitialBidIsGreaterThanConquerPrice();
@@ -54,5 +56,15 @@ public class Auction {
 
     public Bid currentBid() {
         return this.bids.get(0);
+    }
+
+    public void conquerBy(String userId) {
+        expirationDate = LocalDate.now().minusDays(1);
+        bids.add(0, new Bid(conquerPrice, userId));
+    }
+
+    public Optional<Bid> winner() {
+        if (bids.isEmpty()) return Optional.empty();
+        return Optional.of(bids.get(0));
     }
 }
