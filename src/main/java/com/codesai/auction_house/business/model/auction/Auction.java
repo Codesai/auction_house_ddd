@@ -28,7 +28,6 @@ public class Auction {
     public LocalDate expirationDate;
     public Money minimumOverbiddingPrice;
     public List<Bid> bids;
-    public AuctionState state = AuctionState.LIVE;
 
     public Auction(Item item, Bid initialBid, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice) {
         if (conquerPrice.isLessThan(initialBid.money)) throw new InitialBidIsGreaterThanConquerPrice();
