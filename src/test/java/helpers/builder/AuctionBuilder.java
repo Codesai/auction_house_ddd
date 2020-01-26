@@ -36,10 +36,14 @@ public class AuctionBuilder {
         return this;
     }
 
+    public AuctionBuilder withBids(List<Bid> bids) {
+        this.bids = bids;
+        return this;
+    }
+
     public Auction build() {
         var auction = new Auction(item, startingPrice, conquerPrice, expirationDay, minimumOverbiddingPrice);
         this.bids.forEach(auction::bid);
         return auction;
     }
-
 }
