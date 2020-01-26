@@ -135,7 +135,7 @@ public class AuctionHouseApiShould {
 
         var actualAuction = auctionRepository().retrieveById(givenAuctionId);
         assertThat(actualAuction).isNotEmpty();
-        assertThat(actualAuction.get().bids).hasSize(2);
+        assertThat(actualAuction.get().bids).hasSize(1);
         assertThatBid(actualAuction.get().topBid().get()).isEqualTo(expectedBid);
     }
 

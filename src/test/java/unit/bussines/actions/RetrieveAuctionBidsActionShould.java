@@ -35,7 +35,7 @@ public class RetrieveAuctionBidsActionShould {
 
         var result = action.execute(new RetrieveAuctionBidsActionCommand(auction.id));
 
-        assertThat(result).hasSize(4);
+        assertThat(result).hasSize(3);
         assertThat(result).containsExactlyInAnyOrder(firstBid, secondBid, thirdBid, fourthBid);
     }
 
