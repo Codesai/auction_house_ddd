@@ -20,8 +20,8 @@ public class AuctionAssert extends AbstractAssert<AuctionAssert, Auction> {
         if (!actual.item.equals(expected.item)) {
             failWithMessage(String.format("Expected auction item to be: %s but was %s", expected.item, expected.item));
         }
-        if (!actual.initialBid.equals(expected.initialBid)) {
-            failWithMessage(String.format("Expected initial bid to be: %s but was %s", expected.initialBid, expected.initialBid));
+        if (!actual.startingPrice.equals(expected.startingPrice)) {
+            failWithMessage(String.format("Expected initial bid to be: %s but was %s", expected.startingPrice, expected.startingPrice));
         }
         if (!actual.conquerPrice.equals(expected.conquerPrice)) {
             failWithMessage(String.format("Expected conquer price to be: %s but was %s", expected.conquerPrice, expected.conquerPrice));

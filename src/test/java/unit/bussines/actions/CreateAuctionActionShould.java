@@ -31,7 +31,7 @@ public class CreateAuctionActionShould {
         var createAuctionCommand = aCreateAuctionCommand()
                 .withName(expectedAuction.item.name)
                 .withDescription(expectedAuction.item.description)
-                .withInitialBid(expectedAuction.initialBid)
+                .withInitialBid(expectedAuction.startingPrice)
                 .withConquerPrice(expectedAuction.conquerPrice)
                 .withExpirationDay(expectedAuction.expirationDate)
                 .withMinimumOverbiddingPrice(expectedAuction.minimumOverbiddingPrice)

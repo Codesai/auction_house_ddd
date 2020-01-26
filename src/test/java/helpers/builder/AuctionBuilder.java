@@ -16,7 +16,7 @@ import static java.time.LocalDate.now;
 public class AuctionBuilder {
 
     private Money conquerPrice = money(50);
-    private Bid initialBid = new Bid(money(10.5));
+    private Money startingPrice = money(10.5);
     private Money minimumOverbiddingPrice = money(1);
     private LocalDate expirationDay = now().plusDays(14);
     private Item item = item("anyItem", "anyDescription");
@@ -26,8 +26,8 @@ public class AuctionBuilder {
         return new AuctionBuilder();
     }
 
-    public AuctionBuilder withInitialBid(Bid initialBid) {
-        this.initialBid = initialBid;
+    public AuctionBuilder withStartingPrice(Money startingPrice) {
+        this.startingPrice = startingPrice;
         return this;
     }
 
@@ -37,13 +37,9 @@ public class AuctionBuilder {
     }
 
     public Auction build() {
-        var auction = new Auction(item, initialBid, conquerPrice, expirationDay, minimumOverbiddingPrice);
+        var auction = new Auction(item, startingPrice, conquerPrice, expirationDay, minimumOverbiddingPrice);
         this.bids.forEach(auction::bid);
         return auction;
     }
 
-    public AuctionBuilder withExpirationDate(LocalDate expirationDate) {
-        this.expirationDay = expirationDate;
-        return this;
-    }
 }

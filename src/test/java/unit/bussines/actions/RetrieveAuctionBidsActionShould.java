@@ -26,8 +26,7 @@ public class RetrieveAuctionBidsActionShould {
         var secondBid = new Bid(money(10));
         var thirdBid = new Bid(money(15));
         var fourthBid = new Bid(money(20));
-        var auction = anAuction()
-                .withInitialBid(firstBid)
+        var auction = anAuction().withStartingPrice(firstBid.money)
                 .withBid(secondBid)
                 .withBid(thirdBid)
                 .withBid(fourthBid)

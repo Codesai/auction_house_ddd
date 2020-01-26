@@ -157,7 +157,7 @@ public class AuctionHouseApiShould {
                         .put("name", expectedAuction.item.name)
                         .put("description", expectedAuction.item.description)
                 )
-                .put("initial_bid", expectedAuction.initialBid.amount)
+                .put("initial_bid", expectedAuction.startingPrice.amount)
                 .put("conquer_price", expectedAuction.conquerPrice.amount)
                 .put("expiration_date", expectedAuction.expirationDate.toString())
                 .put("minimum_overbidding_price", expectedAuction.minimumOverbiddingPrice.amount);

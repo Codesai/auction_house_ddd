@@ -61,7 +61,7 @@ public class AuctionHouseAPI {
                         .put("name", auction.item.name)
                         .put("description", auction.item.description)
                 )
-                .put("initial_bid", auction.initialBid.amount)
+                .put("initial_bid", auction.startingPrice.amount)
                 .put("conquer_price", auction.conquerPrice.amount)
                 .put("expiration_date", auction.expirationDate.toString())
                 .put("minimum_overbidding_price", auction.minimumOverbiddingPrice.amount)

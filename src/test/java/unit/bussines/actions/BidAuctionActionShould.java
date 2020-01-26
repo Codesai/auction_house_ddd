@@ -6,7 +6,7 @@ import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.Bid;
 import com.codesai.auction_house.business.model.auction.exceptions.BidAmountCannotBeTheSameAsTheCurrentOne;
-import com.codesai.auction_house.business.model.auction.exceptions.CurrentBidIsGreater;
+import com.codesai.auction_house.business.model.auction.exceptions.TopBidIsGreater;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -21,43 +21,57 @@ import static org.mockito.Mockito.*;
 
 public class BidAuctionActionShould {
 
+    String ANY_AUCTION_ID = "anAuctionId";
     AuctionRepository repository = mock(AuctionRepository.class);
     BidAuctionAction action = new BidAuctionAction(this.repository);
     ArgumentCaptor<Auction> captor = ArgumentCaptor.forClass(Auction.class);
 
     @Test
     public void
-    bid_an_auction_when_is_greater_than_the_current_bid() {
-        var auctionId = "anAuctionId";
+    bid_an_auction_when_is_greater_than_the_starting_price_bid() {
         var expectedAmount = 50.0;
-        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(new Bid(money(20))).build()));
+        when(this.repository.retrieveById(ANY_AUCTION_ID)).thenReturn(Optional.of(anAuction().withStartingPrice(money(20)).build()));
 
-        action.execute(new BidAuctionCommand(auctionId, expectedAmount));
+        action.execute(new BidAuctionCommand(ANY_AUCTION_ID, expectedAmount));
 
         verify(this.repository, times(1)).save(this.captor.capture());
-        assertThat(this.captor.getValue().bids).hasSize(2);
+        assertThat(this.captor.getValue().bids).hasSize(1);
         assertThatBid(this.captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount)));
     }
 
     @Test
     public void
-    not_allow_to_bid_an_auction_when_the_amount_is_the_same() {
-        var auctionId = "anAuctionId";
-        var expectedAmount = 50;
-        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(new Bid(money(expectedAmount))).build()));
+    bid_an_auction_when_is_greater_than_the_top_bid() {
+        var auction = Optional.of(anAuction().withStartingPrice(money(20)).withBid(new Bid(money(25))).build());
+        when(this.repository.retrieveById(ANY_AUCTION_ID)).thenReturn(auction);
 
-        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auctionId, expectedAmount)))
+        action.execute(new BidAuctionCommand(ANY_AUCTION_ID, 30));
+
+        verify(repository, times(1)).save(captor.capture());
+        assertThat(captor.getValue().bids).hasSize(2);
+        assertThatBid(captor.getValue().bids.get(0)).isEqualTo(new Bid(money(30)));
+    }
+
+    @Test
+    public void
+    not_allow_to_bid_an_auction_when_the_top_bid_amount_is_the_same() {
+        var expectedAmount = 50;
+        when(this.repository.retrieveById(ANY_AUCTION_ID))
+                .thenReturn(Optional.of(anAuction().withBid(new Bid(money(expectedAmount))).build()));
+
+        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(ANY_AUCTION_ID, expectedAmount)))
                 .isInstanceOf(BidAmountCannotBeTheSameAsTheCurrentOne.class);
     }
 
     @Test
     public void
     not_allow_to_bid_an_auction_when_is_lesser_than_the_current_bid() {
-        var auctionId = "anAuctionId";
         var amount = 10;
-        when(this.repository.retrieveById(auctionId)).thenReturn(Optional.of(anAuction().withInitialBid(new Bid(money(amount))).build()));
+        var auctionBuilder = anAuction().withStartingPrice(money(amount)).withBid(new Bid(money(15)));
+        when(this.repository.retrieveById(ANY_AUCTION_ID))
+                .thenReturn(Optional.of(auctionBuilder.build()));
 
-        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auctionId, 5)))
-                .isInstanceOf(CurrentBidIsGreater.class);
+        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(ANY_AUCTION_ID, 5)))
+                .isInstanceOf(TopBidIsGreater.class);
     }
 }

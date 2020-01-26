@@ -16,4 +16,8 @@ public final class Money extends ValueObject {
     public boolean isLessThan(Money money) {
         return this.amount < money.amount;
     }
+
+    public boolean isGreaterThan(Money money) {
+        return this.amount > money.amount;
+    }
 }
