@@ -20,22 +20,22 @@ import static unit.bussines.actions.AuctionConqueredMatcher.anAuctionIsConquered
 public class ConquerAuctionActionShould {
 
 
-    private final AuctionRepository repository = mock(AuctionRepository.class);
-    private final ConquerAuctionAction action = new ConquerAuctionAction(repository);
+    private final AuctionRepository auctions = mock(AuctionRepository.class);
+    private final ConquerAuctionAction conquerAuction = new ConquerAuctionAction(auctions);
     private final String userId = "anyUser";
 
     @Test public void
     win_the_auction() {
-        var anAuction = givenAnAuction();
+        var aLiveAuction = givenALiveAuction();
 
-        action.execute(new ConquerAuctionActionCommand(userId, anAuction.id));
+        conquerAuction.execute(new ConquerAuctionActionCommand(userId, aLiveAuction.id));
 
-        verify(repository).save(argThat(anAuctionIsConqueredBy(userId)));
+        verify(auctions).save(argThat(anAuctionConqueredBy(userId)));
     }
 
-    private Auction givenAnAuction() {
+    private Auction givenALiveAuction() {
         var anAuction = anAuction().build();
-        when(repository.retrieveById(anAuction.id)).thenReturn(Optional.of(anAuction));
+        when(auctions.retrieveById(anAuction.id)).thenReturn(Optional.of(anAuction));
         return anAuction;
     }
 }
@@ -48,7 +48,7 @@ class AuctionConqueredMatcher extends TypeSafeMatcher<Auction> {
         this.userId = userId;
     }
 
-    public static AuctionConqueredMatcher anAuctionIsConqueredBy(String userId) {
+    public static AuctionConqueredMatcher anAuctionConqueredBy(String userId) {
         return new AuctionConqueredMatcher(userId);
     }
 
