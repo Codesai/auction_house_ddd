@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
@@ -85,13 +84,13 @@ public class BidAuctionActionShould {
 
     private Auction givenAnAuctionWithNoBidsAndStartingPriceAt(Money startingPrice) {
         var auction = anAuction().withStartingPrice(startingPrice).build();
-        when(this.repository.retrieveById(auction.id)).thenReturn(Optional.of(auction));
+        when(this.repository.retrieveById(auction.id)).thenReturn(auction);
         return auction;
     }
 
     private Auction givenAnAuctionWithStartingPriceAndBids(Money startingPrice, List<Bid> bids) {
         var auction = anAuction().withStartingPrice(startingPrice).withBids(bids).build();
-        when(this.repository.retrieveById(auction.id)).thenReturn(Optional.of(auction));
+        when(this.repository.retrieveById(auction.id)).thenReturn(auction);
         return auction;
     }
 }

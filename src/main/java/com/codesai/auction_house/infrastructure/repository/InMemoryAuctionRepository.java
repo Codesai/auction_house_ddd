@@ -2,10 +2,10 @@ package com.codesai.auction_house.infrastructure.repository;
 
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
+import com.codesai.auction_house.business.model.auction.exceptions.AcutionNotFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public class InMemoryAuctionRepository implements AuctionRepository {
     private Map<String, Auction> auctions = new HashMap<>();
@@ -16,8 +16,9 @@ public class InMemoryAuctionRepository implements AuctionRepository {
     }
 
     @Override
-    public Optional<Auction> retrieveById(String id) {
-        return Optional.ofNullable(auctions.get(id));
+    public Auction retrieveById(String id) {
+        if (!auctions.containsKey(id)) throw new AcutionNotFoundException();
+        return auctions.get(id);
     }
 
     public void clean() {

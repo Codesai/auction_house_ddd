@@ -1,9 +1,9 @@
 package com.codesai.auction_house.business.model.auction;
 
-import java.util.Optional;
+import com.codesai.auction_house.business.model.auction.exceptions.AcutionNotFoundException;
 
 public interface AuctionRepository {
     void save(Auction auction);
 
-    Optional<Auction> retrieveById(String id);
+    Auction retrieveById(String id) throws AcutionNotFoundException;
 }

@@ -7,7 +7,6 @@ import com.codesai.auction_house.business.model.auction.Bid;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
@@ -27,7 +26,7 @@ public class RetrieveAuctionBidsActionShould {
         var auction = anAuction().withStartingPrice(money(5))
                 .withBids(expectedBids)
                 .build();
-        when(this.repository.retrieveById(auction.id)).thenReturn(Optional.of(auction));
+        when(this.repository.retrieveById(auction.id)).thenReturn(auction);
 
         var result = action.execute(new RetrieveAuctionBidsActionCommand(auction.id));
 

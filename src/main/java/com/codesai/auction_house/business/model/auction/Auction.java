@@ -61,7 +61,8 @@ public class Auction {
         return Optional.empty();
     }
 
-    public void conquerBy(String userId) {
+    public void conquerBy(String userId) throws CannotConquerAClosedAuctionException {
+        if (expirationDate.isBefore(now())) throw new CannotConquerAClosedAuctionException();
         expirationDate = LocalDate.now().minusDays(1);
         addBid(new Bid(conquerPrice, userId));
     }

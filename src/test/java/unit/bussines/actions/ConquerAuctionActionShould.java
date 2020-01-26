@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Optional;
 
 import static helpers.builder.AuctionBuilder.anAuction;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -52,7 +51,7 @@ public class ConquerAuctionActionShould {
 
     private Auction givenALiveAuction() {
         var anAuction = anAuction().build();
-        when(auctions.retrieveById(anAuction.id)).thenReturn(Optional.of(anAuction));
+        when(auctions.retrieveById(anAuction.id)).thenReturn(anAuction);
         return anAuction;
     }
 }

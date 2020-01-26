@@ -4,8 +4,6 @@ import com.codesai.auction_house.business.actions.commands.RetrieveAuctionComman
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 
-import java.util.Optional;
-
 public class RetrieveAuctionAction {
     private AuctionRepository repository;
 
@@ -13,7 +11,7 @@ public class RetrieveAuctionAction {
         this.repository = repository;
     }
 
-    public Optional<Auction> execute(RetrieveAuctionCommand command) {
+    public Auction execute(RetrieveAuctionCommand command) {
         return this.repository.retrieveById(command.auctionId);
     }
 }

@@ -4,6 +4,7 @@ import com.codesai.auction_house.business.actions.commands.BidAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
+import com.codesai.auction_house.business.model.auction.exceptions.AcutionNotFoundException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.json.JSONException;
@@ -33,13 +34,12 @@ public class AuctionHouseAPI {
 
     public static String retrieveAuction(Request request, Response response) throws JSONException {
         var auctionId = request.params("id");
-        var optionalAuction = retrieveAuctionAction().execute(new RetrieveAuctionCommand(auctionId));
-        if (optionalAuction.isPresent()) {
-            var auction = optionalAuction.get();
+        try {
+            Auction auction = retrieveAuctionAction().execute(new RetrieveAuctionCommand(auctionId));
             response.header("Content-type", "application/json");
             response.status(OK_200);
             return createAuctionJsonFrom(auction);
-        } else {
+        } catch (AcutionNotFoundException e) {
             response.status(NOT_FOUND_404);
             return "An auction with that id does not exists.";
         }

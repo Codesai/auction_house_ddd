@@ -12,9 +12,8 @@ public class BidAuctionAction {
     }
 
     public void execute(BidAuctionCommand command) {
-        this.repository.retrieveById(command.auctionId).ifPresent(auction -> {
-            auction.bid(new Bid(command.biddingAmount));
-            repository.save(auction);
-        });
+        var auction = repository.retrieveById(command.auctionId);
+        auction.bid(new Bid(command.biddingAmount));
+        repository.save(auction);
     }
 }
