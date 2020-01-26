@@ -4,6 +4,7 @@ import com.codesai.auction_house.business.actions.ConquerAuctionAction;
 import com.codesai.auction_house.business.actions.commands.ConquerAuctionActionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
+import com.codesai.auction_house.business.model.auction.exceptions.CannotConquerAClosedAuctionException;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,10 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static helpers.builder.AuctionBuilder.anAuction;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
-import static unit.bussines.actions.AuctionConqueredMatcher.anAuctionIsConqueredBy;
+import static unit.bussines.actions.AuctionConqueredMatcher.anAuctionConqueredBy;
 
 public class ConquerAuctionActionShould {
 
@@ -25,12 +27,27 @@ public class ConquerAuctionActionShould {
     private final String userId = "anyUser";
 
     @Test public void
-    win_the_auction() {
+    win_the_auction() throws Exception {
         var aLiveAuction = givenALiveAuction();
 
         conquerAuction.execute(new ConquerAuctionActionCommand(userId, aLiveAuction.id));
 
         verify(auctions).save(argThat(anAuctionConqueredBy(userId)));
+    }
+    
+    @Test public void
+    cannot_conquer_a_closed_auction() throws Exception {
+        var aClosedAuction = aClosedAuction();
+
+        assertThatThrownBy(() -> {
+            conquerAuction.execute(new ConquerAuctionActionCommand(userId, aClosedAuction.id));
+        }).isInstanceOf(CannotConquerAClosedAuctionException.class);
+    }
+
+    private Auction aClosedAuction() throws Exception {
+        var auction = givenALiveAuction();
+        conquerAuction.execute(new ConquerAuctionActionCommand(userId, auction.id));
+        return auction;
     }
 
     private Auction givenALiveAuction() {
