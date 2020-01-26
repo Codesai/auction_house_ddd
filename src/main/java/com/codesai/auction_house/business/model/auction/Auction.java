@@ -29,7 +29,6 @@ public class Auction {
     public Money minimumOverbiddingPrice;
     public List<Bid> bids;
 
-    // todo: test
     public Auction(Item item, Bid initialBid, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice) {
         if (conquerPrice.isLessThan(initialBid.money)) throw new InitialBidIsGreaterThanConquerPrice();
         if (minimumOverbiddingPrice.isLessThan(MINIMUM_MONEY_TO_OVERBID)) throw new MinimumOverbiddingPriceIsNotAllowed();
