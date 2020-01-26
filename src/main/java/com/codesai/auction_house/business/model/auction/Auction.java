@@ -46,7 +46,10 @@ public class Auction {
                     if (currentBid.money.isGreaterThan(bid.money)) throw new TopBidIsGreater();
                     if (bid.money.equals(currentBid.money)) throw new BidAmountCannotBeTheSameAsTheCurrentOne();
                     this.bids.add(0, bid);
-                }, () -> this.bids.add(0, bid));
+                }, () -> {
+                    if (bid.money.isLessThan(startingPrice)) throw new FirstBidShouldBeGreaterThanStartingPrice();
+                    this.bids.add(0, bid);
+                });
     }
 
     private Optional<Bid> topBid() {

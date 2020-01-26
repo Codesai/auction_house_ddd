@@ -6,6 +6,7 @@ import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.Bid;
 import com.codesai.auction_house.business.model.auction.exceptions.BidAmountCannotBeTheSameAsTheCurrentOne;
+import com.codesai.auction_house.business.model.auction.exceptions.FirstBidShouldBeGreaterThanStartingPrice;
 import com.codesai.auction_house.business.model.auction.exceptions.TopBidIsGreater;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -50,6 +51,17 @@ public class BidAuctionActionShould {
         verify(repository, times(1)).save(captor.capture());
         assertThat(captor.getValue().bids).hasSize(2);
         assertThatBid(captor.getValue().bids.get(0)).isEqualTo(new Bid(money(30)));
+    }
+
+    @Test
+    public void
+    not_bid_an_auction_when_with_no_bids_the_starting_price_is_greater_the_new_bid() {
+        var auction = Optional.of(anAuction().withStartingPrice(money(30)).build());
+        when(this.repository.retrieveById(ANY_AUCTION_ID)).thenReturn(auction);
+
+        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(ANY_AUCTION_ID, 29)))
+            .isInstanceOf(FirstBidShouldBeGreaterThanStartingPrice.class);
+        verify(repository, times(0)).save(any());
     }
 
     @Test
