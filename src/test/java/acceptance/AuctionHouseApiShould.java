@@ -136,7 +136,7 @@ public class AuctionHouseApiShould {
         var actualAuction = auctionRepository().retrieveById(givenAuctionId);
         assertThat(actualAuction).isNotEmpty();
         assertThat(actualAuction.get().bids).hasSize(2);
-        assertThatBid(actualAuction.get().currentBid()).isEqualTo(expectedBid);
+        assertThatBid(actualAuction.get().topBid().get()).isEqualTo(expectedBid);
     }
 
     private String createBidJsonFrom(Bid bid) throws JSONException {

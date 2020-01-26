@@ -45,30 +45,25 @@ public class Auction {
                 currentBid -> {
                     if (currentBid.money.isGreaterThan(bid.money)) throw new TopBidIsGreater();
                     if (bid.money.equals(currentBid.money)) throw new BidAmountCannotBeTheSameAsTheCurrentOne();
-                    this.bids.add(0, bid);
+                    addBid(bid);
                 }, () -> {
                     if (bid.money.isLessThan(startingPrice)) throw new FirstBidShouldBeGreaterThanStartingPrice();
-                    this.bids.add(0, bid);
+                    addBid(bid);
                 });
     }
 
-    private Optional<Bid> topBid() {
-        if (bids.size() > 0)  return Optional.of(bids.get(0));
-        return Optional.empty();
+    private void addBid(Bid bid) {
+        this.bids.add(0, bid);
     }
 
-    public Bid currentBid() {
-        return topBid().get();
+    public Optional<Bid> topBid() {
+        if (!bids.isEmpty())  return Optional.of(bids.get(0));
+        return Optional.empty();
     }
 
     public void conquerBy(String userId) {
         expirationDate = LocalDate.now().minusDays(1);
-        bids.add(0, new Bid(conquerPrice, userId));
-    }
-
-    public Optional<Bid> winner() {
-        if (bids.isEmpty()) return Optional.empty();
-        return topBid();
+        addBid(new Bid(conquerPrice, userId));
     }
 
     @Override

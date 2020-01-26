@@ -15,7 +15,7 @@ import java.util.Optional;
 import static helpers.builder.AuctionBuilder.anAuction;
 import static org.mockito.Mockito.*;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
-import static unit.bussines.actions.AuctionConqueredMatcher.*;
+import static unit.bussines.actions.AuctionConqueredMatcher.anAuctionIsConqueredBy;
 
 public class ConquerAuctionActionShould {
 
@@ -56,7 +56,7 @@ class AuctionConqueredMatcher extends TypeSafeMatcher<Auction> {
     protected boolean matchesSafely(Auction auction) {
         return
             auction.expirationDate.equals(LocalDate.now().minusDays(1)) &&
-            auction.winner().map((bid) -> Objects.equals(bid.userId, userId)).orElse(false);
+            auction.topBid().map((bid) -> Objects.equals(bid.userId, userId)).orElse(false);
     }
 
     @Override
