@@ -6,6 +6,7 @@ import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.Bid;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
@@ -22,21 +23,16 @@ public class RetrieveAuctionBidsActionShould {
     @Test
     public void
     return_all_the_bids_from_an_auction() {
-        var firstBid = new Bid(money(5));
-        var secondBid = new Bid(money(10));
-        var thirdBid = new Bid(money(15));
-        var fourthBid = new Bid(money(20));
-        var auction = anAuction().withStartingPrice(firstBid.money)
-                .withBid(secondBid)
-                .withBid(thirdBid)
-                .withBid(fourthBid)
+        var expectedBids = List.of(new Bid(money(10)), new Bid(money(15)), new Bid(money(20)));
+        var auction = anAuction().withStartingPrice(money(5))
+                .withBids(expectedBids)
                 .build();
         when(this.repository.retrieveById(auction.id)).thenReturn(Optional.of(auction));
 
         var result = action.execute(new RetrieveAuctionBidsActionCommand(auction.id));
 
         assertThat(result).hasSize(3);
-        assertThat(result).containsExactlyInAnyOrder(firstBid, secondBid, thirdBid, fourthBid);
+        assertThat(result).containsAll(expectedBids);
     }
 
 }
