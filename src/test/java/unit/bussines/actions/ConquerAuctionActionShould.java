@@ -38,9 +38,7 @@ public class ConquerAuctionActionShould {
     cannot_conquer_a_closed_auction() throws Exception {
         var aClosedAuction = aClosedAuction();
 
-        assertThatThrownBy(() -> {
-            conquerAuction.execute(new ConquerAuctionActionCommand(userId, aClosedAuction.id));
-        }).isInstanceOf(CannotConquerAClosedAuctionException.class);
+        assertThatThrownBy(() -> conquerAuction.execute(new ConquerAuctionActionCommand(userId, aClosedAuction.id))).isInstanceOf(CannotConquerAClosedAuctionException.class);
     }
 
     private Auction aClosedAuction() throws Exception {

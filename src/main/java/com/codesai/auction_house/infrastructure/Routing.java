@@ -18,9 +18,7 @@ public class Routing {
             post("auction/:id/bid", AuctionHouseAPI::bidAuction);
         });
 
-        before((request, response) -> {
-            response.header("Access-Control-Allow-Origin", "*");
-        });
+        before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
 
         options("/*", (request, response) -> {
             var accessControlRequestHeaders = Optional.ofNullable(request.headers("Access-Control-Request-Headers"));
