@@ -146,7 +146,7 @@ definitions:
     required:
       - amount
     properties:
-      name:
+      amount:
         type: number
         example: 50
         description: the bid amount for the auction
