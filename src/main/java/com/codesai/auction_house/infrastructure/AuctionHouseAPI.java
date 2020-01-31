@@ -5,7 +5,7 @@ import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.exceptions.AcutionNotFoundException;
-import com.codesai.auction_house.business.model.auction.exceptions.FirstBidShouldBeGreaterThanStartingPrice;
+import com.codesai.auction_house.business.model.auction.exceptions.AuctionException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.json.JSONException;
@@ -34,9 +34,8 @@ public class AuctionHouseAPI {
     }
 
     public static String retrieveAuction(Request request, Response response) throws JSONException {
-        var auctionId = request.params("id");
         try {
-            Auction auction = retrieveAuctionAction().execute(new RetrieveAuctionCommand(auctionId));
+            Auction auction = retrieveAuctionAction().execute(new RetrieveAuctionCommand(auctionIdFrom(request)));
             response.header("Content-type", "application/json");
             response.status(OK_200);
             return createAuctionJsonFrom(auction);
@@ -47,23 +46,43 @@ public class AuctionHouseAPI {
     }
 
     public static Object bidAuction(Request request, Response response) throws JSONException {
-        var auctionId = request.params("id");
-        var body = request.body();
-        var bodyAsJson = new Gson().fromJson(body, JsonObject.class);
-        var amount = bodyAsJson.get("amount").getAsDouble();
-
         try {
-            bidAuctionAction().execute(new BidAuctionCommand(auctionId, amount));
-            response.status(CREATED_201);
-            return "OK";
-        } catch (FirstBidShouldBeGreaterThanStartingPrice e) {
-            response.status(422);
-            response.type("application/json");
-            return anErrorJsonResponseFor(e);
+            bidAuctionAction().execute(new BidAuctionCommand(auctionIdFrom(request), amountFrom(request)));
+            return createdOk(response);
+        } catch (AuctionException e) {
+            return anAuctionException(response, e);
+        } catch (Exception e) {
+            return anUnknownError(response, e);
         }
     }
 
-    private static String anErrorJsonResponseFor(FirstBidShouldBeGreaterThanStartingPrice e) throws JSONException {
+    private static Object createdOk(Response response) {
+        response.status(CREATED_201);
+        return "OK";
+    }
+
+    private static String auctionIdFrom(Request request) {
+        return request.params("id");
+    }
+
+    private static double amountFrom(Request request) {
+        var body = request.body();
+        var bodyAsJson = new Gson().fromJson(body, JsonObject.class);
+        return bodyAsJson.get("amount").getAsDouble();
+    }
+
+    private static String anAuctionException(Response response, Exception e) throws JSONException {
+        response.status(422);
+        return aJsonErrorException(response, e);
+    }
+
+    private static String anUnknownError(Response response, Exception e) throws JSONException {
+        response.status(500);
+        return aJsonErrorException(response, e);
+    }
+
+    private static String aJsonErrorException(Response response, Exception e) throws JSONException {
+        response.type("application/json");
         return new JSONObject()
                 .put("name", e.getClass().getSimpleName())
                 .put("description", e.getMessage())
