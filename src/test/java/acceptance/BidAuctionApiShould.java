@@ -15,8 +15,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 public class BidAuctionApiShould extends ApiTest {
 
-    @Test
-    public void
+    @Test public void
     post_to_bid_an_existing_auction() throws JSONException {
         var givenAuctionId = givingAnExistingAuction().id;
         var expectedBid = new Bid(money(50));
@@ -35,9 +34,28 @@ public class BidAuctionApiShould extends ApiTest {
         assertThatBid(actualAuction.topBid().orElseThrow()).isEqualTo(expectedBid);
     }
 
+    @Test public void
+    get_an_error_response_when_try_to_create_an_invalid_bid() throws JSONException {
+        var auction = anAuction().withStartingPrice(money(10)).build();
+        var insufficientBid = new Bid(money(5));
+        auctionRepository.save(auction);
+
+        given().
+            when().
+                body(JSONBuilder.createBidJsonFrom(insufficientBid)).
+                post("auction/{id}/bid", auction.id).
+            then().assertThat().
+                statusCode(422).
+                contentType("application/json").
+                body(
+                        "name", equalTo("FirstBidShouldBeGreaterThanStartingPrice"),
+                        "description", equalTo("Initial auction price is 10,00 and bid is only 5,00")
+                );
+    }
+
     private Auction givingAnExistingAuction() {
         var expectedAuction = anAuction().build();
-        this.auctionRepository.save(expectedAuction);
+        auctionRepository.save(expectedAuction);
         return expectedAuction;
     }
 }

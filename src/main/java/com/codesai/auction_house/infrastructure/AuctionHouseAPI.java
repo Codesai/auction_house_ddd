@@ -5,6 +5,7 @@ import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.exceptions.AcutionNotFoundException;
+import com.codesai.auction_house.business.model.auction.exceptions.FirstBidShouldBeGreaterThanStartingPrice;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.json.JSONException;
@@ -45,14 +46,28 @@ public class AuctionHouseAPI {
         }
     }
 
-    public static Object bidAuction(Request request, Response response) {
+    public static Object bidAuction(Request request, Response response) throws JSONException {
         var auctionId = request.params("id");
         var body = request.body();
         var bodyAsJson = new Gson().fromJson(body, JsonObject.class);
         var amount = bodyAsJson.get("amount").getAsDouble();
-        bidAuctionAction().execute(new BidAuctionCommand(auctionId, amount));
-        response.status(CREATED_201);
-        return "OK";
+
+        try {
+            bidAuctionAction().execute(new BidAuctionCommand(auctionId, amount));
+            response.status(CREATED_201);
+            return "OK";
+        } catch (FirstBidShouldBeGreaterThanStartingPrice e) {
+            response.status(422);
+            response.type("application/json");
+            return anErrorJsonResponseFor(e);
+        }
+    }
+
+    private static String anErrorJsonResponseFor(FirstBidShouldBeGreaterThanStartingPrice e) throws JSONException {
+        return new JSONObject()
+                .put("name", e.getClass().getSimpleName())
+                .put("description", e.getMessage())
+                .toString();
     }
 
     private static String createAuctionJsonFrom(Auction auction) throws JSONException {
