@@ -1,6 +1,7 @@
 package acceptance;
 
 import io.restassured.RestAssured;
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
 import static acceptance.JSONBuilder.createJsonFrom;
@@ -33,15 +34,33 @@ public class CreateAuctionApiShould extends ApiTest {
     public void
     not_create_an_auction_when_the_input_is_incorrect() throws Exception {
         given().
+        when().
+            body(createJsonFrom(anAuction().build())
+                .put("initial_bid", "an invalid value")
+                .toString()).
+            post("auction").
+        then().
+            assertThat().
+            statusCode(400).
+            body(equalTo("The auction body is not well formed."));
+    }
+
+    @Test public void
+    cannot_create_auction_when_inital_bid_is_greater_than_conquer_price() throws JSONException {
+        given().
                 when().
-                body(createJsonFrom(anAuction().build())
-                        .put("initial_bid", "an invalid value")
-                        .toString()).
-                post("auction").
+                    body(createJsonFrom(anAuction().build())
+                            .put("initial_bid", 10)
+                            .put("conquer_price", 5)
+                            .toString()).
+                    post("auction").
                 then().
-                assertThat().
-                statusCode(422).
-                body(equalTo("The auction body is not well formed."));
+                    assertThat().
+                    statusCode(422).
+                    body(
+                            "name", equalTo("InitialBidIsGreaterThanConquerPrice"),
+                            "description", equalTo("initial cannot be greater 10,00 than conquer price 5,00")
+                    );
     }
 
 }

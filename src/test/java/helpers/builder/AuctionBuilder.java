@@ -41,6 +41,11 @@ public class AuctionBuilder {
         return this;
     }
 
+    public AuctionBuilder withConquerPrice(Money conquerPrice) {
+        this.conquerPrice = conquerPrice;
+        return this;
+    }
+
     public Auction build() {
         var auction = new Auction(item, startingPrice, conquerPrice, expirationDay, minimumOverbiddingPrice);
         this.bids.forEach(auction::bid);

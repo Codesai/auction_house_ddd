@@ -26,7 +26,7 @@ public class Auction {
     public List<Bid> bids;
 
     public Auction(Item item, Money startingPrice, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice) {
-        if (conquerPrice.isLessThan(startingPrice)) throw new InitialBidIsGreaterThanConquerPrice();
+        if (conquerPrice.isLessThan(startingPrice)) throw new InitialBidIsGreaterThanConquerPrice(startingPrice, conquerPrice);
         if (minimumOverbiddingPrice.isLessThan(MINIMUM_MONEY_TO_OVERBID))
             throw new MinimumOverbiddingPriceIsNotAllowed();
         if (expirationDate.isAfter(now().plusWeeks(2))) throw new ExpirationDayIsTooFar();
@@ -43,10 +43,10 @@ public class Auction {
     public void bid(Bid bid) {
         topBid().ifPresentOrElse(
                 currentBid -> {
-                    if (currentBid.money.isGreaterThan(bid.money)) throw new TopBidIsGreater();
-                    if (bid.money.equals(currentBid.money)) throw new BidAmountCannotBeTheSameAsTheCurrentOne();
+                    if (currentBid.money.isGreaterThan(bid.money)) throw new TopBidIsGreater(currentBid, bid);
+                    if (bid.money.equals(currentBid.money)) throw new BidAmountCannotBeTheSameAsTheCurrentOne(currentBid);
                     addBid(bid);
-                }, () -> {
+                }, ()  -> {
                     if (bid.money.isLessThan(startingPrice)) throw new FirstBidShouldBeGreaterThanStartingPrice(startingPrice, bid.money);
                     addBid(bid);
                 });

@@ -2,6 +2,7 @@ package acceptance;
 
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.Bid;
+import com.codesai.auction_house.business.model.auction.exceptions.FirstBidShouldBeGreaterThanStartingPrice;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +49,7 @@ public class BidAuctionApiShould extends ApiTest {
                 statusCode(422).
                 contentType("application/json").
                 body(
-                        "name", equalTo("FirstBidShouldBeGreaterThanStartingPrice"),
+                        "name", equalTo(FirstBidShouldBeGreaterThanStartingPrice.class.getSimpleName()),
                         "description", equalTo("Initial auction price is 10,00 and bid is only 5,00")
                 );
     }
