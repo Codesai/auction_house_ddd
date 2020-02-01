@@ -2,8 +2,7 @@ package com.codesai.auction_house;
 
 import static com.codesai.auction_house.infrastructure.Routing.Routes;
 
-// TODO: Decidir diseño para tratamiento de errores
-// TODO: Separar las clases de API (controladores) en varias
+// TODO: Retrive auction controller
 // TODO: Hacer definición swagger para conquer
 // TODO: Test api de conquer
 // TODO: Meter los usuarios
