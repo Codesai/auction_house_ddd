@@ -4,7 +4,7 @@ import com.codesai.auction_house.business.actions.commands.BidAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
-import com.codesai.auction_house.business.model.auction.exceptions.AcutionNotFoundException;
+import com.codesai.auction_house.business.model.auction.exceptions.AuctionNotFoundException;
 import com.codesai.auction_house.business.model.auction.exceptions.AuctionException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -48,28 +48,32 @@ public class AuctionHouseAPI {
         });
     }
 
-    public Object eval(Supplier<Object> s) throws JSONException {
-        try {
-            return s.get();
-        } catch (AuctionException e) {
-            return anAuctionException(e);
-        } catch (JsonSyntaxException e) {
-            return anMalformedRequestException();
-        } catch (Exception e) {
-            return anUnknownError(e);
-        }
-    }
-
-    public String retrieveAuction() throws JSONException {
-        try {
+    public Object retrieveAuction() throws JSONException {
+        return eval(() -> {
             Auction auction = retrieveAuctionAction().execute(new RetrieveAuctionCommand(auctionIdFrom()));
             response.header("Content-type", "application/json");
             response.status(OK_200);
             return createAuctionJsonFrom(auction);
-        } catch (AcutionNotFoundException e) {
-            response.status(NOT_FOUND_404);
-            return "An auction with that id does not exists.";
+        });
+    }
+
+    public Object eval(Supplier<Object> s) throws JSONException {
+        try {
+            return s.get();
+        } catch (AuctionNotFoundException e) {
+            return anAuctionNotFoundException();
+       } catch (AuctionException e) {
+            return anAuctionException(e);
+        } catch (JsonSyntaxException e) {
+            return anMalformedRequestException();
+        }  catch (Exception e) {
+            return anUnknownError(e);
         }
+    }
+
+    private String anAuctionNotFoundException() {
+        response.status(NOT_FOUND_404);
+        return "An auction with that id does not exists.";
     }
 
     private String anMalformedRequestException() {
@@ -115,17 +119,21 @@ public class AuctionHouseAPI {
                 .toString();
     }
 
-    private static String createAuctionJsonFrom(Auction auction) throws JSONException {
-        return new JSONObject()
-                .put("item", new JSONObject()
-                        .put("name", auction.item.name)
-                        .put("description", auction.item.description)
-                )
-                .put("initial_bid", auction.startingPrice.amount)
-                .put("conquer_price", auction.conquerPrice.amount)
-                .put("expiration_date", auction.expirationDate.toString())
-                .put("minimum_overbidding_price", auction.minimumOverbiddingPrice.amount)
-                .toString();
+    private static String createAuctionJsonFrom(Auction auction) {
+        try {
+            return new JSONObject()
+                    .put("item", new JSONObject()
+                            .put("name", auction.item.name)
+                            .put("description", auction.item.description)
+                    )
+                    .put("initial_bid", auction.startingPrice.amount)
+                    .put("conquer_price", auction.conquerPrice.amount)
+                    .put("expiration_date", auction.expirationDate.toString())
+                    .put("minimum_overbidding_price", auction.minimumOverbiddingPrice.amount)
+                    .toString();
+        } catch (JSONException e) {
+           throw new RuntimeException(e);
+        }
     }
 
     private static CreateAuctionCommand createAuctionCommandFrom(String body) {
