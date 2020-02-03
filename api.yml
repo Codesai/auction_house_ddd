@@ -97,6 +97,38 @@ paths:
           schema:
             items:
               $ref: "#/definitions/ErrorResponse"
+  /auction/{auction_id}/conquer:
+    post:
+      parameters:
+        - in: path
+          name: auction_id
+          required: true
+          schema:
+            type: string
+            maximum: 1
+          description: Auction Id
+        - in: body
+          name: bid
+          required: true
+          description: conquer request
+          schema:
+            $ref: "#/definitions/Conquer"
+      tags:
+        - "auction"
+      summary: "Conquer an auction"
+      operationId: "postConquerAuction"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Ok"
+        422:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: "#/definitions/ErrorResponse"
 
 definitions:
   ErrorResponse:
@@ -150,3 +182,12 @@ definitions:
         type: number
         example: 50
         description: the bid amount for the auction
+  Conquer:
+    type: "object"
+    required:
+      - user_id
+    properties:
+      user_id:
+        type: string
+        example: "anyUserId"
+        description: the user that conquer the auction

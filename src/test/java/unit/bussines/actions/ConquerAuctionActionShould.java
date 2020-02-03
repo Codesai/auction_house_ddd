@@ -35,7 +35,7 @@ public class ConquerAuctionActionShould {
         assertThatThrownBy(() -> conquerAuction.execute(new ConquerAuctionActionCommand(userId, aClosedAuction.id))).isInstanceOf(CannotConquerAClosedAuctionException.class);
     }
 
-    private Auction aClosedAuction() throws Exception {
+    private Auction aClosedAuction() {
         var auction = givenALiveAuction();
         conquerAuction.execute(new ConquerAuctionActionCommand(userId, auction.id));
         return auction;
