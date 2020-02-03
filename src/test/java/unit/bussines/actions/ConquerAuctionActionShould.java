@@ -8,20 +8,19 @@ import com.codesai.auction_house.business.model.auction.exceptions.CannotConquer
 import org.junit.jupiter.api.Test;
 
 import static helpers.builder.AuctionBuilder.anAuction;
+import static matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
-import static matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
 
 public class ConquerAuctionActionShould {
-
 
     private final AuctionRepository auctions = mock(AuctionRepository.class);
     private final ConquerAuctionAction conquerAuction = new ConquerAuctionAction(auctions);
     private final String userId = "anyUser";
 
     @Test public void
-    win_the_auction() throws Exception {
+    win_the_auction() {
         var aLiveAuction = givenALiveAuction();
 
         conquerAuction.execute(new ConquerAuctionActionCommand(userId, aLiveAuction.id));
