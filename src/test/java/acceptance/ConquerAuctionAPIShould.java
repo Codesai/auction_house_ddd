@@ -1,5 +1,6 @@
 package acceptance;
 
+import com.codesai.auction_house.business.actions.commands.ConquerAuctionActionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.Bid;
 import org.json.JSONException;
@@ -8,12 +9,14 @@ import org.junit.jupiter.api.Test;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
 import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
+import static com.codesai.auction_house.infrastructure.ActionFactory.conquerAuctionAction;
 import static helpers.builder.AuctionBuilder.anAuction;
 import static io.restassured.RestAssured.given;
 import static matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
 import static matchers.BidAssert.assertThatBid;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.mockito.Mockito.when;
 
 public class ConquerAuctionAPIShould extends ApiTest {
 
@@ -25,8 +28,7 @@ public class ConquerAuctionAPIShould extends ApiTest {
         given().
         when().
             body(new JSONObject()
-                .put("user_id", "userThatConquerAuction")
-                .put("auction_id", givenAuctionId).toString()).
+                .put("user_id", "userThatConquerAuction").toString()).
             post("auction/{id}/conquer", givenAuctionId).
         then().
             assertThat().
@@ -39,9 +41,38 @@ public class ConquerAuctionAPIShould extends ApiTest {
         );
     }
 
+    @Test public void
+    cannot_conquer_an_already_closed_auction() throws Exception {
+        var aClosedAuction = aClosedAuction();
+
+        given().
+        when().
+            body(new JSONObject().put("user_id", "userThatConquerAuction").toString()).
+            post("auction/{auction_id}/conquer", aClosedAuction.id).
+        then().
+            assertThat().
+            statusCode(422).
+            body(
+                    "name",equalTo("CannotConquerAClosedAuctionException"),
+                    "description", equalTo("Cannot conquer a closed auction")
+            );
+    }
+
     private Auction givingAnExistingAuction() {
         var expectedAuction = anAuction().build();
         auctionRepository.save(expectedAuction);
         return expectedAuction;
+    }
+
+    private Auction aClosedAuction() throws Exception {
+        var auction = givenALiveAuction();
+        conquerAuctionAction().execute(new ConquerAuctionActionCommand("", auction.id));
+        return auction;
+    }
+
+    private Auction givenALiveAuction() {
+        var anAuction = anAuction().build();
+        auctionRepository.save(anAuction);
+        return anAuction;
     }
 }

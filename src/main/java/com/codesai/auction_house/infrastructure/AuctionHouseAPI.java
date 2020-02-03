@@ -60,18 +60,20 @@ public class AuctionHouseAPI {
         });
     }
 
-    public Object conquerAuction() throws CannotConquerAClosedAuctionException {
-        var command = createConquerAuctionCommand();
-        conquerAuctionAction().execute(command);
-        response.status(OK_200);
-        return "OK";
+    public Object conquerAuction() throws JSONException {
+        return eval(() -> {
+            var command = createConquerAuctionCommand();
+            conquerAuctionAction().execute(command);
+            response.status(OK_200);
+            return "OK";
+        });
     }
 
     private ConquerAuctionActionCommand createConquerAuctionCommand() {
         var bodyAsJson = new Gson().fromJson(request.body(), JsonObject.class);
         return new ConquerAuctionActionCommand(
                 bodyAsJson.get("user_id").getAsString(),
-                bodyAsJson.get("auction_id").getAsString()
+                request.params("auction_id")
         );
     }
 

@@ -16,7 +16,7 @@ public class Routing {
             get("auction/:id", (request, response) -> new AuctionHouseAPI(request, response).retrieveAuction());
             post("auction", (request, response) -> new AuctionHouseAPI(request, response).createAuction());
             post("auction/:id/bid", (request, response) -> new AuctionHouseAPI(request, response).bidAuction());
-            post("auction/:id/conquer", (request, response) -> new AuctionHouseAPI(request, response).conquerAuction());
+            post("auction/:auction_id/conquer", (request, response) -> new AuctionHouseAPI(request, response).conquerAuction());
         });
 
         before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
