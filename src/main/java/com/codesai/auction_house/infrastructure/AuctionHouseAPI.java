@@ -1,11 +1,14 @@
 package com.codesai.auction_house.infrastructure;
 
+import com.codesai.auction_house.business.actions.ConquerAuctionAction;
 import com.codesai.auction_house.business.actions.commands.BidAuctionCommand;
+import com.codesai.auction_house.business.actions.commands.ConquerAuctionActionCommand;
 import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.exceptions.AuctionNotFoundException;
 import com.codesai.auction_house.business.model.auction.exceptions.AuctionException;
+import com.codesai.auction_house.business.model.auction.exceptions.CannotConquerAClosedAuctionException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -55,6 +58,21 @@ public class AuctionHouseAPI {
             response.status(OK_200);
             return createAuctionJsonFrom(auction);
         });
+    }
+
+    public Object conquerAuction() throws CannotConquerAClosedAuctionException {
+        var command = createConquerAuctionCommand();
+        conquerAuctionAction().execute(command);
+        response.status(OK_200);
+        return "OK";
+    }
+
+    private ConquerAuctionActionCommand createConquerAuctionCommand() {
+        var bodyAsJson = new Gson().fromJson(request.body(), JsonObject.class);
+        return new ConquerAuctionActionCommand(
+                bodyAsJson.get("user_id").getAsString(),
+                bodyAsJson.get("auction_id").getAsString()
+        );
     }
 
     public Object eval(Supplier<Object> s) throws JSONException {

@@ -71,4 +71,8 @@ public class Auction {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+
+    public boolean isFinished() {
+        return false;
+    }
 }
