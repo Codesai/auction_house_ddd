@@ -43,15 +43,15 @@ public class AuctionHouseAPI {
 
     public Object bidAuction() throws JSONException {
         return eval(() -> {
-            var command = createBidAuctionCommandFrom();
-            bidAuctionAction().execute(command);
+            bidAuctionAction().execute(createBidAuctionCommand());
             return createdOk();
         });
     }
 
     public Object retrieveAuction() throws JSONException {
         return eval(() -> {
-            Auction auction = retrieveAuctionAction().execute(new RetrieveAuctionCommand(auctionIdFrom()));
+            var auction = retrieveAuctionAction()
+                    .execute(new RetrieveAuctionCommand(auctionId()));
             response.header("Content-type", "application/json");
             response.status(OK_200);
             return createAuctionJsonFrom(auction);
@@ -60,8 +60,7 @@ public class AuctionHouseAPI {
 
     public Object conquerAuction() throws JSONException {
         return eval(() -> {
-            var command = createConquerAuctionCommand();
-            conquerAuctionAction().execute(command);
+            conquerAuctionAction().execute(createConquerAuctionCommand());
             response.status(OK_200);
             return "OK";
         });
@@ -99,8 +98,8 @@ public class AuctionHouseAPI {
         return "The auction body is not well formed.";
     }
 
-    private BidAuctionCommand createBidAuctionCommandFrom() {
-        return new BidAuctionCommand(auctionIdFrom(), amountFrom());
+    private BidAuctionCommand createBidAuctionCommand() {
+        return new BidAuctionCommand(auctionId(), amountFrom());
     }
 
     private Object createdOk() {
@@ -108,7 +107,7 @@ public class AuctionHouseAPI {
         return "OK";
     }
 
-    private String auctionIdFrom() {
+    private String auctionId() {
         return request.params("id");
     }
 
