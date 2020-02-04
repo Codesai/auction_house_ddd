@@ -15,6 +15,7 @@ public class CreateAuctionCommandBuilder {
     private Money initialBid = money(1);
     private String name = "Any Name";
     private String description = "Any Description";
+    private String owner = "ownerId";
 
     private CreateAuctionCommandBuilder() {
     }
@@ -64,6 +65,11 @@ public class CreateAuctionCommandBuilder {
         return this;
     }
 
+    public CreateAuctionCommandBuilder withOwnerId(String owner) {
+        this.owner = owner;
+        return this;
+    }
+
     public CreateAuctionCommand build() {
         return new CreateAuctionCommand(
                 name,
@@ -71,7 +77,8 @@ public class CreateAuctionCommandBuilder {
                 initialBid.amount,
                 conquerPrice.amount,
                 expirationDay,
-                overbiddingPrice.amount
+                overbiddingPrice.amount,
+                owner
         );
     }
 }

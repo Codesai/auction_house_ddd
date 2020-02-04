@@ -1,14 +1,12 @@
 package com.codesai.auction_house.infrastructure;
 
-import com.codesai.auction_house.business.actions.ConquerAuctionAction;
 import com.codesai.auction_house.business.actions.commands.BidAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.ConquerAuctionActionCommand;
 import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
-import com.codesai.auction_house.business.model.auction.exceptions.AuctionNotFoundException;
 import com.codesai.auction_house.business.model.auction.exceptions.AuctionException;
-import com.codesai.auction_house.business.model.auction.exceptions.CannotConquerAClosedAuctionException;
+import com.codesai.auction_house.business.model.auction.exceptions.AuctionNotFoundException;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -165,7 +163,8 @@ public class AuctionHouseAPI {
                     json.get("initial_bid").getAsDouble(),
                     json.get("conquer_price").getAsDouble(),
                     LocalDate.parse(json.get("expiration_date").getAsString()),
-                    json.get("minimum_overbidding_price").getAsDouble()
+                    json.get("minimum_overbidding_price").getAsDouble(),
+                    json.get("owner").getAsString()
             );
         } catch (Exception e) {
             throw new JsonSyntaxException(e);

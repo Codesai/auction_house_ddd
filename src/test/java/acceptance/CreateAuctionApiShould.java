@@ -18,16 +18,16 @@ public class CreateAuctionApiShould extends ApiTest {
     public void
     create_a_new_auction() throws Exception {
         given().
-                when().
-                body(createJsonFrom(anAuction().build()).toString()).
-                post("auction").
-                then().
-                assertThat().
-                statusCode(201).
-                header("Location", allOf(
-                        startsWith(RestAssured.baseURI + "auction/"),
-                        urlEndsWithValidUUID()
-                ));
+        when().
+            body(createJsonFrom(anAuction().build()).toString()).
+            post("auction").
+        then().
+            assertThat().
+            statusCode(201).
+            header("Location", allOf(
+                startsWith(RestAssured.baseURI + "auction/"),
+                urlEndsWithValidUUID()
+            ));
     }
 
     @Test

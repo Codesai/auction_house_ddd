@@ -13,18 +13,21 @@ public class CreateAuctionCommand {
     public final Money conquerPrice;
     public final LocalDate expirationDate;
     public final Money minimumOverbiddingPrice;
+    public final String owner;
 
     public CreateAuctionCommand(String name,
                                 String description,
                                 double startingPrice,
                                 double conquerPrice,
                                 LocalDate expirationDate,
-                                double minimumOverbiddingPrice) {
+                                double minimumOverbiddingPrice,
+                                String owner) {
         this.name = name;
         this.description = description;
         this.startingPrice = money(startingPrice);
         this.conquerPrice = money(conquerPrice);
         this.expirationDate = expirationDate;
         this.minimumOverbiddingPrice = money(minimumOverbiddingPrice);
+        this.owner = owner;
     }
 }

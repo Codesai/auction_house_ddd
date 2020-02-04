@@ -149,6 +149,9 @@ definitions:
       - item
       - initial_bid
       - end_date
+      - conquer_price
+      - minimum_overbidding_price
+      - owner
     properties:
       item:
         type: object
@@ -173,6 +176,11 @@ definitions:
       minimum_overbidding_price:
         type: number
         example: 1.0
+      owner:
+        type: string
+        default: The owner of the auction
+        example: auction_owner_id
+
   Bid:
     type: "object"
     required:
