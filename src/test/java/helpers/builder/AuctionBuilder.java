@@ -49,6 +49,11 @@ public class AuctionBuilder {
         return this;
     }
 
+    public AuctionBuilder withExpirationDay(LocalDate expirationDay) {
+        this.expirationDay = expirationDay;
+        return this;
+    }
+
     public Auction build() {
         var auction = new Auction(item, startingPrice, conquerPrice, expirationDay, minimumOverbiddingPrice, owner);
         this.bids.forEach(auction::bid);
