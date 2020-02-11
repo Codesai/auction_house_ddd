@@ -13,7 +13,7 @@ public class RetrieveAuctionApiShould extends ApiTest {
     public void
     get_an_auction_by_its_id() throws Exception {
         var expectedAuction = givingAnExistingAuction();
-        var auctionJson = JSONBuilder.createJsonFrom(expectedAuction);
+        var auctionJson = JSONParser.createJsonFrom(expectedAuction);
 
         given().
                 when().

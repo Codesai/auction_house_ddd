@@ -18,10 +18,10 @@ public class DeclareAuctionWinnerAction {
 
     public void execute() {
         auctionRepository.retrieveAll().stream()
-                .filter(auction -> auction.expirationDate.equals(calendar.today().minusDays(1)))
+                .filter(auction -> auction.expirationDate.equals(calendar.yesterday()))
                 .filter(auction -> auction.topBid().isPresent())
                 .forEach(auction -> eventProducer.produce(new DeclareWinnerEvent(
-                    auction.topBid().get().userId,
+                    auction.topBid().get().bidderId,
                     auction.id,
                     auction.topBid().get().money
                 )));

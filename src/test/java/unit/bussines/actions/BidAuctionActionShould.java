@@ -8,6 +8,7 @@ import com.codesai.auction_house.business.model.auction.Bid;
 import com.codesai.auction_house.business.model.auction.exceptions.BidAmountCannotBeTheSameAsTheCurrentOne;
 import com.codesai.auction_house.business.model.auction.exceptions.FirstBidShouldBeGreaterThanStartingPrice;
 import com.codesai.auction_house.business.model.auction.exceptions.TopBidIsGreater;
+import com.codesai.auction_house.business.model.bidder.BidderId;
 import com.codesai.auction_house.business.model.generic.Money;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.*;
 
 public class BidAuctionActionShould {
 
+    String ANY_BIDDER_ID = "AnyBidderId";
     AuctionRepository repository = mock(AuctionRepository.class);
     BidAuctionAction action = new BidAuctionAction(this.repository);
     ArgumentCaptor<Auction> captor = ArgumentCaptor.forClass(Auction.class);
@@ -33,24 +35,24 @@ public class BidAuctionActionShould {
         var expectedAmount = 50.0;
         var auction = givenAnAuctionWithNoBidsAndStartingPriceAt(money(20));
 
-        action.execute(new BidAuctionCommand(auction.id, expectedAmount));
+        action.execute(new BidAuctionCommand(auction.id, expectedAmount, ANY_BIDDER_ID));
 
         verify(this.repository, times(1)).save(this.captor.capture());
         assertThat(this.captor.getValue().bids).hasSize(1);
-        assertThatBid(this.captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount)));
+        assertThatBid(this.captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount), new BidderId(ANY_BIDDER_ID)));
     }
 
     @Test
     public void
     bid_an_auction_when_is_greater_than_the_top_bid() {
         var expectedAmount = 30;
-        var auction = givenAnAuctionWithStartingPriceAndBids(money(20), List.of(new Bid(money(25))));
+        var auction = givenAnAuctionWithStartingPriceAndBids(money(20), List.of(new Bid(money(25), new BidderId(ANY_BIDDER_ID))));
 
-        action.execute(new BidAuctionCommand(auction.id, expectedAmount));
+        action.execute(new BidAuctionCommand(auction.id, expectedAmount, ANY_BIDDER_ID));
 
         verify(repository, times(1)).save(captor.capture());
         assertThat(captor.getValue().bids).hasSize(2);
-        assertThatBid(captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount)));
+        assertThatBid(captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount), new BidderId(ANY_BIDDER_ID)));
     }
 
     @Test
@@ -58,7 +60,7 @@ public class BidAuctionActionShould {
     not_bid_an_auction_when_with_no_bids_the_starting_price_is_greater_the_new_bid() {
         var auction = givenAnAuctionWithNoBidsAndStartingPriceAt(money(30));
 
-        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auction.id, 29)))
+        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auction.id, 29, ANY_BIDDER_ID)))
             .isInstanceOf(FirstBidShouldBeGreaterThanStartingPrice.class);
         verify(repository, times(0)).save(any());
     }
@@ -67,18 +69,18 @@ public class BidAuctionActionShould {
     public void
     not_allow_to_bid_an_auction_when_the_top_bid_amount_is_the_same() {
         var expectedAmount = 50;
-        var auction = givenAnAuctionWithStartingPriceAndBids(money(10), List.of(new Bid(money(expectedAmount))));
+        var auction = givenAnAuctionWithStartingPriceAndBids(money(10), List.of(new Bid(money(expectedAmount), new BidderId(ANY_BIDDER_ID))));
 
-        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auction.id, expectedAmount)))
+        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auction.id, expectedAmount, ANY_BIDDER_ID)))
                 .isInstanceOf(BidAmountCannotBeTheSameAsTheCurrentOne.class);
     }
 
     @Test
     public void
     not_allow_to_bid_an_auction_when_is_lesser_than_the_current_bid() {
-        var auction = givenAnAuctionWithStartingPriceAndBids(money(10), List.of(new Bid(money(15))));
+        var auction = givenAnAuctionWithStartingPriceAndBids(money(10), List.of(new Bid(money(15), new BidderId(ANY_BIDDER_ID))));
 
-        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auction.id, 5)))
+        assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auction.id, 5, ANY_BIDDER_ID)))
                 .isInstanceOf(TopBidIsGreater.class);
     }
 

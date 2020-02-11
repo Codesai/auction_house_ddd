@@ -25,6 +25,10 @@ public class BidAssert extends AbstractAssert<BidAssert, Bid> {
             failWithMessage("Expected money to be: <%s> and was: <%s>", actual.money, expected.money);
         }
 
+        if (!this.actual.bidderId.equals(expected.bidderId)) {
+            failWithMessage("Expected bidder id to be: <%s> and was: <%s>", actual.bidderId, expected.bidderId);
+        }
+
         return this;
     }
 

@@ -2,8 +2,7 @@ package com.codesai.auction_house.business.model.auction;
 
 import com.codesai.auction_house.business.model.generic.ValueObject;
 
-public final class
-Item extends ValueObject {
+public final class Item extends ValueObject {
     public final String name;
     public final String description;
 

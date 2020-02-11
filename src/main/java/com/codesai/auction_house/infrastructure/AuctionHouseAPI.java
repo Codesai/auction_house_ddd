@@ -51,7 +51,7 @@ public class AuctionHouseAPI {
     public Object retrieveAuction() throws JSONException {
         return eval(() -> {
             var auction = retrieveAuctionAction()
-                    .execute(new RetrieveAuctionCommand(auctionId()));
+                    .execute(new RetrieveAuctionCommand(auction()));
             response.header("Content-type", "application/json");
             response.status(OK_200);
             return createAuctionJsonFrom(auction);
@@ -99,7 +99,13 @@ public class AuctionHouseAPI {
     }
 
     private BidAuctionCommand createBidAuctionCommand() {
-        return new BidAuctionCommand(auctionId(), amountFrom());
+        return new BidAuctionCommand(auction(), amount(), bidderId());
+    }
+
+    private String bidderId() {
+        var body = request.body();
+        var bodyAsJson = new Gson().fromJson(body, JsonObject.class);
+        return bodyAsJson.get("bidder_id").getAsString();
     }
 
     private Object createdOk() {
@@ -107,11 +113,11 @@ public class AuctionHouseAPI {
         return "OK";
     }
 
-    private String auctionId() {
+    private String auction() {
         return request.params("id");
     }
 
-    private double amountFrom() {
+    private double amount() {
         var body = request.body();
         var bodyAsJson = new Gson().fromJson(body, JsonObject.class);
         return bodyAsJson.get("amount").getAsDouble();

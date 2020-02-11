@@ -4,7 +4,7 @@ import io.restassured.RestAssured;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
-import static acceptance.JSONBuilder.createJsonFrom;
+import static acceptance.JSONParser.createJsonFrom;
 import static helpers.builder.AuctionBuilder.anAuction;
 import static io.restassured.RestAssured.given;
 import static matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
@@ -59,7 +59,7 @@ public class CreateAuctionApiShould extends ApiTest {
                     statusCode(422).
                     body(
                             "name", equalTo("InitialBidIsGreaterThanConquerPrice"),
-                            "description", equalTo("initial cannot be greater 10,00 than conquer price 5,00")
+                            "description", equalTo("initial cannot be greater 10.00 than conquer price 5.00")
                     );
     }
 

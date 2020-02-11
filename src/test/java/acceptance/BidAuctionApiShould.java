@@ -3,8 +3,11 @@ package acceptance;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.Bid;
 import com.codesai.auction_house.business.model.auction.exceptions.FirstBidShouldBeGreaterThanStartingPrice;
+import com.codesai.auction_house.business.model.bidder.BidderId;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
 import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
@@ -19,11 +22,12 @@ public class BidAuctionApiShould extends ApiTest {
     @Test public void
     post_to_bid_an_existing_auction() throws JSONException {
         var givenAuctionId = givingAnExistingAuction().id;
-        var expectedBid = new Bid(money(50));
+        var givenBidderId = new BidderId("AnyUserId" + UUID.randomUUID());
+        var expectedBid = new Bid(money(50), givenBidderId);
 
         given().
                 when().
-                body(JSONBuilder.createBidJsonFrom(expectedBid)).
+                body(JSONParser.createBidJsonFrom(expectedBid)).
                 post("auction/{id}/bid", givenAuctionId).
                 then().
                 assertThat().
@@ -38,19 +42,19 @@ public class BidAuctionApiShould extends ApiTest {
     @Test public void
     get_an_error_response_when_try_to_create_an_invalid_bid() throws JSONException {
         var auction = anAuction().withStartingPrice(money(10)).build();
-        var insufficientBid = new Bid(money(5));
+        var insufficientBid = new Bid(money(5), new BidderId("AnyBidderId"));
         auctionRepository.save(auction);
 
         given().
             when().
-                body(JSONBuilder.createBidJsonFrom(insufficientBid)).
+                body(JSONParser.createBidJsonFrom(insufficientBid)).
                 post("auction/{id}/bid", auction.id).
             then().assertThat().
                 statusCode(422).
                 contentType("application/json").
                 body(
                         "name", equalTo(FirstBidShouldBeGreaterThanStartingPrice.class.getSimpleName()),
-                        "description", equalTo("Initial auction price is 10,00 and bid is only 5,00")
+                        "description", equalTo("Initial auction price is 10.00 and bid is only 5.00")
                 );
     }
 

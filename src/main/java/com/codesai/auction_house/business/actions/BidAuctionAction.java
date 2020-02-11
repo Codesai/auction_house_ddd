@@ -14,7 +14,7 @@ public class BidAuctionAction {
 
     public void execute(BidAuctionCommand command) throws FirstBidShouldBeGreaterThanStartingPrice {
         var auction = repository.retrieveById(command.auctionId);
-        auction.bid(new Bid(command.biddingAmount));
+        auction.bid(new Bid(command.biddingAmount, command.bidderId));
         repository.save(auction);
     }
 }

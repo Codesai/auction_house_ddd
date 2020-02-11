@@ -4,6 +4,7 @@ import com.codesai.auction_house.business.actions.commands.RetrieveAuctionBidsAc
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionBidsActionCommand;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.Bid;
+import com.codesai.auction_house.business.model.bidder.BidderId;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class RetrieveAuctionBidsActionShould {
     @Test
     public void
     return_all_the_bids_from_an_auction() {
-        var expectedBids = List.of(new Bid(money(10)), new Bid(money(15)), new Bid(money(20)));
+        var expectedBids = List.of(new Bid(money(10), new BidderId("AnyBidderId")), new Bid(money(15), new BidderId("AnyBidderId")), new Bid(money(20), new BidderId("AnyBidderId")));
         var auction = anAuction().withStartingPrice(money(5))
                 .withBids(expectedBids)
                 .build();

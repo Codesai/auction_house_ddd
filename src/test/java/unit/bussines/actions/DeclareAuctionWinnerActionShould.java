@@ -5,6 +5,7 @@ import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.Bid;
 import com.codesai.auction_house.business.model.auction.EventProducer;
 import com.codesai.auction_house.business.model.auction.events.DeclareWinnerEvent;
+import com.codesai.auction_house.business.model.bidder.BidderId;
 import com.codesai.auction_house.business.model.generic.Calendar;
 import org.junit.jupiter.api.Test;
 
@@ -13,31 +14,34 @@ import java.util.List;
 
 import static com.codesai.auction_house.business.model.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
+import static java.time.LocalDate.now;
 import static org.mockito.Mockito.*;
 
 public class DeclareAuctionWinnerActionShould {
 
+    LocalDate TODAY = now();
+    AuctionRepository auctionRepository = mock(AuctionRepository.class);
+    Calendar calendar = mock(Calendar.class);
+    EventProducer eventProducer = mock(EventProducer.class);
+    String ANY_BIDDER_ID = "anyUser";
+
     @Test
     public void
     declare_the_top_bid_as_the_winner() {
-        var today = LocalDate.now();
+        var expectedBidder = new BidderId(ANY_BIDDER_ID);
         var auction = anAuction()
-                .withExpirationDay(today)
+                .withExpirationDay(TODAY)
                 .withStartingPrice(money(1))
-                .withBid(new Bid(money(2), "anyUser"))
+                .withBids(List.of(new Bid(money(2), expectedBidder)))
                 .build();
 
-        var auctionRepository = mock(AuctionRepository.class);
-        var calendar = mock(Calendar.class);
-        var eventProducer = mock(EventProducer.class);
-        when(calendar.today()).thenReturn(today.plusDays(1));
+        when(calendar.yesterday()).thenReturn(TODAY);
         when(auctionRepository.retrieveAll()).thenReturn(List.of(auction));
 
-        new DeclareAuctionWinnerAction(auctionRepository, calendar, eventProducer)
-                .execute();
+        new DeclareAuctionWinnerAction(auctionRepository, calendar, eventProducer).execute();
 
         verify(eventProducer).produce(new DeclareWinnerEvent(
-                "anyUser",
+                expectedBidder,
                 auction.id,
                 money(2)
         ));

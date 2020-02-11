@@ -2,6 +2,7 @@ package acceptance;
 
 import com.codesai.auction_house.business.actions.commands.ConquerAuctionActionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
+import com.codesai.auction_house.business.model.bidder.BidderId;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class ConquerAuctionAPIShould extends ApiTest {
 
         assertThat(
                 auctionRepository().retrieveById(givenAuctionId),
-                anAuctionConqueredBy("userThatConquerAuction")
+                anAuctionConqueredBy(new BidderId("userThatConquerAuction"))
         );
     }
 

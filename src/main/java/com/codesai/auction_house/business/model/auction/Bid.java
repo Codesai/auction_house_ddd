@@ -1,5 +1,6 @@
 package com.codesai.auction_house.business.model.auction;
 
+import com.codesai.auction_house.business.model.bidder.BidderId;
 import com.codesai.auction_house.business.model.generic.Money;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -10,34 +11,22 @@ import java.util.UUID;
 
 public class Bid {
     public final String id = UUID.randomUUID().toString();
-    public Money money;
-    public String userId;
+    public final Money money;
+    public final BidderId bidderId;
 
-    public Bid(Money money) {
+    public Bid(Money money, BidderId bidderId) {
         this.money = money;
-    }
-
-    public Bid(Money conquerPrice, String userId) {
-        money = conquerPrice;
-        this.userId = userId;
+        this.bidderId = bidderId;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Bid bid = (Bid) o;
-        return new EqualsBuilder()
-                .append(id, bid.id)
-                .isEquals();
+        return EqualsBuilder.reflectionEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(id)
-                .append(money)
-                .toHashCode();
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 
     @Override

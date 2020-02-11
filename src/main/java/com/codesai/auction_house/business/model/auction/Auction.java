@@ -2,6 +2,7 @@ package com.codesai.auction_house.business.model.auction;
 
 import com.codesai.auction_house.business.model.Owner;
 import com.codesai.auction_house.business.model.auction.exceptions.*;
+import com.codesai.auction_house.business.model.bidder.BidderId;
 import com.codesai.auction_house.business.model.generic.Money;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -64,10 +65,10 @@ public class Auction {
         return Optional.empty();
     }
 
-    public void conquerBy(String userId) throws CannotConquerAClosedAuctionException {
+    public void conquerBy(BidderId bidderId) throws CannotConquerAClosedAuctionException {
         if (expirationDate.isBefore(now())) throw new CannotConquerAClosedAuctionException();
         expirationDate = LocalDate.now().minusDays(1);
-        addBid(new Bid(conquerPrice, userId));
+        addBid(new Bid(conquerPrice, bidderId));
     }
 
     @Override

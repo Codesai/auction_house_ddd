@@ -5,7 +5,7 @@ import com.codesai.auction_house.business.model.auction.Bid;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JSONBuilder {
+public class JSONParser {
     static JSONObject createJsonFrom(Auction expectedAuction) throws JSONException {
         return new JSONObject()
                 .put("item", new JSONObject()
@@ -22,6 +22,7 @@ public class JSONBuilder {
     static String createBidJsonFrom(Bid bid) throws JSONException {
         return new JSONObject()
                 .put("amount", bid.money.amount)
+                .put("bidder_id", bid.bidderId.id)
                 .toString();
     }
 }

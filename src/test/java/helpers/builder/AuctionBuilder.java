@@ -39,11 +39,6 @@ public class AuctionBuilder {
         return this;
     }
 
-    public AuctionBuilder withConquerPrice(Money conquerPrice) {
-        this.conquerPrice = conquerPrice;
-        return this;
-    }
-
     public AuctionBuilder withExpirationDay(LocalDate expirationDay) {
         this.expirationDay = expirationDay;
         return this;
