@@ -14,7 +14,8 @@ public class ConquerAuctionAction {
 
     public void  execute(ConquerAuctionActionCommand command) throws CannotConquerAClosedAuctionException {
         Auction auction = repository.retrieveById(command.auctionId);
-        auction.conquerBy(command.userId);
+        // TODO: What can we do to make the Bidder to conquer the Auction through a bidder.conquer
+        auction.conquerBy(command.conquerorId);
         repository.save(auction);
     }
 }

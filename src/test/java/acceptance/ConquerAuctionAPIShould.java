@@ -25,7 +25,7 @@ public class ConquerAuctionAPIShould extends ApiTest {
         given().
         when().
             body(new JSONObject()
-                .put("user_id", "userThatConquerAuction").toString()).
+                .put("conqueror_id", "userThatConquerAuction").toString()).
             post("auction/{id}/conquer", givenAuctionId).
         then().
             assertThat().
@@ -44,7 +44,7 @@ public class ConquerAuctionAPIShould extends ApiTest {
 
         given().
         when().
-            body(new JSONObject().put("user_id", "userThatConquerAuction").toString()).
+            body(new JSONObject().put("conqueror_id", "userThatConquerAuction").toString()).
             post("auction/{auction_id}/conquer", aClosedAuction.id).
         then().
             assertThat().

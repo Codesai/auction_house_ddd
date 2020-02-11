@@ -71,7 +71,7 @@ public class AuctionHouseAPI {
     private ConquerAuctionActionCommand createConquerAuctionCommand() {
         var bodyAsJson = new Gson().fromJson(request.body(), JsonObject.class);
         return new ConquerAuctionActionCommand(
-                bodyAsJson.get("user_id").getAsString(),
+                bodyAsJson.get("conqueror_id").getAsString(),
                 request.params("auction_id")
         );
     }
