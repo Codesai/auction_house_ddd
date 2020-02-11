@@ -39,9 +39,8 @@ paths:
           description: "Created."
           headers:
             Location:
-                schema:
-                  type: string
-                description: Url of the newly created auction
+              type: string
+              description: Url of the newly created auction
   /auction/{auction_id}:
     get:
       parameters:
@@ -57,15 +56,79 @@ paths:
       summary: "Finds auction by id"
       operationId: "findAuctionById"
       produces:
-        - "application/json"
+        - "text/html"
       responses:
-        200:
-          description: "OK"
+        201:
+          description: "Created"
           schema:
             items:
               $ref: "#/definitions/Auction"
         400:
           description: "Invalid status value"
+  /auction/{auction_id}/bid:
+    post:
+      parameters:
+        - in: path
+          name: auction_id
+          required: true
+          schema:
+            type: string
+            maximum: 1
+          description: Auction Id
+        - in: body
+          name: bid
+          required: true
+          description: A bid to the auction
+          schema:
+            $ref: "#/definitions/Bid"
+      tags:
+        - "auction"
+      summary: "Post a bid to an existing auction"
+      operationId: "postBidToAuction"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        201:
+          description: "Created"
+        422:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: "#/definitions/ErrorResponse"
+  /auction/{auction_id}/conquer:
+    post:
+      parameters:
+        - in: path
+          name: auction_id
+          required: true
+          schema:
+            type: string
+            maximum: 1
+          description: Auction Id
+        - in: body
+          name: bid
+          required: true
+          description: conquer request
+          schema:
+            $ref: "#/definitions/Conquer"
+      tags:
+        - "auction"
+      summary: "Conquer an auction"
+      operationId: "postConquerAuction"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: "Ok"
+        422:
+          description: "Invalid input"
+          schema:
+            items:
+              $ref: "#/definitions/ErrorResponse"
 
 definitions:
   ErrorResponse:
@@ -76,18 +139,19 @@ definitions:
     properties:
       name:
         type: string
-        example: invalid auction data
-        description: error name
+        example: error name
       description:
         type: string
-        example: initial bid must be greater than conquer_price
-        description: a more detailed error description
+        example: a more detailed error description
   Auction:
     type: "object"
     required:
       - item
       - initial_bid
       - end_date
+      - conquer_price
+      - minimum_overbidding_price
+      - owner
     properties:
       item:
         type: object
@@ -112,3 +176,26 @@ definitions:
       minimum_overbidding_price:
         type: number
         example: 1.0
+      owner:
+        type: string
+        default: The owner of the auction
+        example: auction_owner_id
+
+  Bid:
+    type: "object"
+    required:
+      - amount
+    properties:
+      amount:
+        type: number
+        example: 50
+        description: the bid amount for the auction
+  Conquer:
+    type: "object"
+    required:
+      - user_id
+    properties:
+      user_id:
+        type: string
+        example: "anyUserId"
+        description: the user that conquer the auction

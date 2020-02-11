@@ -12,7 +12,7 @@ public class ConquerAuctionAction {
         this.repository = repository;
     }
 
-    public void execute(ConquerAuctionActionCommand command) throws CannotConquerAClosedAuctionException {
+    public void  execute(ConquerAuctionActionCommand command) throws CannotConquerAClosedAuctionException {
         Auction auction = repository.retrieveById(command.auctionId);
         auction.conquerBy(command.userId);
         repository.save(auction);

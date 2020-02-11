@@ -35,12 +35,15 @@ public class CreateAuctionActionShould {
                 .withConquerPrice(expectedAuction.conquerPrice)
                 .withExpirationDay(expectedAuction.expirationDate)
                 .withMinimumOverbiddingPrice(expectedAuction.minimumOverbiddingPrice)
+                .withOwnerId(expectedAuction.owner.id)
                 .build();
 
         var actualId = action.execute(createAuctionCommand);
 
         verify(auctionRepository, times(1)).save(captor.capture());
         assertThat(actualId).isEqualTo(captor.getValue().id);
+        System.out.println(expectedAuction);
+        System.out.println(captor.getValue());
         assertThatAuction(captor.getValue()).isEqualTo(expectedAuction);
     }
 

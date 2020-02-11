@@ -1,4 +1,9 @@
 package com.codesai.auction_house.business.model.auction.exceptions;
 
-public class InitialBidIsGreaterThanConquerPrice extends RuntimeException {
+import com.codesai.auction_house.business.model.generic.Money;
+
+public class InitialBidIsGreaterThanConquerPrice extends AuctionException {
+    public InitialBidIsGreaterThanConquerPrice(Money startingPrice, Money conquerPrice) {
+        super(String.format("initial cannot be greater %.2f than conquer price %.2f", startingPrice.amount, conquerPrice.amount));
+    }
 }

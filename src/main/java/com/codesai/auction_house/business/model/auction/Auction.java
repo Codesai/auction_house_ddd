@@ -1,5 +1,6 @@
 package com.codesai.auction_house.business.model.auction;
 
+import com.codesai.auction_house.business.model.Owner;
 import com.codesai.auction_house.business.model.auction.exceptions.*;
 import com.codesai.auction_house.business.model.generic.Money;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,16 +18,18 @@ import static java.time.LocalDate.now;
 public class Auction {
     private static final Money MINIMUM_MONEY_TO_OVERBID = money(1);
 
-    public String id;
-    public Item item;
-    public Money startingPrice;
-    public Money conquerPrice;
+    public final Owner owner;
+    public final String id;
+    public final Item item;
+    public final Money startingPrice;
+    public final Money conquerPrice;
+    public final Money minimumOverbiddingPrice;
+    public final List<Bid> bids;
     public LocalDate expirationDate;
-    public Money minimumOverbiddingPrice;
-    public List<Bid> bids;
 
-    public Auction(Item item, Money startingPrice, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice) {
-        if (conquerPrice.isLessThan(startingPrice)) throw new InitialBidIsGreaterThanConquerPrice();
+    public Auction(Item item, Money startingPrice, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice, Owner owner) {
+        this.owner = owner;
+        if (conquerPrice.isLessThan(startingPrice)) throw new InitialBidIsGreaterThanConquerPrice(startingPrice, conquerPrice);
         if (minimumOverbiddingPrice.isLessThan(MINIMUM_MONEY_TO_OVERBID))
             throw new MinimumOverbiddingPriceIsNotAllowed();
         if (expirationDate.isAfter(now().plusWeeks(2))) throw new ExpirationDayIsTooFar();
@@ -43,11 +46,11 @@ public class Auction {
     public void bid(Bid bid) {
         topBid().ifPresentOrElse(
                 currentBid -> {
-                    if (currentBid.money.isGreaterThan(bid.money)) throw new TopBidIsGreater();
-                    if (bid.money.equals(currentBid.money)) throw new BidAmountCannotBeTheSameAsTheCurrentOne();
+                    if (currentBid.money.isGreaterThan(bid.money)) throw new TopBidIsGreater(currentBid, bid);
+                    if (bid.money.equals(currentBid.money)) throw new BidAmountCannotBeTheSameAsTheCurrentOne(currentBid);
                     addBid(bid);
-                }, () -> {
-                    if (bid.money.isLessThan(startingPrice)) throw new FirstBidShouldBeGreaterThanStartingPrice();
+                }, ()  -> {
+                    if (bid.money.isLessThan(startingPrice)) throw new FirstBidShouldBeGreaterThanStartingPrice(startingPrice, bid.money);
                     addBid(bid);
                 });
     }
@@ -71,4 +74,5 @@ public class Auction {
     public String toString() {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
+
 }
