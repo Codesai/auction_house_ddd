@@ -1,11 +1,29 @@
 package acceptance;
 
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import static com.codesai.auction_house.infrastructure.Routing.PORT;
+import static com.codesai.auction_house.infrastructure.Routing.Routes;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static spark.Spark.*;
 
-public class StatusApiShould extends ApiTest {
+public class StatusApiShould {
+    @BeforeAll
+    static void startServer() {
+        Routes();
+        RestAssured.baseURI = String.format("http://localhost:%s/", PORT);
+        awaitInitialization();
+    }
+
+    @AfterAll
+    static void stopServer() {
+        stop();
+        awaitStop();
+    }
 
     @Test
     public void

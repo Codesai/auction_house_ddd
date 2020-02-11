@@ -8,6 +8,8 @@ services:
     - 9001:9001
     environment:
       - PORT=9001
+    depends_on:
+      - swagger
   swagger:
       image: swaggerapi/swagger-ui
       ports:

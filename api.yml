@@ -17,7 +17,7 @@ paths:
         - "auction"
       summary: "Creates a new auction"
       description: ""
-      operationId: "addPet"
+      operationId: "addAuction"
       consumes:
         - "application/json"
       produces:
@@ -151,7 +151,7 @@ definitions:
       - end_date
       - conquer_price
       - minimum_overbidding_price
-      - owner
+      - owner_id
     properties:
       item:
         type: object
@@ -176,7 +176,7 @@ definitions:
       minimum_overbidding_price:
         type: number
         example: 1.0
-      owner:
+      owner_id:
         type: string
         default: The owner of the auction
         example: auction_owner_id
@@ -185,11 +185,16 @@ definitions:
     type: "object"
     required:
       - amount
+      - bidder_id
     properties:
       amount:
         type: number
         example: 50
         description: the bid amount for the auction
+      bidder_id:
+        type: string
+        example: "any_bidder_id"
+        description: the bidder id
   Conquer:
     type: "object"
     required:

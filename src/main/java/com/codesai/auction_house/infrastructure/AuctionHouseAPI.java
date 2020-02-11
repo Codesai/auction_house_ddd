@@ -5,6 +5,7 @@ import com.codesai.auction_house.business.actions.commands.ConquerAuctionActionC
 import com.codesai.auction_house.business.actions.commands.CreateAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
+import com.codesai.auction_house.business.model.auction.Bid;
 import com.codesai.auction_house.business.model.auction.exceptions.AuctionException;
 import com.codesai.auction_house.business.model.auction.exceptions.AuctionNotFoundException;
 import com.google.gson.Gson;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.util.function.Supplier;
 
 import static com.codesai.auction_house.infrastructure.ActionFactory.*;
+import static java.util.stream.Collectors.toList;
 import static org.eclipse.jetty.http.HttpStatus.*;
 
 
@@ -82,6 +84,7 @@ public class AuctionHouseAPI {
        } catch (AuctionException e) {
             return anAuctionException(e);
         } catch (JsonSyntaxException e) {
+            e.printStackTrace();
             return anMalformedRequestException();
         }  catch (Exception e) {
             return anUnknownError(e);
@@ -151,12 +154,25 @@ public class AuctionHouseAPI {
                     )
                     .put("initial_bid", auction.startingPrice.amount)
                     .put("conquer_price", auction.conquerPrice.amount)
+                    .put("bids", auction.bids.stream().map(AuctionHouseAPI::createBidJson).collect(toList()))
                     .put("expiration_date", auction.expirationDate.toString())
                     .put("minimum_overbidding_price", auction.minimumOverbiddingPrice.amount)
-                    .put("owner", auction.ownerId.id)
+                    .put("owner_id", auction.ownerId.id)
                     .toString();
         } catch (JSONException e) {
            throw new RuntimeException(e);
+        }
+    }
+
+    private static String createBidJson(Bid bid) {
+        try {
+            return new JSONObject()
+                        .put("id", bid.id)
+                        .put("amount", bid.money.amount)
+                        .put("bidder_id", bid.bidderId.id)
+                        .toString();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -170,7 +186,7 @@ public class AuctionHouseAPI {
                     json.get("conquer_price").getAsDouble(),
                     LocalDate.parse(json.get("expiration_date").getAsString()),
                     json.get("minimum_overbidding_price").getAsDouble(),
-                    json.get("owner").getAsString()
+                    json.get("owner_id").getAsString()
             );
         } catch (Exception e) {
             throw new JsonSyntaxException(e);

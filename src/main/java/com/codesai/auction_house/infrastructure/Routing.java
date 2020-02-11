@@ -11,8 +11,8 @@ public class Routing {
     public static void Routes() {
         port(PORT);
 
+        get("status", (req, res) -> "OK");
         path("api/", () -> {
-            get("status", (req, res) -> "OK");
             get("auction/:id", (request, response) -> new AuctionHouseAPI(request, response).retrieveAuction());
             post("auction", (request, response) -> new AuctionHouseAPI(request, response).createAuction());
             post("auction/:id/bid", (request, response) -> new AuctionHouseAPI(request, response).bidAuction());
