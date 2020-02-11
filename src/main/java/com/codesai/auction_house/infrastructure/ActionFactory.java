@@ -4,9 +4,12 @@ import com.codesai.auction_house.business.actions.BidAuctionAction;
 import com.codesai.auction_house.business.actions.ConquerAuctionAction;
 import com.codesai.auction_house.business.actions.CreateAuctionAction;
 import com.codesai.auction_house.business.actions.RetrieveAuctionAction;
+import com.codesai.auction_house.business.model.OwnerId;
 import com.codesai.auction_house.business.model.bidder.Bidder;
 import com.codesai.auction_house.business.model.bidder.BidderId;
 import com.codesai.auction_house.business.model.bidder.BidderRepository;
+import com.codesai.auction_house.business.model.owner.Owner;
+import com.codesai.auction_house.business.model.owner.OwnerRepository;
 import com.codesai.auction_house.infrastructure.repository.InMemoryAuctionRepository;
 
 public class ActionFactory {
@@ -14,7 +17,21 @@ public class ActionFactory {
     private static final InMemoryAuctionRepository repository = new InMemoryAuctionRepository();
 
     public static CreateAuctionAction createAuctionAction() {
-        return new CreateAuctionAction(auctionRepository());
+        return new CreateAuctionAction(auctionRepository(), ownerRepository());
+    }
+
+    private static OwnerRepository ownerRepository() {
+        return new OwnerRepository() {
+            @Override
+            public Owner retrieveById(OwnerId ownerId) {
+                return new Owner(ownerId);
+            }
+
+            @Override
+            public void save(Owner owner) {
+
+            }
+        };
     }
 
     public static BidAuctionAction bidAuctionAction() { return new BidAuctionAction(auctionRepository(), bidderRepository()); }

@@ -32,8 +32,8 @@ public class AuctionAssert extends AbstractAssert<AuctionAssert, Auction> {
         if (!actual.minimumOverbiddingPrice.equals(expected.minimumOverbiddingPrice)) {
             failWithMessage(String.format("Expected  minimum overbidding price to be: %s but was %s", expected.minimumOverbiddingPrice, expected.minimumOverbiddingPrice));
         }
-        if (!actual.owner.id.equals(expected.owner.id)) {
-            failWithMessage(String.format("Expected owner was: %s but was %s", expected.owner.id, actual.owner.id));
+        if (!actual.ownerId.id.equals(expected.ownerId.id)) {
+            failWithMessage(String.format("Expected owner was: %s but was %s", expected.ownerId.id, actual.ownerId.id));
         }
         return this;
     }

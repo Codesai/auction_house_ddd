@@ -1,12 +1,16 @@
 package unit.bussines.actions;
 
 import com.codesai.auction_house.business.actions.CreateAuctionAction;
+import com.codesai.auction_house.business.model.OwnerId;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.exceptions.ExpirationDayAlreadyPassed;
 import com.codesai.auction_house.business.model.auction.exceptions.ExpirationDayIsTooFar;
 import com.codesai.auction_house.business.model.auction.exceptions.InitialBidIsGreaterThanConquerPrice;
 import com.codesai.auction_house.business.model.auction.exceptions.MinimumOverbiddingPriceIsNotAllowed;
+import com.codesai.auction_house.business.model.owner.Owner;
+import com.codesai.auction_house.business.model.owner.OwnerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -21,13 +25,20 @@ import static org.mockito.Mockito.*;
 
 public class CreateAuctionActionShould {
 
+    public static final OwnerId ANY_OWNER_ID = new OwnerId("ANY_OWNER_ID");
     AuctionRepository auctionRepository = mock(AuctionRepository.class);
+    OwnerRepository ownerRepository = mock(OwnerRepository.class);
     ArgumentCaptor<Auction> captor = ArgumentCaptor.forClass(Auction.class);
-    CreateAuctionAction action = new CreateAuctionAction(auctionRepository);
+    CreateAuctionAction action = new CreateAuctionAction(auctionRepository, ownerRepository);
+
+    @BeforeEach
+    public void setUp() {
+        when(ownerRepository.retrieveById(any())).thenReturn(new Owner(ANY_OWNER_ID));
+    }
 
     @Test public void
     create_an_auction() {
-        var expectedAuction = anAuction().build();
+        var expectedAuction = anAuction().withOwnerId(ANY_OWNER_ID).build();
         var createAuctionCommand = aCreateAuctionCommand()
                 .withName(expectedAuction.item.name)
                 .withDescription(expectedAuction.item.description)
@@ -35,15 +46,14 @@ public class CreateAuctionActionShould {
                 .withConquerPrice(expectedAuction.conquerPrice)
                 .withExpirationDay(expectedAuction.expirationDate)
                 .withMinimumOverbiddingPrice(expectedAuction.minimumOverbiddingPrice)
-                .withOwnerId(expectedAuction.owner.id)
+                .withOwnerId(expectedAuction.ownerId.id)
                 .build();
 
         var actualId = action.execute(createAuctionCommand);
 
         verify(auctionRepository, times(1)).save(captor.capture());
+        verify(ownerRepository, times(1)).save(any());
         assertThat(actualId).isEqualTo(captor.getValue().id);
-        System.out.println(expectedAuction);
-        System.out.println(captor.getValue());
         assertThatAuction(captor.getValue()).isEqualTo(expectedAuction);
     }
 
@@ -55,6 +65,8 @@ public class CreateAuctionActionShould {
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(InitialBidIsGreaterThanConquerPrice.class);
+        verify(auctionRepository, times(0)).save(any());
+        verify(ownerRepository, times(0)).save(any());
     }
 
     @Test public void
@@ -65,6 +77,8 @@ public class CreateAuctionActionShould {
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(MinimumOverbiddingPriceIsNotAllowed.class);
+        verify(auctionRepository, times(0)).save(any());
+        verify(ownerRepository, times(0)).save(any());
     }
 
     @Test public void
@@ -75,6 +89,8 @@ public class CreateAuctionActionShould {
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(ExpirationDayIsTooFar.class);
+        verify(auctionRepository, times(0)).save(any());
+        verify(ownerRepository, times(0)).save(any());
     }
 
     @Test public void
@@ -85,6 +101,8 @@ public class CreateAuctionActionShould {
 
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(ExpirationDayAlreadyPassed.class);
+        verify(auctionRepository, times(0)).save(any());
+        verify(ownerRepository, times(0)).save(any());
     }
 
 }

@@ -1,9 +1,9 @@
 package com.codesai.auction_house.business.model;
 
-public class Owner {
+public class OwnerId {
     public final String id;
 
-    public Owner(String ownerId) {
+    public OwnerId(String ownerId) {
         this.id = ownerId;
     }
 }

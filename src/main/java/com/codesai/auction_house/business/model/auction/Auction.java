@@ -1,6 +1,6 @@
 package com.codesai.auction_house.business.model.auction;
 
-import com.codesai.auction_house.business.model.Owner;
+import com.codesai.auction_house.business.model.OwnerId;
 import com.codesai.auction_house.business.model.auction.exceptions.*;
 import com.codesai.auction_house.business.model.bidder.BidderId;
 import com.codesai.auction_house.business.model.generic.Money;
@@ -19,7 +19,7 @@ import static java.time.LocalDate.now;
 public class Auction {
     private static final Money MINIMUM_MONEY_TO_OVERBID = money(1);
 
-    public final Owner owner;
+    public final OwnerId ownerId;
     public final String id;
     public final Item item;
     public final Money startingPrice;
@@ -28,8 +28,8 @@ public class Auction {
     public final List<Bid> bids;
     public LocalDate expirationDate;
 
-    public Auction(Item item, Money startingPrice, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice, Owner owner) {
-        this.owner = owner;
+    public Auction(Item item, Money startingPrice, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice, OwnerId ownerId) {
+        this.ownerId = ownerId;
         if (conquerPrice.isLessThan(startingPrice)) throw new InitialBidIsGreaterThanConquerPrice(startingPrice, conquerPrice);
         if (minimumOverbiddingPrice.isLessThan(MINIMUM_MONEY_TO_OVERBID))
             throw new MinimumOverbiddingPriceIsNotAllowed();

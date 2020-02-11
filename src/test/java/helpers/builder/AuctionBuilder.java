@@ -1,6 +1,6 @@
 package helpers.builder;
 
-import com.codesai.auction_house.business.model.Owner;
+import com.codesai.auction_house.business.model.OwnerId;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.Bid;
 import com.codesai.auction_house.business.model.auction.Item;
@@ -23,7 +23,7 @@ public class AuctionBuilder {
     private LocalDate expirationDay = now().plusDays(14);
     private Item item = item("anyItem", "anyDescription");
     private List<Bid> bids = new ArrayList<>();
-    private Owner owner = new Owner(UUID.randomUUID().toString());
+    private OwnerId ownerId = new OwnerId(UUID.randomUUID().toString());
 
     public static AuctionBuilder anAuction() {
         return new AuctionBuilder();
@@ -45,8 +45,13 @@ public class AuctionBuilder {
     }
 
     public Auction build() {
-        var auction = new Auction(item, startingPrice, conquerPrice, expirationDay, minimumOverbiddingPrice, owner);
+        var auction = new Auction(item, startingPrice, conquerPrice, expirationDay, minimumOverbiddingPrice, ownerId);
         this.bids.forEach(auction::proposeBid);
         return auction;
+    }
+
+    public AuctionBuilder withOwnerId(OwnerId ownerId) {
+        this.ownerId = ownerId;
+        return this;
     }
 }

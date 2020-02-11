@@ -153,7 +153,7 @@ public class AuctionHouseAPI {
                     .put("conquer_price", auction.conquerPrice.amount)
                     .put("expiration_date", auction.expirationDate.toString())
                     .put("minimum_overbidding_price", auction.minimumOverbiddingPrice.amount)
-                    .put("owner", auction.owner.id)
+                    .put("owner", auction.ownerId.id)
                     .toString();
         } catch (JSONException e) {
            throw new RuntimeException(e);

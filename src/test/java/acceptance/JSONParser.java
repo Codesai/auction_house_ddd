@@ -16,7 +16,7 @@ public class JSONParser {
                 .put("conquer_price", expectedAuction.conquerPrice.amount)
                 .put("expiration_date", expectedAuction.expirationDate.toString())
                 .put("minimum_overbidding_price", expectedAuction.minimumOverbiddingPrice.amount)
-                .put("owner", expectedAuction.owner.id);
+                .put("owner", expectedAuction.ownerId.id);
     }
 
     static String createBidJsonFrom(Bid bid) throws JSONException {
