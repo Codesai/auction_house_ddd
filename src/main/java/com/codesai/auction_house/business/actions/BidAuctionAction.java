@@ -20,6 +20,6 @@ public class BidAuctionAction {
         var bid = bidder.bidWith(command.biddingAmount);
         auction.proposeBid(bid);
         auctionRepository.save(auction);
-        bidderRepository.save(bidder);
+        bidderRepository.save();
     }
 }

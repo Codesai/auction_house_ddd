@@ -27,11 +27,11 @@ import static org.mockito.Mockito.*;
 
 public class BidAuctionActionShould {
 
-    String ANY_BIDDER_ID = "AnyBidderId";
-    AuctionRepository auctionRepository = mock(AuctionRepository.class);
-    BidderRepository bidderRepository = mock(BidderRepository.class);
-    BidAuctionAction action = new BidAuctionAction(auctionRepository, bidderRepository);
-    ArgumentCaptor<Auction> captor = ArgumentCaptor.forClass(Auction.class);
+    final String ANY_BIDDER_ID = "AnyBidderId";
+    final AuctionRepository auctionRepository = mock(AuctionRepository.class);
+    final BidderRepository bidderRepository = mock(BidderRepository.class);
+    final BidAuctionAction action = new BidAuctionAction(auctionRepository, bidderRepository);
+    final ArgumentCaptor<Auction> captor = ArgumentCaptor.forClass(Auction.class);
 
     @BeforeEach
     public void setUp() {
@@ -47,7 +47,7 @@ public class BidAuctionActionShould {
         action.execute(new BidAuctionCommand(auction.id, expectedAmount, ANY_BIDDER_ID));
 
         verify(auctionRepository, times(1)).save(captor.capture());
-        verify(bidderRepository, times(1)).save(any());
+        verify(bidderRepository, times(1)).save();
         assertThat(captor.getValue().bids).hasSize(1);
         assertThatBid(captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount), new BidderId(ANY_BIDDER_ID)));
     }
@@ -61,7 +61,7 @@ public class BidAuctionActionShould {
         action.execute(new BidAuctionCommand(auction.id, expectedAmount, ANY_BIDDER_ID));
 
         verify(auctionRepository, times(1)).save(captor.capture());
-        verify(bidderRepository, times(1)).save(any());
+        verify(bidderRepository, times(1)).save();
         assertThat(captor.getValue().bids).hasSize(2);
         assertThatBid(captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount), new BidderId(ANY_BIDDER_ID)));
     }
@@ -74,7 +74,7 @@ public class BidAuctionActionShould {
         assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auction.id, 29, ANY_BIDDER_ID)))
             .isInstanceOf(FirstBidShouldBeGreaterThanStartingPrice.class);
         verify(auctionRepository, times(0)).save(any());
-        verify(bidderRepository, times(0)).save(any());
+        verify(bidderRepository, times(0)).save();
     }
 
     @Test
@@ -85,7 +85,7 @@ public class BidAuctionActionShould {
 
         assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auction.id, expectedAmount, ANY_BIDDER_ID)))
                 .isInstanceOf(BidAmountCannotBeTheSameAsTheCurrentOne.class);
-        verify(bidderRepository, times(0)).save(any());
+        verify(bidderRepository, times(0)).save();
         verify(auctionRepository, times(0)).save(any());
     }
 

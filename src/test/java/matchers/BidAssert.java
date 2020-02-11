@@ -14,7 +14,7 @@ public class BidAssert extends AbstractAssert<BidAssert, Bid> {
         return new BidAssert(expectedBid);
     }
 
-    public BidAssert isEqualTo(Bid expected) {
+    public void isEqualTo(Bid expected) {
         isNotNull();
 
         try { UUID.fromString(actual.id); } catch (Exception e) {
@@ -29,7 +29,6 @@ public class BidAssert extends AbstractAssert<BidAssert, Bid> {
             failWithMessage("Expected bidder id to be: <%s> and was: <%s>", actual.bidderId, expected.bidderId);
         }
 
-        return this;
     }
 
 }

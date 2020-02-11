@@ -10,7 +10,6 @@ import static java.time.LocalDate.now;
 
 public class CreateAuctionCommandBuilder {
     private LocalDate expirationDay = now().plusDays(14);
-    private Money overbiddingPrice = money(1);
     private Money conquerPrice = money(5);
     private Money initialBid = money(1);
     private String name = "Any Name";
@@ -35,7 +34,6 @@ public class CreateAuctionCommandBuilder {
     }
 
     public CreateAuctionCommandBuilder withMinimumOverbiddingPrice(Money overbiddingPrice) {
-        this.overbiddingPrice = overbiddingPrice;
         return this;
     }
 

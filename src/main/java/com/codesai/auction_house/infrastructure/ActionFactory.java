@@ -28,7 +28,7 @@ public class ActionFactory {
             }
 
             @Override
-            public void save(Owner owner) {
+            public void save() {
 
             }
         };
@@ -44,7 +44,7 @@ public class ActionFactory {
             }
 
             @Override
-            public void save(Bidder bidder) {
+            public void save() {
 
             }
         };

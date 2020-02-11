@@ -12,7 +12,7 @@ public class AuctionAssert extends AbstractAssert<AuctionAssert, Auction> {
         return new AuctionAssert(actual);
     }
 
-    public AuctionAssert isEqualTo(Auction expected) {
+    public void isEqualTo(Auction expected) {
         isNotNull();
         if (!actual.id.matches("[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}")) {
             failWithMessage("Expected auction id to be: " + expected.id + " but was " + expected.id);
@@ -32,6 +32,5 @@ public class AuctionAssert extends AbstractAssert<AuctionAssert, Auction> {
         if (!actual.ownerId.id.equals(expected.ownerId.id)) {
             failWithMessage(String.format("Expected owner was: %s but was %s", expected.ownerId.id, actual.ownerId.id));
         }
-        return this;
     }
 }

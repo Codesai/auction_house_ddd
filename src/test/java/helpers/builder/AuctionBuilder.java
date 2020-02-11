@@ -17,11 +17,11 @@ import static java.time.LocalDate.now;
 
 public class AuctionBuilder {
 
-    private Money conquerPrice = money(50);
+    private final Money conquerPrice = money(50);
     private Money startingPrice = money(10.5);
     private Money minimumOverbiddingPrice = money(1);
     private LocalDate expirationDay = now().plusDays(14);
-    private Item item = item("anyItem", "anyDescription");
+    private final Item item = item("anyItem", "anyDescription");
     private List<Bid> bids = new ArrayList<>();
     private OwnerId ownerId = new OwnerId(UUID.randomUUID().toString());
 

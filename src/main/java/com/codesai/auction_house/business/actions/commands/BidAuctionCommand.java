@@ -8,7 +8,7 @@ import static com.codesai.auction_house.business.model.generic.Money.money;
 public class BidAuctionCommand {
     public final String auctionId;
     public final Money biddingAmount;
-    public BidderId bidderId;
+    public final BidderId bidderId;
 
     public BidAuctionCommand(String auctionId, double bidAmount, String bidderId) {
         this.auctionId = auctionId;

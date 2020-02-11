@@ -61,7 +61,7 @@ public class ConquerAuctionAPIShould extends ApiTest {
         return expectedAuction;
     }
 
-    private Auction aClosedAuction() throws Exception {
+    private Auction aClosedAuction() {
         var auction = givenALiveAuction();
         conquerAuctionAction().execute(new ConquerAuctionActionCommand("", auction.id));
         return auction;

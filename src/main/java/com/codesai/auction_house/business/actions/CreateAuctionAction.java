@@ -7,7 +7,7 @@ import com.codesai.auction_house.business.model.owner.OwnerRepository;
 import static com.codesai.auction_house.business.model.auction.Item.item;
 
 public class CreateAuctionAction {
-    private AuctionRepository auctionRepository;
+    private final AuctionRepository auctionRepository;
     private final OwnerRepository ownerRepository;
 
     public CreateAuctionAction(AuctionRepository auctionRepository, OwnerRepository ownerRepository) {
@@ -25,7 +25,7 @@ public class CreateAuctionAction {
                         command.expirationDate
                 );
         auctionRepository.save(auction);
-        ownerRepository.save(owner);
+        ownerRepository.save();
         return auction.id;
     }
 }

@@ -17,8 +17,8 @@ import static org.mockito.Mockito.when;
 
 public class RetrieveAuctionBidsActionShould {
 
-    AuctionRepository repository = mock(AuctionRepository.class);
-    RetrieveAuctionBidsAction action = new RetrieveAuctionBidsAction(this.repository);
+    final AuctionRepository repository = mock(AuctionRepository.class);
+    final RetrieveAuctionBidsAction action = new RetrieveAuctionBidsAction(this.repository);
 
     @Test
     public void

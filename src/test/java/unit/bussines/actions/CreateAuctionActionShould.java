@@ -24,10 +24,10 @@ import static org.mockito.Mockito.*;
 public class CreateAuctionActionShould {
 
     public static final OwnerId ANY_OWNER_ID = new OwnerId("ANY_OWNER_ID");
-    AuctionRepository auctionRepository = mock(AuctionRepository.class);
-    OwnerRepository ownerRepository = mock(OwnerRepository.class);
-    ArgumentCaptor<Auction> captor = ArgumentCaptor.forClass(Auction.class);
-    CreateAuctionAction action = new CreateAuctionAction(auctionRepository, ownerRepository);
+    final AuctionRepository auctionRepository = mock(AuctionRepository.class);
+    final OwnerRepository ownerRepository = mock(OwnerRepository.class);
+    final ArgumentCaptor<Auction> captor = ArgumentCaptor.forClass(Auction.class);
+    final CreateAuctionAction action = new CreateAuctionAction(auctionRepository, ownerRepository);
 
     @BeforeEach
     public void setUp() {
@@ -49,7 +49,7 @@ public class CreateAuctionActionShould {
         var actualId = action.execute(createAuctionCommand);
 
         verify(auctionRepository, times(1)).save(captor.capture());
-        verify(ownerRepository, times(1)).save(any());
+        verify(ownerRepository, times(1)).save();
         assertThat(actualId).isEqualTo(captor.getValue().id);
         assertThatAuction(captor.getValue()).isEqualTo(expectedAuction);
     }
@@ -63,7 +63,7 @@ public class CreateAuctionActionShould {
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(InitialBidIsGreaterThanConquerPrice.class);
         verify(auctionRepository, times(0)).save(any());
-        verify(ownerRepository, times(0)).save(any());
+        verify(ownerRepository, times(0)).save();
     }
     @Test public void
     not_create_an_auction_when_the_expiration_date_is_more_than_2_weeks_from_today() {
@@ -74,7 +74,7 @@ public class CreateAuctionActionShould {
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(ExpirationDayIsTooFar.class);
         verify(auctionRepository, times(0)).save(any());
-        verify(ownerRepository, times(0)).save(any());
+        verify(ownerRepository, times(0)).save();
     }
 
     @Test public void
@@ -86,7 +86,7 @@ public class CreateAuctionActionShould {
         assertThatThrownBy(() -> action.execute(command))
                 .isInstanceOf(ExpirationDayAlreadyPassed.class);
         verify(auctionRepository, times(0)).save(any());
-        verify(ownerRepository, times(0)).save(any());
+        verify(ownerRepository, times(0)).save();
     }
 
 }

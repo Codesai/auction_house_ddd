@@ -19,11 +19,11 @@ import static org.mockito.Mockito.*;
 
 public class DeclareAuctionWinnerActionShould {
 
-    LocalDate TODAY = now();
-    AuctionRepository auctionRepository = mock(AuctionRepository.class);
-    Calendar calendar = mock(Calendar.class);
-    EventProducer eventProducer = mock(EventProducer.class);
-    String ANY_BIDDER_ID = "anyUser";
+    final LocalDate TODAY = now();
+    final AuctionRepository auctionRepository = mock(AuctionRepository.class);
+    final Calendar calendar = mock(Calendar.class);
+    final EventProducer eventProducer = mock(EventProducer.class);
+    final String ANY_BIDDER_ID = "anyUser";
 
     @Test
     public void

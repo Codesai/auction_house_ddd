@@ -5,7 +5,7 @@ import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 
 public class RetrieveAuctionAction {
-    private AuctionRepository repository;
+    private final AuctionRepository repository;
 
     public RetrieveAuctionAction(AuctionRepository repository) {
         this.repository = repository;

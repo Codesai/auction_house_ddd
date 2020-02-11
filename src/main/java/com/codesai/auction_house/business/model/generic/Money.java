@@ -2,7 +2,7 @@ package com.codesai.auction_house.business.model.generic;
 
 public final class Money extends ValueObject {
     public final double amount;
-    private final Currency currency;
+    public final Currency currency;
 
     public static Money money(double amount) {
         return new Money(amount);

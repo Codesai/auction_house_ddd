@@ -12,7 +12,7 @@ import static com.codesai.auction_house.infrastructure.Routing.Routes;
 import static spark.Spark.*;
 
 public class ApiTest {
-    InMemoryAuctionRepository auctionRepository = auctionRepository();
+    final InMemoryAuctionRepository auctionRepository = auctionRepository();
 
     @BeforeAll
     static void startServer() {

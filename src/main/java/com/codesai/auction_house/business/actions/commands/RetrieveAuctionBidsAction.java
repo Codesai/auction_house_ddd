@@ -6,7 +6,7 @@ import com.codesai.auction_house.business.model.auction.Bid;
 import java.util.List;
 
 public class RetrieveAuctionBidsAction {
-    private AuctionRepository repository;
+    private final AuctionRepository repository;
 
     public RetrieveAuctionBidsAction(AuctionRepository repository) {
         this.repository = repository;

@@ -4,7 +4,6 @@ import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.Bid;
 import com.codesai.auction_house.business.model.auction.exceptions.FirstBidShouldBeGreaterThanStartingPrice;
 import com.codesai.auction_house.business.model.bidder.BidderId;
-import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -20,7 +19,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class BidAuctionApiShould extends ApiTest {
 
     @Test public void
-    post_to_bid_an_existing_auction() throws JSONException {
+    post_to_bid_an_existing_auction() {
         var givenAuctionId = givingAnExistingAuction().id;
         var givenBidderId = new BidderId("AnyUserId" + UUID.randomUUID());
         var expectedBid = new Bid(money(50), givenBidderId);
@@ -40,7 +39,7 @@ public class BidAuctionApiShould extends ApiTest {
     }
 
     @Test public void
-    get_an_error_response_when_try_to_create_an_invalid_bid() throws JSONException {
+    get_an_error_response_when_try_to_create_an_invalid_bid() {
         var auction = anAuction().withStartingPrice(money(10)).build();
         var insufficientBid = new Bid(money(5), new BidderId("AnyBidderId"));
         auctionRepository.save(auction);
