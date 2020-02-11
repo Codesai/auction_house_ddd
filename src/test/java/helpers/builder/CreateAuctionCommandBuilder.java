@@ -77,7 +77,6 @@ public class CreateAuctionCommandBuilder {
                 initialBid.amount,
                 conquerPrice.amount,
                 expirationDay,
-                overbiddingPrice.amount,
                 owner
         );
     }

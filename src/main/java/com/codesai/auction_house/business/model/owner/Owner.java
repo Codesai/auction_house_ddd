@@ -14,13 +14,12 @@ public class Owner {
         this.id = id;
     }
 
-    public Auction auctionWith(Item item, Money startingPrice, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice) {
+    public Auction auctionWith(Item item, Money startingPrice, Money conquerPrice, LocalDate expirationDate) {
         return new Auction(
                 item,
                 startingPrice,
                 conquerPrice,
                 expirationDate,
-                minimumOverbiddingPrice,
                 id);
     }
 }

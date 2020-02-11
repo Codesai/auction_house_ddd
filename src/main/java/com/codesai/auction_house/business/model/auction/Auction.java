@@ -24,15 +24,12 @@ public class Auction {
     public final Item item;
     public final Money startingPrice;
     public final Money conquerPrice;
-    public final Money minimumOverbiddingPrice;
     public final List<Bid> bids;
     public LocalDate expirationDate;
 
-    public Auction(Item item, Money startingPrice, Money conquerPrice, LocalDate expirationDate, Money minimumOverbiddingPrice, OwnerId ownerId) {
+    public Auction(Item item, Money startingPrice, Money conquerPrice, LocalDate expirationDate, OwnerId ownerId) {
         this.ownerId = ownerId;
         if (conquerPrice.isLessThan(startingPrice)) throw new InitialBidIsGreaterThanConquerPrice(startingPrice, conquerPrice);
-        if (minimumOverbiddingPrice.isLessThan(MINIMUM_MONEY_TO_OVERBID))
-            throw new MinimumOverbiddingPriceIsNotAllowed();
         if (expirationDate.isAfter(now().plusWeeks(2))) throw new ExpirationDayIsTooFar();
         if (expirationDate.isBefore(now())) throw new ExpirationDayAlreadyPassed();
         this.id = UUID.randomUUID().toString();
@@ -40,7 +37,6 @@ public class Auction {
         this.startingPrice = startingPrice;
         this.conquerPrice = conquerPrice;
         this.expirationDate = expirationDate;
-        this.minimumOverbiddingPrice = minimumOverbiddingPrice;
         this.bids = new LinkedList<>();
     }
 

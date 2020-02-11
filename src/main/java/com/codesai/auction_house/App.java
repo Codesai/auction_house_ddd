@@ -2,7 +2,6 @@ package com.codesai.auction_house;
 
 import static com.codesai.auction_house.infrastructure.Routing.Routes;
 
-// TODO: Usuario al crear el bid
 // TODO: Usuario en el conquer
 // TODO: Hacer algo para enseñar domain events
 // TODO: lógica asociado a "minimum overriding price" (quitarlo)

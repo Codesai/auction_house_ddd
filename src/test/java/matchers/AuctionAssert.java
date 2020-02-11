@@ -29,9 +29,6 @@ public class AuctionAssert extends AbstractAssert<AuctionAssert, Auction> {
         if (!actual.expirationDate.equals(expected.expirationDate)) {
             failWithMessage(String.format("Expected expiration date to be: %s but was %s", expected.expirationDate, expected.expirationDate));
         }
-        if (!actual.minimumOverbiddingPrice.equals(expected.minimumOverbiddingPrice)) {
-            failWithMessage(String.format("Expected  minimum overbidding price to be: %s but was %s", expected.minimumOverbiddingPrice, expected.minimumOverbiddingPrice));
-        }
         if (!actual.ownerId.id.equals(expected.ownerId.id)) {
             failWithMessage(String.format("Expected owner was: %s but was %s", expected.ownerId.id, actual.ownerId.id));
         }

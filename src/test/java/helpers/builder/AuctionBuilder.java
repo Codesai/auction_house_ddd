@@ -45,7 +45,7 @@ public class AuctionBuilder {
     }
 
     public Auction build() {
-        var auction = new Auction(item, startingPrice, conquerPrice, expirationDay, minimumOverbiddingPrice, ownerId);
+        var auction = new Auction(item, startingPrice, conquerPrice, expirationDay, ownerId);
         this.bids.forEach(auction::proposeBid);
         return auction;
     }

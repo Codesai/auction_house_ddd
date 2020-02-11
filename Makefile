@@ -11,3 +11,6 @@ clean:
 
 api_definition: clean
 	docker-compose up swagger
+
+start: build
+	docker-compose up

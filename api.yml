@@ -150,7 +150,6 @@ definitions:
       - initial_bid
       - end_date
       - conquer_price
-      - minimum_overbidding_price
       - owner_id
     properties:
       item:
@@ -173,9 +172,6 @@ definitions:
       expiration_date:
         type: string
         example: "2020-01-24"
-      minimum_overbidding_price:
-        type: number
-        example: 1.0
       owner_id:
         type: string
         default: The owner of the auction

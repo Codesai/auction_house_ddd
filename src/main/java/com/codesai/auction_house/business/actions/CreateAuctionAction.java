@@ -22,8 +22,7 @@ public class CreateAuctionAction {
                         item(command.name, command.description),
                         command.startingPrice,
                         command.conquerPrice,
-                        command.expirationDate,
-                        command.minimumOverbiddingPrice
+                        command.expirationDate
                 );
         auctionRepository.save(auction);
         ownerRepository.save(owner);

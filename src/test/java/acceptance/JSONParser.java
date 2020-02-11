@@ -18,7 +18,6 @@ public class JSONParser {
                 .put("conquer_price", expectedAuction.conquerPrice.amount)
                 .put("bids", expectedAuction.bids.stream().map(JSONParser::createBidJsonFrom).collect(toList()))
                 .put("expiration_date", expectedAuction.expirationDate.toString())
-                .put("minimum_overbidding_price", expectedAuction.minimumOverbiddingPrice.amount)
                 .put("owner_id", expectedAuction.ownerId.id);
     }
 

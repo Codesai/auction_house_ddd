@@ -156,7 +156,6 @@ public class AuctionHouseAPI {
                     .put("conquer_price", auction.conquerPrice.amount)
                     .put("bids", auction.bids.stream().map(AuctionHouseAPI::createBidJson).collect(toList()))
                     .put("expiration_date", auction.expirationDate.toString())
-                    .put("minimum_overbidding_price", auction.minimumOverbiddingPrice.amount)
                     .put("owner_id", auction.ownerId.id)
                     .toString();
         } catch (JSONException e) {
@@ -185,7 +184,6 @@ public class AuctionHouseAPI {
                     json.get("initial_bid").getAsDouble(),
                     json.get("conquer_price").getAsDouble(),
                     LocalDate.parse(json.get("expiration_date").getAsString()),
-                    json.get("minimum_overbidding_price").getAsDouble(),
                     json.get("owner_id").getAsString()
             );
         } catch (Exception e) {

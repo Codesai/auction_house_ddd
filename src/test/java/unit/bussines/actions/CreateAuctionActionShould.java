@@ -7,14 +7,12 @@ import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.exceptions.ExpirationDayAlreadyPassed;
 import com.codesai.auction_house.business.model.auction.exceptions.ExpirationDayIsTooFar;
 import com.codesai.auction_house.business.model.auction.exceptions.InitialBidIsGreaterThanConquerPrice;
-import com.codesai.auction_house.business.model.auction.exceptions.MinimumOverbiddingPriceIsNotAllowed;
 import com.codesai.auction_house.business.model.owner.Owner;
 import com.codesai.auction_house.business.model.owner.OwnerRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static com.codesai.auction_house.business.model.generic.Money.money;
 import static helpers.builder.AuctionBuilder.anAuction;
 import static helpers.builder.CreateAuctionCommandBuilder.aCreateAuctionCommand;
 import static java.time.LocalDate.now;
@@ -45,7 +43,6 @@ public class CreateAuctionActionShould {
                 .withInitialBid(expectedAuction.startingPrice)
                 .withConquerPrice(expectedAuction.conquerPrice)
                 .withExpirationDay(expectedAuction.expirationDate)
-                .withMinimumOverbiddingPrice(expectedAuction.minimumOverbiddingPrice)
                 .withOwnerId(expectedAuction.ownerId.id)
                 .build();
 
@@ -68,19 +65,6 @@ public class CreateAuctionActionShould {
         verify(auctionRepository, times(0)).save(any());
         verify(ownerRepository, times(0)).save(any());
     }
-
-    @Test public void
-    not_create_an_auction_when_the_minimum_overbidding_price_is_less_than_an_euro() {
-        var command = aCreateAuctionCommand()
-                        .withMinimumOverbiddingPrice(money(0.5))
-                        .build();
-
-        assertThatThrownBy(() -> action.execute(command))
-                .isInstanceOf(MinimumOverbiddingPriceIsNotAllowed.class);
-        verify(auctionRepository, times(0)).save(any());
-        verify(ownerRepository, times(0)).save(any());
-    }
-
     @Test public void
     not_create_an_auction_when_the_expiration_date_is_more_than_2_weeks_from_today() {
         var command = aCreateAuctionCommand()
