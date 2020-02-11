@@ -8,8 +8,11 @@ import com.codesai.auction_house.business.model.auction.Bid;
 import com.codesai.auction_house.business.model.auction.exceptions.BidAmountCannotBeTheSameAsTheCurrentOne;
 import com.codesai.auction_house.business.model.auction.exceptions.FirstBidShouldBeGreaterThanStartingPrice;
 import com.codesai.auction_house.business.model.auction.exceptions.TopBidIsGreater;
+import com.codesai.auction_house.business.model.bidder.Bidder;
 import com.codesai.auction_house.business.model.bidder.BidderId;
+import com.codesai.auction_house.business.model.bidder.BidderRepository;
 import com.codesai.auction_house.business.model.generic.Money;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -25,9 +28,15 @@ import static org.mockito.Mockito.*;
 public class BidAuctionActionShould {
 
     String ANY_BIDDER_ID = "AnyBidderId";
-    AuctionRepository repository = mock(AuctionRepository.class);
-    BidAuctionAction action = new BidAuctionAction(this.repository);
+    AuctionRepository auctionRepository = mock(AuctionRepository.class);
+    BidderRepository bidderRepository = mock(BidderRepository.class);
+    BidAuctionAction action = new BidAuctionAction(auctionRepository, bidderRepository);
     ArgumentCaptor<Auction> captor = ArgumentCaptor.forClass(Auction.class);
+
+    @BeforeEach
+    public void setUp() {
+        when(bidderRepository.retrieveById(any())).thenReturn(new Bidder(new BidderId(ANY_BIDDER_ID)));
+    }
 
     @Test
     public void
@@ -37,9 +46,10 @@ public class BidAuctionActionShould {
 
         action.execute(new BidAuctionCommand(auction.id, expectedAmount, ANY_BIDDER_ID));
 
-        verify(this.repository, times(1)).save(this.captor.capture());
-        assertThat(this.captor.getValue().bids).hasSize(1);
-        assertThatBid(this.captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount), new BidderId(ANY_BIDDER_ID)));
+        verify(auctionRepository, times(1)).save(captor.capture());
+        verify(bidderRepository, times(1)).save(any());
+        assertThat(captor.getValue().bids).hasSize(1);
+        assertThatBid(captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount), new BidderId(ANY_BIDDER_ID)));
     }
 
     @Test
@@ -50,7 +60,8 @@ public class BidAuctionActionShould {
 
         action.execute(new BidAuctionCommand(auction.id, expectedAmount, ANY_BIDDER_ID));
 
-        verify(repository, times(1)).save(captor.capture());
+        verify(auctionRepository, times(1)).save(captor.capture());
+        verify(bidderRepository, times(1)).save(any());
         assertThat(captor.getValue().bids).hasSize(2);
         assertThatBid(captor.getValue().bids.get(0)).isEqualTo(new Bid(money(expectedAmount), new BidderId(ANY_BIDDER_ID)));
     }
@@ -62,7 +73,8 @@ public class BidAuctionActionShould {
 
         assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auction.id, 29, ANY_BIDDER_ID)))
             .isInstanceOf(FirstBidShouldBeGreaterThanStartingPrice.class);
-        verify(repository, times(0)).save(any());
+        verify(auctionRepository, times(0)).save(any());
+        verify(bidderRepository, times(0)).save(any());
     }
 
     @Test
@@ -73,6 +85,8 @@ public class BidAuctionActionShould {
 
         assertThatThrownBy(() -> action.execute(new BidAuctionCommand(auction.id, expectedAmount, ANY_BIDDER_ID)))
                 .isInstanceOf(BidAmountCannotBeTheSameAsTheCurrentOne.class);
+        verify(bidderRepository, times(0)).save(any());
+        verify(auctionRepository, times(0)).save(any());
     }
 
     @Test
@@ -86,13 +100,13 @@ public class BidAuctionActionShould {
 
     private Auction givenAnAuctionWithNoBidsAndStartingPriceAt(Money startingPrice) {
         var auction = anAuction().withStartingPrice(startingPrice).build();
-        when(this.repository.retrieveById(auction.id)).thenReturn(auction);
+        when(auctionRepository.retrieveById(auction.id)).thenReturn(auction);
         return auction;
     }
 
     private Auction givenAnAuctionWithStartingPriceAndBids(Money startingPrice, List<Bid> bids) {
         var auction = anAuction().withStartingPrice(startingPrice).withBids(bids).build();
-        when(this.repository.retrieveById(auction.id)).thenReturn(auction);
+        when(auctionRepository.retrieveById(auction.id)).thenReturn(auction);
         return auction;
     }
 }

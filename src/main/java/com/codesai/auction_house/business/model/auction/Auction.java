@@ -44,7 +44,7 @@ public class Auction {
         this.bids = new LinkedList<>();
     }
 
-    public void bid(Bid bid) {
+    public void proposeBid(Bid bid) {
         topBid().ifPresentOrElse(
                 currentBid -> {
                     if (currentBid.money.isGreaterThan(bid.money)) throw new TopBidIsGreater(currentBid, bid);
