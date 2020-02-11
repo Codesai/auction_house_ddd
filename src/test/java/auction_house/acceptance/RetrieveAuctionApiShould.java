@@ -1,9 +1,9 @@
-package acceptance;
+package auction_house.acceptance;
 
 import com.codesai.auction_house.business.model.auction.Auction;
 import org.junit.jupiter.api.Test;
 
-import static helpers.builder.AuctionBuilder.anAuction;
+import static auction_house.helpers.builder.AuctionBuilder.anAuction;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 

@@ -1,4 +1,4 @@
-package unit.bussines.actions;
+package auction_house.unit.bussines.actions;
 
 import com.codesai.auction_house.business.actions.CreateAuctionAction;
 import com.codesai.auction_house.business.model.OwnerId;
@@ -13,10 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static helpers.builder.AuctionBuilder.anAuction;
-import static helpers.builder.CreateAuctionCommandBuilder.aCreateAuctionCommand;
+import static auction_house.helpers.builder.AuctionBuilder.anAuction;
+import static auction_house.helpers.builder.CreateAuctionCommandBuilder.aCreateAuctionCommand;
+import static auction_house.matchers.AuctionAssert.assertThatAuction;
 import static java.time.LocalDate.now;
-import static matchers.AuctionAssert.assertThatAuction;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;

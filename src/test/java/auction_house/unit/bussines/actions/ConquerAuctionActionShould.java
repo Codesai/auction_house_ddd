@@ -1,4 +1,4 @@
-package unit.bussines.actions;
+package auction_house.unit.bussines.actions;
 
 import com.codesai.auction_house.business.actions.ConquerAuctionAction;
 import com.codesai.auction_house.business.actions.commands.ConquerAuctionActionCommand;
@@ -8,8 +8,8 @@ import com.codesai.auction_house.business.model.auction.exceptions.CannotConquer
 import com.codesai.auction_house.business.model.bidder.BidderId;
 import org.junit.jupiter.api.Test;
 
-import static helpers.builder.AuctionBuilder.anAuction;
-import static matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
+import static auction_house.helpers.builder.AuctionBuilder.anAuction;
+import static auction_house.matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;

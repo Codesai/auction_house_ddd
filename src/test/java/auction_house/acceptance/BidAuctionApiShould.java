@@ -1,4 +1,4 @@
-package acceptance;
+package auction_house.acceptance;
 
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.Bid;
@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
+import static auction_house.helpers.builder.AuctionBuilder.anAuction;
+import static auction_house.matchers.BidAssert.assertThatBid;
 import static com.codesai.auction_house.business.model.generic.Money.money;
 import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
-import static helpers.builder.AuctionBuilder.anAuction;
 import static io.restassured.RestAssured.given;
-import static matchers.BidAssert.assertThatBid;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 

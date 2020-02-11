@@ -1,13 +1,13 @@
-package acceptance;
+package auction_house.acceptance;
 
 import io.restassured.RestAssured;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
-import static acceptance.JSONParser.createJsonFrom;
-import static helpers.builder.AuctionBuilder.anAuction;
+import static auction_house.acceptance.JSONParser.createJsonFrom;
+import static auction_house.helpers.builder.AuctionBuilder.anAuction;
+import static auction_house.matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
 import static io.restassured.RestAssured.given;
-import static matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.IsEqual.equalTo;

@@ -1,4 +1,4 @@
-package acceptance;
+package auction_house.acceptance;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterAll;

@@ -1,4 +1,4 @@
-package helpers.builder;
+package auction_house.helpers.builder;
 
 import com.codesai.auction_house.business.model.OwnerId;
 import com.codesai.auction_house.business.model.auction.Auction;

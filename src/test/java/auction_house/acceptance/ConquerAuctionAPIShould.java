@@ -1,4 +1,4 @@
-package acceptance;
+package auction_house.acceptance;
 
 import com.codesai.auction_house.business.actions.commands.ConquerAuctionActionCommand;
 import com.codesai.auction_house.business.model.auction.Auction;
@@ -7,11 +7,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
+import static auction_house.helpers.builder.AuctionBuilder.anAuction;
+import static auction_house.matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
 import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
 import static com.codesai.auction_house.infrastructure.ActionFactory.conquerAuctionAction;
-import static helpers.builder.AuctionBuilder.anAuction;
 import static io.restassured.RestAssured.given;
-import static matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 

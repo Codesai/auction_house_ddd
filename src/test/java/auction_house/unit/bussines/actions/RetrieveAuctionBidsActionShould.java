@@ -1,4 +1,4 @@
-package unit.bussines.actions;
+package auction_house.unit.bussines.actions;
 
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionBidsAction;
 import com.codesai.auction_house.business.actions.commands.RetrieveAuctionBidsActionCommand;
@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static auction_house.helpers.builder.AuctionBuilder.anAuction;
 import static com.codesai.auction_house.business.model.generic.Money.money;
-import static helpers.builder.AuctionBuilder.anAuction;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

@@ -1,4 +1,4 @@
-package matchers;
+package auction_house.matchers;
 
 import com.codesai.auction_house.business.model.auction.Auction;
 import org.assertj.core.api.AbstractAssert;

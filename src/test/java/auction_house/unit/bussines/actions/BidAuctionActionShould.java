@@ -1,4 +1,4 @@
-package unit.bussines.actions;
+package auction_house.unit.bussines.actions;
 
 import com.codesai.auction_house.business.actions.BidAuctionAction;
 import com.codesai.auction_house.business.actions.commands.BidAuctionCommand;
@@ -18,9 +18,9 @@ import org.mockito.ArgumentCaptor;
 
 import java.util.List;
 
+import static auction_house.helpers.builder.AuctionBuilder.anAuction;
+import static auction_house.matchers.BidAssert.assertThatBid;
 import static com.codesai.auction_house.business.model.generic.Money.money;
-import static helpers.builder.AuctionBuilder.anAuction;
-import static matchers.BidAssert.assertThatBid;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;

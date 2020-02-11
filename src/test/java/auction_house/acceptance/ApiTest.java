@@ -1,4 +1,4 @@
-package acceptance;
+package auction_house.acceptance;
 
 import com.codesai.auction_house.infrastructure.repository.InMemoryAuctionRepository;
 import io.restassured.RestAssured;
