@@ -59,6 +59,6 @@ public class ActionFactory {
     }
 
     public static ConquerAuctionAction conquerAuctionAction() {
-        return new ConquerAuctionAction(repository);
+        return new ConquerAuctionAction(repository, bidderRepository());
     }
 }
