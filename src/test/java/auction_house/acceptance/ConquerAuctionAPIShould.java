@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import static auction_house.helpers.builder.AuctionBuilder.anAuction;
 import static auction_house.helpers.matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
-import static com.codesai.auction_house.infrastructure.deliverymechanism.ActionFactory.auctionRepository;
-import static com.codesai.auction_house.infrastructure.deliverymechanism.ActionFactory.conquerAuctionAction;
+import static com.codesai.auction_house.infrastructure.delivery_mechanism.ActionFactory.auctionRepository;
+import static com.codesai.auction_house.infrastructure.delivery_mechanism.ActionFactory.conquerAuctionAction;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;

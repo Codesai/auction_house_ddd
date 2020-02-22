@@ -1,4 +1,4 @@
-package com.codesai.auction_house.infrastructure.deliverymechanism;
+package com.codesai.auction_house.infrastructure.delivery_mechanism;
 
 import com.codesai.auction_house.business.actions.commands.BidAuctionCommand;
 import com.codesai.auction_house.business.actions.commands.ConquerAuctionActionCommand;
@@ -19,7 +19,7 @@ import spark.Response;
 import java.time.LocalDate;
 import java.util.function.Supplier;
 
-import static com.codesai.auction_house.infrastructure.deliverymechanism.ActionFactory.*;
+import static com.codesai.auction_house.infrastructure.delivery_mechanism.ActionFactory.*;
 import static java.util.stream.Collectors.toList;
 import static org.eclipse.jetty.http.HttpStatus.*;
 

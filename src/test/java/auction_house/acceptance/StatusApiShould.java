@@ -5,8 +5,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static com.codesai.auction_house.infrastructure.deliverymechanism.Routing.PORT;
-import static com.codesai.auction_house.infrastructure.deliverymechanism.Routing.Routes;
+import static com.codesai.auction_house.infrastructure.delivery_mechanism.Routing.PORT;
+import static com.codesai.auction_house.infrastructure.delivery_mechanism.Routing.Routes;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static spark.Spark.*;

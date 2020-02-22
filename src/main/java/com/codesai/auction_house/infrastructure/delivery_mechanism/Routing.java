@@ -1,4 +1,4 @@
-package com.codesai.auction_house.infrastructure.deliverymechanism;
+package com.codesai.auction_house.infrastructure.delivery_mechanism;
 
 import java.util.Optional;
 
