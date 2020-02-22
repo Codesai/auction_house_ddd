@@ -6,9 +6,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
-import static com.codesai.auction_house.infrastructure.Routing.PORT;
-import static com.codesai.auction_house.infrastructure.Routing.Routes;
+import static com.codesai.auction_house.infrastructure.deliverymechanism.ActionFactory.auctionRepository;
+import static com.codesai.auction_house.infrastructure.deliverymechanism.Routing.PORT;
+import static com.codesai.auction_house.infrastructure.deliverymechanism.Routing.Routes;
 import static spark.Spark.*;
 
 public class ApiTest {

@@ -1,6 +1,6 @@
 package com.codesai.auction_house;
 
-import static com.codesai.auction_house.infrastructure.Routing.Routes;
+import static com.codesai.auction_house.infrastructure.deliverymechanism.Routing.Routes;
 
 
 // TODO: Hacer algo para enseñar domain events

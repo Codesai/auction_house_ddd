@@ -1,4 +1,4 @@
-package com.codesai.auction_house.infrastructure;
+package com.codesai.auction_house.infrastructure.deliverymechanism;
 
 import com.codesai.auction_house.business.actions.BidAuctionAction;
 import com.codesai.auction_house.business.actions.ConquerAuctionAction;
