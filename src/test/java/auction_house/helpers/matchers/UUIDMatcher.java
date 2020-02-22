@@ -1,4 +1,4 @@
-package auction_house.matchers;
+package auction_house.helpers.matchers;
 
 import org.hamcrest.Description;
 import org.hamcrest.Factory;

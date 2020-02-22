@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import static auction_house.helpers.builder.AuctionBuilder.anAuction;
-import static auction_house.matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
+import static auction_house.helpers.matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
 import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
 import static com.codesai.auction_house.infrastructure.ActionFactory.conquerAuctionAction;
 import static io.restassured.RestAssured.given;

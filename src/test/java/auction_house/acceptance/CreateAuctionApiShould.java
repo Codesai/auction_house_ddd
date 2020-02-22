@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static auction_house.acceptance.JSONParser.createJsonFrom;
 import static auction_house.helpers.builder.AuctionBuilder.anAuction;
-import static auction_house.matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
+import static auction_house.helpers.matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.startsWith;

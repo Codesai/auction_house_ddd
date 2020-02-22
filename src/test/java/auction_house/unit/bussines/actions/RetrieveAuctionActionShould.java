@@ -7,7 +7,7 @@ import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import org.junit.jupiter.api.Test;
 
 import static auction_house.helpers.builder.AuctionBuilder.anAuction;
-import static auction_house.matchers.AuctionAssert.assertThatAuction;
+import static auction_house.helpers.matchers.AuctionAssert.assertThatAuction;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

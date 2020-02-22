@@ -5,6 +5,7 @@ import com.codesai.auction_house.business.model.generic.Event;
 import com.codesai.auction_house.business.model.generic.Money;
 
 public class DeclareWinnerEvent extends Event {
+    // TODO: deberian los eventos usar siempre tipos básicos? (como los comand, estan en el boundary del modelo y sirvén para comunicar sucesos al exterior)
     public final BidderId winner;
     public final String auctionId;
     public final Money bidWinnerAmount;

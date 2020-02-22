@@ -15,7 +15,7 @@ import org.mockito.ArgumentCaptor;
 
 import static auction_house.helpers.builder.AuctionBuilder.anAuction;
 import static auction_house.helpers.builder.CreateAuctionCommandBuilder.aCreateAuctionCommand;
-import static auction_house.matchers.AuctionAssert.assertThatAuction;
+import static auction_house.helpers.matchers.AuctionAssert.assertThatAuction;
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static auction_house.helpers.builder.AuctionBuilder.anAuction;
-import static auction_house.matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
+import static auction_house.helpers.matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 import static org.mockito.hamcrest.MockitoHamcrest.argThat;
