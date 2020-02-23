@@ -5,17 +5,16 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import org.junit.jupiter.api.Test;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 public class HexagonalArchitectureFitness {
 
     @Test
     public void
     business_model_dont_depend_on_infrastructure() {
-        var dependencyInversionRule = noClasses().that()
+        var dependencyInversionRule = classes().that()
                 .resideInAPackage("..business..")
-                .should().accessClassesThat()
-                .resideInAPackage("..infrastructure..");
+                .should().onlyAccessClassesThat()
+                .resideInAnyPackage("..business..", "java..", "org.apache.commons..");
 
         dependencyInversionRule.check(auctionHouseBoundedContextClasses());
     }
