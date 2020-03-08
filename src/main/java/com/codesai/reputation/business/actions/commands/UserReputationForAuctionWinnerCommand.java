@@ -1,6 +1,6 @@
 package com.codesai.reputation.business.actions.commands;
 
-public class UserReputationForAuctionWinnerCommand {
+public class UserReputationForAuctionWinnerCommand implements Command{
     public final String userId;
     public final double winnerBid;
 

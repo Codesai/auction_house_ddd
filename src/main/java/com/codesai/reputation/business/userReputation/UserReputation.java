@@ -6,8 +6,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class UserReputation {
-    private final String anyUserId;
-    private long reputation;
+    public final String anyUserId;
+    public long reputation;
 
     public UserReputation(String anyUserId, long reputation) {
         this.anyUserId = anyUserId;
@@ -15,7 +15,7 @@ public class UserReputation {
     }
 
     public void accountBidWinner(double winnerBid) {
-        reputation = reputation + reputationForWinAnAuction(winnerBid);
+        reputation += reputationForWinAnAuction(winnerBid);
     }
 
     private long reputationForWinAnAuction(double winnerBid) {
