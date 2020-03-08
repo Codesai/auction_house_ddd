@@ -6,9 +6,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import static com.codesai.auction_house.infrastructure.delivery_mechanism.ActionFactory.auctionRepository;
+import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
 import static com.codesai.auction_house.infrastructure.delivery_mechanism.Routing.PORT;
-import static com.codesai.auction_house.infrastructure.delivery_mechanism.Routing.Routes;
+import static com.codesai.auction_house.infrastructure.delivery_mechanism.Routing.startApi;
 import static spark.Spark.*;
 
 public class ApiTest {
@@ -16,7 +16,7 @@ public class ApiTest {
 
     @BeforeAll
     static void startServer() {
-        Routes();
+        startApi();
         RestAssured.baseURI = String.format("http://localhost:%s/api/", PORT);
         awaitInitialization();
     }

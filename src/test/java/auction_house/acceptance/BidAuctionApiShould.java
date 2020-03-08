@@ -11,7 +11,7 @@ import java.util.UUID;
 import static auction_house.helpers.builder.AuctionBuilder.anAuction;
 import static auction_house.helpers.matchers.BidAssert.assertThatBid;
 import static com.codesai.auction_house.business.model.generic.Money.money;
-import static com.codesai.auction_house.infrastructure.delivery_mechanism.ActionFactory.auctionRepository;
+import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;

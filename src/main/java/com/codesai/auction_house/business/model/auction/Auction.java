@@ -26,6 +26,7 @@ public class Auction {
     public final Money conquerPrice;
     public final List<Bid> bids;
     public LocalDate expirationDate;
+    public boolean winnerDeclared = false;
 
     public Auction(Item item, Money startingPrice, Money conquerPrice, LocalDate expirationDate, OwnerId ownerId) {
         this.ownerId = ownerId;
@@ -77,4 +78,7 @@ public class Auction {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
+    public void winnerDeclared() {
+        winnerDeclared = true;
+    }
 }

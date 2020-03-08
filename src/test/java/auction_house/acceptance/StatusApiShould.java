@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static com.codesai.auction_house.infrastructure.delivery_mechanism.Routing.PORT;
-import static com.codesai.auction_house.infrastructure.delivery_mechanism.Routing.Routes;
+import static com.codesai.auction_house.infrastructure.delivery_mechanism.Routing.startApi;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static spark.Spark.*;
@@ -14,7 +14,7 @@ import static spark.Spark.*;
 public class StatusApiShould {
     @BeforeAll
     static void startServer() {
-        Routes();
+        startApi();
         RestAssured.baseURI = String.format("http://localhost:%s/", PORT);
         awaitInitialization();
     }

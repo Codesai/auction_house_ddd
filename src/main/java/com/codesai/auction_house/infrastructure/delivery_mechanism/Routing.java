@@ -8,7 +8,8 @@ public class Routing {
 
     public final static Integer PORT = 9001;
 
-    public static void Routes() {
+    public static void startApi() {
+        System.out.println("starting auction house API");
         port(PORT);
 
         get("status", (req, res) -> "OK");

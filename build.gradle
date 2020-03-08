@@ -13,7 +13,7 @@ repositories {
 }
 
 application {
-    mainClassName = 'com.codesai.auction_house.App'
+    mainClassName = 'com.codesai.App'
 }
 
 test {

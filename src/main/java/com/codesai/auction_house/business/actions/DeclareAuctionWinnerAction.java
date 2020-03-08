@@ -1,5 +1,6 @@
 package com.codesai.auction_house.business.actions;
 
+import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.EventProducer;
 import com.codesai.auction_house.business.model.auction.events.DeclareWinnerEvent;
@@ -20,10 +21,17 @@ public class DeclareAuctionWinnerAction {
         auctionRepository.retrieveAll().stream()
                 .filter(auction -> auction.expirationDate.equals(calendar.yesterday()))
                 .filter(auction -> auction.topBid().isPresent())
-                .forEach(auction -> eventProducer.produce(new DeclareWinnerEvent(
-                    auction.topBid().get().bidderId,
-                    auction.id,
-                    auction.topBid().get().money
-                )));
+                .filter(auction -> !auction.winnerDeclared)
+                .forEach(this::declareWinner);
+    }
+
+    private void declareWinner(Auction auction) {
+        auction.winnerDeclared();
+        auctionRepository.save(auction);
+        eventProducer.produce(new DeclareWinnerEvent(
+                auction.topBid().get().bidderId,
+                auction.id,
+                auction.topBid().get().money
+        ));
     }
 }
