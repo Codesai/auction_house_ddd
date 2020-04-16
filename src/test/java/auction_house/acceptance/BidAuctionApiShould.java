@@ -1,6 +1,5 @@
 package auction_house.acceptance;
 
-import com.codesai.auction_house.business.model.auction.exceptions.FirstBidShouldBeGreaterThanStartingPrice;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.json.JSONException;
@@ -52,7 +51,7 @@ public class BidAuctionApiShould extends ApiTest {
                 statusCode(422).
                 contentType("application/json").
                 body(
-                        "name", equalTo(FirstBidShouldBeGreaterThanStartingPrice.class.getSimpleName()),
+                        "name", equalTo("FirstBidShouldBeGreaterThanStartingPrice"),
                         "description", equalTo(String.format("Initial auction price is %s0 and bid is only %s0", ANY_INITIAL_BIDDING_AMOUNT, underBiddenAmount))
                 );
     }

@@ -1,6 +1,5 @@
 package auction_house.acceptance;
 
-import com.codesai.auction_house.business.model.bidder.BidderId;
 import io.restassured.RestAssured;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,12 +9,9 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import static auction_house.acceptance.JSONParser.createAuctionJsonFrom;
-import static auction_house.helpers.matchers.AuctionConqueredMatcher.anAuctionConqueredBy;
 import static auction_house.helpers.matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
-import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
 import static io.restassured.RestAssured.given;
 import static java.util.Collections.emptyList;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -38,11 +34,6 @@ public class ConquerAuctionAPIShould extends ApiTest {
             assertThat().
             statusCode(200).
             body(equalTo("OK"));
-
-        assertThat(
-                auctionRepository().retrieveById(givenAuctionId),
-                anAuctionConqueredBy(new BidderId("userThatConquerAuction"))
-        );
     }
 
     @Test public void

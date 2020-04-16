@@ -1,5 +1,7 @@
 package com.codesai.auction_house.infrastructure.delivery_mechanism;
 
+import spark.Response;
+
 import java.util.Optional;
 
 import static spark.Spark.*;
@@ -14,10 +16,10 @@ public class Routing {
 
         get("status", (req, res) -> "OK");
         path("api/", () -> {
-            get("auction/:id", (request, response) -> new AuctionHouseAPI(request, response).retrieveAuction());
-            post("auction", (request, response) -> new AuctionHouseAPI(request, response).createAuction());
-            post("auction/:id/bid", (request, response) -> new AuctionHouseAPI(request, response).bidAuction());
-            post("auction/:auction_id/conquer", (request, response) -> new AuctionHouseAPI(request, response).conquerAuction());
+            get("auction/:id", (request, response) -> wipResponse(response));
+            post("auction", (request, response) -> wipResponse(response));
+            post("auction/:id/bid", (request, response) -> wipResponse(response));
+            post("auction/:auction_id/conquer", (request, response) -> wipResponse(response));
         });
 
         before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
@@ -31,5 +33,10 @@ public class Routing {
         });
 
 
+    }
+
+    private static Object wipResponse(Response response) {
+        response.status(500);
+        return "WIP";
     }
 }
