@@ -4,10 +4,11 @@ import io.restassured.RestAssured;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
-import static auction_house.acceptance.JSONParser.createJsonFrom;
+import static auction_house.acceptance.JSONParser.createAuctionJsonFrom;
 import static auction_house.helpers.builder.AuctionBuilder.anAuction;
 import static auction_house.helpers.matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
 import static io.restassured.RestAssured.given;
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -19,7 +20,7 @@ public class CreateAuctionApiShould extends ApiTest {
     create_a_new_auction() throws Exception {
         given().
         when().
-            body(createJsonFrom(anAuction().build()).toString()).
+            body(createAuctionJsonFrom(anAuction().build().item.name, anAuction().build().item.description, anAuction().build().startingPrice.amount, anAuction().build().conquerPrice.amount, anAuction().build().bids.stream().map(bid -> JSONParser.createBidJsonFrom(bid.id, bid.money.amount, bid.bidderId.id)).collect(toList()), anAuction().build().expirationDate, anAuction().build().ownerId.id).toString()).
             post("auction").
         then().
             assertThat().
@@ -35,7 +36,7 @@ public class CreateAuctionApiShould extends ApiTest {
     not_create_an_auction_when_the_input_is_incorrect() throws Exception {
         given().
         when().
-            body(createJsonFrom(anAuction().build())
+            body(createAuctionJsonFrom(anAuction().build().item.name, anAuction().build().item.description, anAuction().build().startingPrice.amount, anAuction().build().conquerPrice.amount, anAuction().build().bids.stream().map(bid -> JSONParser.createBidJsonFrom(bid.id, bid.money.amount, bid.bidderId.id)).collect(toList()), anAuction().build().expirationDate, anAuction().build().ownerId.id)
                 .put("initial_bid", "an invalid value")
                 .toString()).
             post("auction").
@@ -49,7 +50,7 @@ public class CreateAuctionApiShould extends ApiTest {
     cannot_create_auction_when_inital_bid_is_greater_than_conquer_price() throws JSONException {
         given().
                 when().
-                    body(createJsonFrom(anAuction().build())
+                    body(createAuctionJsonFrom(anAuction().build().item.name, anAuction().build().item.description, anAuction().build().startingPrice.amount, anAuction().build().conquerPrice.amount, anAuction().build().bids.stream().map(bid -> JSONParser.createBidJsonFrom(bid.id, bid.money.amount, bid.bidderId.id)).collect(toList()), anAuction().build().expirationDate, anAuction().build().ownerId.id)
                             .put("initial_bid", 10)
                             .put("conquer_price", 5)
                             .toString()).

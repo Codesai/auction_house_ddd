@@ -1,19 +1,14 @@
 package auction_house.acceptance;
 
-import com.codesai.auction_house.infrastructure.repository.InMemoryAuctionRepository;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 
-import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
 import static com.codesai.auction_house.infrastructure.delivery_mechanism.Routing.PORT;
 import static com.codesai.auction_house.infrastructure.delivery_mechanism.Routing.startApi;
 import static spark.Spark.*;
 
 public class ApiTest {
-    final InMemoryAuctionRepository auctionRepository = auctionRepository();
-
     @BeforeAll
     static void startServer() {
         startApi();
@@ -25,10 +20,5 @@ public class ApiTest {
     static void stopServer() {
         stop();
         awaitStop();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        auctionRepository.clean();
     }
 }

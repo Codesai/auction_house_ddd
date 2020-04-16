@@ -1,65 +1,89 @@
 package auction_house.acceptance;
 
-import com.codesai.auction_house.business.model.auction.Auction;
-import com.codesai.auction_house.business.model.auction.Bid;
 import com.codesai.auction_house.business.model.auction.exceptions.FirstBidShouldBeGreaterThanStartingPrice;
-import com.codesai.auction_house.business.model.bidder.BidderId;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
-import static auction_house.helpers.builder.AuctionBuilder.anAuction;
-import static auction_house.helpers.matchers.BidAssert.assertThatBid;
-import static com.codesai.auction_house.business.model.generic.Money.money;
-import static com.codesai.auction_house.infrastructure.ActionFactory.auctionRepository;
+import static auction_house.acceptance.JSONParser.createAuctionJsonFrom;
 import static io.restassured.RestAssured.given;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class BidAuctionApiShould extends ApiTest {
 
+    public static final String ANY_OWNER_ID = "AnyOwnerId" + UUID.randomUUID().toString();
+    public static final String ANY_BIDDER_ID = "AnyUserId" + UUID.randomUUID();
+    public static final double ANY_INITIAL_BIDDING_AMOUNT = 50.0;
+
     @Test public void
-    post_to_bid_an_existing_auction() {
-        var givenAuctionId = givingAnExistingAuction().id;
-        var givenBidderId = new BidderId("AnyUserId" + UUID.randomUUID());
-        var expectedBid = new Bid(money(50), givenBidderId);
+    post_to_bid_an_existing_auction() throws JSONException {
+        var overBiddingAmount = ANY_INITIAL_BIDDING_AMOUNT + 10;
+        String auctionId = givenExistingAuction(ANY_OWNER_ID, ANY_INITIAL_BIDDING_AMOUNT);
 
         given().
                 when().
-                body(JSONParser.createBidJsonFrom(expectedBid)).
-                post("auction/{id}/bid", givenAuctionId).
+                body(JSONParser.createBidJsonFrom(auctionId, overBiddingAmount, ANY_BIDDER_ID)).
+                post("/auction/{id}/bid", auctionId).
                 then().
                 assertThat().
                 statusCode(201).
                 body(equalTo("OK"));
 
-        Auction actualAuction = auctionRepository().retrieveById(givenAuctionId);
-        assertThat(actualAuction.bids).hasSize(1);
-        assertThatBid(actualAuction.topBid().orElseThrow()).isEqualTo(expectedBid);
+        assertThat(actualBidFrom(auctionId).get("amount").getAsDouble()).isEqualTo(overBiddingAmount);
+        assertThat(actualBidFrom(auctionId).get("bidder_id").getAsString()).isEqualTo(ANY_BIDDER_ID);
     }
 
     @Test public void
-    get_an_error_response_when_try_to_create_an_invalid_bid() {
-        var auction = anAuction().withStartingPrice(money(10)).build();
-        var insufficientBid = new Bid(money(5), new BidderId("AnyBidderId"));
-        auctionRepository.save(auction);
+    get_an_error_response_when_try_to_create_an_invalid_bid() throws JSONException {
+        var givenExistingAuctionId = givenExistingAuction(ANY_BIDDER_ID, ANY_INITIAL_BIDDING_AMOUNT);
 
+        var underBiddenAmount = ANY_INITIAL_BIDDING_AMOUNT - 10;
         given().
             when().
-                body(JSONParser.createBidJsonFrom(insufficientBid)).
-                post("auction/{id}/bid", auction.id).
+                body(JSONParser.createBidJsonFrom(givenExistingAuctionId, underBiddenAmount, ANY_BIDDER_ID)).
+                post("auction/{id}/bid", givenExistingAuctionId).
             then().assertThat().
                 statusCode(422).
                 contentType("application/json").
                 body(
                         "name", equalTo(FirstBidShouldBeGreaterThanStartingPrice.class.getSimpleName()),
-                        "description", equalTo("Initial auction price is 10.00 and bid is only 5.00")
+                        "description", equalTo(String.format("Initial auction price is %s0 and bid is only %s0", ANY_INITIAL_BIDDING_AMOUNT, underBiddenAmount))
                 );
     }
 
-    private Auction givingAnExistingAuction() {
-        var expectedAuction = anAuction().build();
-        auctionRepository.save(expectedAuction);
-        return expectedAuction;
+    private JsonObject actualBidFrom(String auctionId) {
+        var bids = given().
+                when().
+                get("auction/{id}", auctionId).
+                then().
+                assertThat().
+                statusCode(200).
+                contentType("application/json").
+                extract().
+                response().
+                body().
+                jsonPath().
+                getList("bids");
+        assertThat(bids).hasSize(1);
+        return new Gson().fromJson((String) bids.get(0), JsonObject.class);
     }
+
+    private String givenExistingAuction(String ownerId, double initialBidAmount) throws JSONException {
+        var location = given().
+                when().
+                body(createAuctionJsonFrom("AnAuctionName", "An AuctionDescription", initialBidAmount, 100.0, emptyList(), LocalDate.now().plusDays(10), ownerId).toString()).
+                post("auction").
+                then().
+                extract().
+                header("Location");
+
+        return location.split("/")[5];
+    }
+
 }

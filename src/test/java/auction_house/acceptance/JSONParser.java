@@ -1,32 +1,31 @@
 package auction_house.acceptance;
 
-import com.codesai.auction_house.business.model.auction.Auction;
-import com.codesai.auction_house.business.model.auction.Bid;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static java.util.stream.Collectors.toList;
+import java.time.LocalDate;
+import java.util.List;
 
 public class JSONParser {
-    static JSONObject createJsonFrom(Auction expectedAuction) throws JSONException {
+    static JSONObject createAuctionJsonFrom(String name, String description, double initialBidAmount, double conquerPriceAmount, List<String> bids, LocalDate expirationDay, String ownerId) throws JSONException {
         return new JSONObject()
                 .put("item", new JSONObject()
-                        .put("name", expectedAuction.item.name)
-                        .put("description", expectedAuction.item.description)
+                        .put("name", name)
+                        .put("description", description)
                 )
-                .put("initial_bid", expectedAuction.startingPrice.amount)
-                .put("conquer_price", expectedAuction.conquerPrice.amount)
-                .put("bids", expectedAuction.bids.stream().map(JSONParser::createBidJsonFrom).collect(toList()))
-                .put("expiration_date", expectedAuction.expirationDate.toString())
-                .put("owner_id", expectedAuction.ownerId.id);
+                .put("initial_bid", initialBidAmount)
+                .put("conquer_price", conquerPriceAmount)
+                .put("bids", bids)
+                .put("expiration_date", expirationDay.toString())
+                .put("owner_id", ownerId);
     }
 
-    static String createBidJsonFrom(Bid bid) {
+    static String createBidJsonFrom(String auctionId, double amount, String bidderId) {
         try {
             return new JSONObject()
-                    .put("id", bid.id)
-                    .put("amount", bid.money.amount)
-                    .put("bidder_id", bid.bidderId.id)
+                    .put("id", auctionId)
+                    .put("amount", amount)
+                    .put("bidder_id", bidderId)
                     .toString();
         } catch (JSONException e) {
             throw new RuntimeException(e);
