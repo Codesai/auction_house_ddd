@@ -28,9 +28,13 @@ public class AuctionHouseAPI {
     private final Request request;
     private final Response response;
 
-    public AuctionHouseAPI(Request request, Response response) {
+    private AuctionHouseAPI(Request request, Response response) {
         this.request = request;
         this.response = response;
+    }
+
+    public static AuctionHouseAPI auctionHouseAPI(Request request, Response response) {
+        return new AuctionHouseAPI(request, response);
     }
 
     public Object createAuction() throws JSONException {
