@@ -82,6 +82,9 @@ public class BidAuctionApiShould extends ApiTest {
                 extract().
                 header("Location");
 
+        if (location == null) {
+            return "NotSuccessfully created auction";
+        }
         return location.split("/")[5];
     }
 
