@@ -11,7 +11,7 @@ public class Routing {
     public final static Integer PORT = 8080;
 
     public static void startApi() {
-        System.out.println("starting auction house API" + PORT);
+        System.out.println("starting auction house API: " + PORT);
         port(PORT);
 
         get("status", (req, res) -> "OK");
