@@ -1,6 +1,7 @@
 package com.codesai.auction_house.business.model.auction;
 
 import com.codesai.auction_house.business.model.OwnerId;
+import com.codesai.auction_house.business.model.auction.events.DeclareWinnerEvent;
 import com.codesai.auction_house.business.model.auction.exceptions.*;
 import com.codesai.auction_house.business.model.bidder.Bidder;
 import com.codesai.auction_house.business.model.generic.Calendar;
@@ -79,8 +80,13 @@ public class Auction {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
-    public void winnerDeclared() {
+    public DeclareWinnerEvent winnerDeclared() {
         winnerDeclared = true;
+        return new DeclareWinnerEvent(
+                topBid().get().bidderId,
+                id,
+                topBid().get().money
+        );
     }
 
     public boolean isPendingWinnerDeclaration(Calendar calendar) {

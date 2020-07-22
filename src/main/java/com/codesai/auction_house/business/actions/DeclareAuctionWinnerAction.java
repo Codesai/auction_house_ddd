@@ -3,7 +3,6 @@ package com.codesai.auction_house.business.actions;
 import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.EventProducer;
-import com.codesai.auction_house.business.model.auction.events.DeclareWinnerEvent;
 import com.codesai.auction_house.business.model.generic.Calendar;
 
 public class DeclareAuctionWinnerAction {
@@ -26,12 +25,8 @@ public class DeclareAuctionWinnerAction {
 
 
     private void declareWinner(Auction auction) {
-        auction.winnerDeclared();
+        var declareWinnerEvent = auction.winnerDeclared();
         auctionRepository.save(auction);
-        eventProducer.produce(new DeclareWinnerEvent(
-                auction.topBid().get().bidderId,
-                auction.id,
-                auction.topBid().get().money
-        ));
+        eventProducer.produce(declareWinnerEvent);
     }
 }
