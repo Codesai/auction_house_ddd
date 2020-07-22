@@ -1,7 +1,6 @@
 package auction_house.acceptance;
 
 import io.restassured.RestAssured;
-import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -19,7 +18,7 @@ public class RetrieveAuctionApiShould extends ApiTest {
     String ANY_OWNER_ID = "AnyOwnerId" + UUID.randomUUID().toString();
     double ANY_INITIAL_BIDDING_AMOUNT = 50.0;
 
-    private String givenExistingAuction(String body) throws JSONException {
+    private String givenExistingAuction(String body) {
         var location = given().
                 when().
                 body(body).
@@ -50,7 +49,10 @@ public class RetrieveAuctionApiShould extends ApiTest {
                     assertThat().
                     statusCode(200).
                     header("Content-type", "application/json").
-                    body(equalTo(expectedAuctionBody));
+                    body(
+                            "item.name", equalTo("AnAuctionName"),
+                            "item.description", equalTo("An AuctionDescription")
+                    );
     }
 
     @Test

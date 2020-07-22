@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class JSONParser {
-    static JsonObject createAuctionJsonFrom(String name, String description, double initialBidAmount, double conquerPriceAmount, List<String> bids, LocalDate expirationDay, String ownerId) throws JSONException {
+    public static JsonObject createAuctionJsonFrom(String name, String description, double initialBidAmount, double conquerPriceAmount, List<String> bids, LocalDate expirationDay, String ownerId) throws JSONException {
         return new Gson().toJsonTree(new AuctionDTO(
                 name,
                 description,
@@ -22,7 +22,7 @@ public class JSONParser {
         )).getAsJsonObject();
     }
 
-    static String createBidJsonFrom(String auctionId, double amount, String bidderId) {
+    public static String createBidJsonFrom(String auctionId, double amount, String bidderId) {
         try {
             return new JSONObject()
                     .put("id", auctionId)
