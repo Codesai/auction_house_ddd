@@ -10,7 +10,6 @@ import java.util.UUID;
 import static auction_house.acceptance.JSONParser.createAuctionJsonFrom;
 import static auction_house.helpers.matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
 import static io.restassured.RestAssured.given;
-import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -40,7 +39,7 @@ public class RetrieveAuctionApiShould extends ApiTest {
     @Test
     public void
     get_an_auction_by_its_id() throws Exception {
-        var expectedAuctionBody = createAuctionJsonFrom("AnAuctionName", "An AuctionDescription", ANY_INITIAL_BIDDING_AMOUNT, 100.0, emptyList(), LocalDate.now().plusDays(10), ANY_OWNER_ID).toString();
+        var expectedAuctionBody = createAuctionJsonFrom("AnAuctionName", "An AuctionDescription", ANY_INITIAL_BIDDING_AMOUNT, 100.0, LocalDate.now().plusDays(10), ANY_OWNER_ID).toString();
         var givenAuctionId = givenExistingAuction(expectedAuctionBody);
 
         given().

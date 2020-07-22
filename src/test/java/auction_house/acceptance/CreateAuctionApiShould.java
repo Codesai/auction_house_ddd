@@ -7,14 +7,12 @@ import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import static auction_house.acceptance.JSONParser.createAuctionJsonFrom;
 import static auction_house.helpers.matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
 import static io.restassured.RestAssured.given;
 import static java.time.LocalDate.now;
-import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -28,11 +26,10 @@ public class CreateAuctionApiShould extends ApiTest {
     public static final String ANY_DESCRIPTION = "AnyDescription" + UUID.randomUUID();
     public static final double ANY_INITIAL_BID_AMOUNT = 50.0;
     public static final double ANY_CONQUER_PRICE_AMOUNT = 100.0;
-    public static final List<String> ANY_BIDS = emptyList();
     public static final LocalDate ANY_EXPIRATION_DAY = now();
     public static final String ANY_OWNER_ID = "AnyOwnerId" + UUID.randomUUID();
 
-    private final JsonObject ANY_AUCTION_JSON = createAuctionJsonFrom(ANY_ITEM_NAME, ANY_DESCRIPTION, ANY_INITIAL_BID_AMOUNT, ANY_CONQUER_PRICE_AMOUNT, ANY_BIDS, ANY_EXPIRATION_DAY, ANY_OWNER_ID);
+    private final JsonObject ANY_AUCTION_JSON = createAuctionJsonFrom(ANY_ITEM_NAME, ANY_DESCRIPTION, ANY_INITIAL_BID_AMOUNT, ANY_CONQUER_PRICE_AMOUNT, ANY_EXPIRATION_DAY, ANY_OWNER_ID);
 
     @Test
     public void

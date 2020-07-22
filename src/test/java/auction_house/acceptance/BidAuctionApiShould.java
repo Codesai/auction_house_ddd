@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import static auction_house.acceptance.JSONParser.createAuctionJsonFrom;
 import static io.restassured.RestAssured.given;
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
@@ -76,7 +75,7 @@ public class BidAuctionApiShould extends ApiTest {
     private String givenExistingAuction(String ownerId, double initialBidAmount) throws JSONException {
         var location = given().
                 when().
-                body(createAuctionJsonFrom("AnAuctionName", "An AuctionDescription", initialBidAmount, 100.0, emptyList(), LocalDate.now().plusDays(10), ownerId).toString()).
+                body(createAuctionJsonFrom("AnAuctionName", "An AuctionDescription", initialBidAmount, 100.0, LocalDate.now().plusDays(10), ownerId).toString()).
                 post("auction").
                 then().
                 extract().

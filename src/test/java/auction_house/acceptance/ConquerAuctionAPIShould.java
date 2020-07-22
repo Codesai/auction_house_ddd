@@ -11,7 +11,6 @@ import java.util.UUID;
 import static auction_house.acceptance.JSONParser.createAuctionJsonFrom;
 import static auction_house.helpers.matchers.UrlEndsWithUUIDMatcher.urlEndsWithValidUUID;
 import static io.restassured.RestAssured.given;
-import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -66,7 +65,7 @@ public class ConquerAuctionAPIShould extends ApiTest {
     private String givenExistingAuction(String ownerId, double initialBidAmount) throws JSONException {
         var location = given().
                 when().
-                body(createAuctionJsonFrom("AnAuctionName", "An AuctionDescription", initialBidAmount, 100.0, emptyList(), LocalDate.now().plusDays(10), ownerId).toString()).
+                body(createAuctionJsonFrom("AnAuctionName", "An AuctionDescription", initialBidAmount, 100.0, LocalDate.now().plusDays(10), ownerId).toString()).
                 post("auction").
                 then().
                 assertThat().

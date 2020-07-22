@@ -7,16 +7,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
-import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 public class JSONParser {
-    static JsonObject createAuctionJsonFrom(String name, String description, double initialBidAmount, double conquerPriceAmount, List<String> bids, LocalDate expirationDay, String ownerId) throws JSONException {
+    static JsonObject createAuctionJsonFrom(String name, String description, double initialBidAmount, double conquerPriceAmount, LocalDate expirationDay, String ownerId) throws JSONException {
         return new Gson().toJsonTree(new AuctionDTO(
                 name,
                 description,
                 initialBidAmount,
                 conquerPriceAmount,
-                bids,
+                emptyList(),
                 expirationDay.toString(),
                 ownerId
         )).getAsJsonObject();
