@@ -41,7 +41,7 @@ public class DeclareAuctionWinnerActionShould {
         new DeclareAuctionWinnerAction(auctionRepository, calendar, eventProducer).execute();
 
         verify(eventProducer).produce(new DeclareWinnerEvent(
-                expectedBidder,
+                expectedBidder.id,
                 auction.id,
                 money(2)
         ));

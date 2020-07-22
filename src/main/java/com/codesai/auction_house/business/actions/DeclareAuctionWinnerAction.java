@@ -22,8 +22,6 @@ public class DeclareAuctionWinnerAction {
                 .forEach(this::declareWinner);
     }
 
-
-
     private void declareWinner(Auction auction) {
         var declareWinnerEvent = auction.winnerDeclared();
         auctionRepository.save(auction);

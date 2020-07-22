@@ -5,7 +5,9 @@ import com.codesai.reputation.business.actions.commands.UserReputationForAuction
 import com.codesai.reputation.business.userReputation.UserReputation;
 import com.codesai.reputation.business.userReputation.UserReputationRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 public class AccountReputationForAuctionWinnerActionShould {
@@ -14,6 +16,8 @@ public class AccountReputationForAuctionWinnerActionShould {
     UserReputationRepository userReputationRepository = mock(UserReputationRepository.class);
     UserReputationForAuctionWinnerAction accountUserReputation = new UserReputationForAuctionWinnerAction(userReputationRepository);
 
+    ArgumentCaptor<UserReputation> captor = ArgumentCaptor.forClass(UserReputation.class);
+
     @Test
     public void
     add_1_reputation_point_to_user_score_for_each_100_euros_spend_in_the_auction() {
@@ -21,7 +25,8 @@ public class AccountReputationForAuctionWinnerActionShould {
 
         accountUserReputation.execute(new UserReputationForAuctionWinnerCommand(ANY_USER_ID, 320));
 
-        verify(userReputationRepository).save(aUserWithReputation(3));
+        verify(userReputationRepository).save(captor.capture());
+        assertThat(captor.getValue().reputation).isEqualTo(3);
     }
 
     private UserReputation aUserWithReputation(int reputation) {

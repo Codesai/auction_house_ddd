@@ -20,7 +20,7 @@ public class InMemoryEventProducer implements EventProducer {
         try {
             return new JSONObject()
                     .put("eventType", declareWinnerEvent.getClass().getSimpleName())
-                    .put("winner", declareWinnerEvent.winner.id)
+                    .put("winner", declareWinnerEvent.winner)
                     .put("auctionId", declareWinnerEvent.auctionId)
                     .put("bidWinnerAmount", declareWinnerEvent.bidWinnerAmount.amount)
                     .toString();

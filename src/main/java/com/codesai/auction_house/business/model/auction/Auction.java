@@ -83,7 +83,7 @@ public class Auction {
     public DeclareWinnerEvent winnerDeclared() {
         winnerDeclared = true;
         return new DeclareWinnerEvent(
-                topBid().get().bidderId,
+                topBid().get().bidderId.id,
                 id,
                 topBid().get().money
         );
