@@ -64,12 +64,6 @@ public class CreateAuctionApiShould extends ApiTest {
             body(equalTo("The auction body is not well formed."));
     }
 
-    private String givenAuctionWithInvalidInitialBidFormat() {
-        var givenNotValidInitialBidAuction = ANY_AUCTION_JSON;
-        givenNotValidInitialBidAuction.add("initial_bid",  new JsonPrimitive("an invalid value"));
-        return givenNotValidInitialBidAuction.toString();
-    }
-
     @Test public void
     cannot_create_auction_when_inital_bid_is_greater_than_conquer_price() {
         given().
@@ -83,6 +77,12 @@ public class CreateAuctionApiShould extends ApiTest {
                             "name", equalTo("InitialBidIsGreaterThanConquerPrice"),
                             "description", equalTo("initial cannot be greater 10.00 than conquer price 5.00")
                     );
+    }
+
+    private String givenAuctionWithInvalidInitialBidFormat() {
+        var givenNotValidInitialBidAuction = ANY_AUCTION_JSON;
+        givenNotValidInitialBidAuction.add("initial_bid",  new JsonPrimitive("an invalid value"));
+        return givenNotValidInitialBidAuction.toString();
     }
 
     private String givenAuctionWithInitialBidGreaterThanConquerPrice() {
