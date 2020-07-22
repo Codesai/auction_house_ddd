@@ -70,8 +70,8 @@ public class CreateAuctionApiShould extends ApiTest {
                     assertThat().
                     statusCode(422).
                     body(
-                            "name", equalTo("InitialBidIsGreaterThanConquerPrice"),
-                            "description", equalTo("initial cannot be greater 10.00 than conquer price 5.00")
+                            "name", equalTo("InitialBidCannotBeGreaterThanConquerPriceException"),
+                            "description", equalTo("initial cannot be greater 10.0 than conquer price 5.0")
                     );
     }
 

@@ -17,7 +17,7 @@ public class Routing {
         get("status", (req, res) -> "OK");
         path("api/", () -> {
             get("auction/:id", (request, response) -> wipResponse(response));
-            post("auction", (request, response) -> wipResponse(response));
+            post("auction", AuctionAPI::createAuction);
             post("auction/:id/bid", (request, response) -> wipResponse(response));
             post("auction/:auction_id/conquer", (request, response) -> wipResponse(response));
         });
