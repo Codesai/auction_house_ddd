@@ -19,11 +19,11 @@ public class DeclareAuctionWinnerAction {
 
     public void execute() {
         auctionRepository.retrieveAll().stream()
-                .filter(auction -> auction.expirationDate.equals(calendar.yesterday()))
-                .filter(auction -> auction.topBid().isPresent())
-                .filter(auction -> !auction.winnerDeclared)
+                .filter(auction -> auction.isPendingWinnerDeclaration(calendar))
                 .forEach(this::declareWinner);
     }
+
+
 
     private void declareWinner(Auction auction) {
         auction.winnerDeclared();

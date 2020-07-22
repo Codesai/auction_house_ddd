@@ -1,5 +1,6 @@
 package auction_house.acceptance;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.restassured.RestAssured;
 import org.json.JSONException;
@@ -31,7 +32,7 @@ public class CreateAuctionApiShould extends ApiTest {
     public static final LocalDate ANY_EXPIRATION_DAY = now();
     public static final String ANY_OWNER_ID = "AnyOwnerId" + UUID.randomUUID();
 
-    private final JSONObject ANY_AUCTION_JSON = createAuctionJsonFrom(
+    private final JsonObject ANY_AUCTION_JSON = createAuctionJsonFrom(
             ANY_ITEM_NAME,
             ANY_DESCRIPTION,
             ANY_INITIAL_BID_AMOUNT,
