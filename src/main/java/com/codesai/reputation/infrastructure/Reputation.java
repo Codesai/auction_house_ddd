@@ -1,9 +1,11 @@
 package com.codesai.reputation.infrastructure;
 
+import com.codesai.EventStore;
+
 public class Reputation {
     public static void start() {
         System.out.println("starting reputation bounded context");
-        new EventListener().listen(Reputation::processEvent);
+        EventStore.listen(Reputation::processEvent);
     }
 
     public static void processEvent(String event) {
