@@ -53,7 +53,6 @@ public class CreateAuctionApiShould extends ApiTest {
     @Test
     public void
     not_create_an_auction_when_the_input_is_incorrect() {
-
         given().
         when().
             body(givenAuctionWithInvalidInitialBidFormat()).
