@@ -1,8 +1,8 @@
 package com.codesai.auction_house.business.model.auction.services;
 
+import com.codesai.auction_house.business.model.auction.Auction;
 import com.codesai.auction_house.business.model.auction.AuctionRepository;
 import com.codesai.auction_house.business.model.auction.EventProducer;
-import com.codesai.auction_house.business.model.auction.events.DeclareWinnerEvent;
 import com.codesai.auction_house.business.model.generic.Calendar;
 
 public class AuctionService {
@@ -19,14 +19,12 @@ public class AuctionService {
     public void declareAuctionWinner() {
         auctionRepository.retrieveAll().stream()
                 .filter(auction -> auction.isPendingWinnerDeclaration(calendar))
-                .forEach(auction -> {
-                    auction.winnerDeclared();
-                    auctionRepository.save(auction);
-                    eventProducer.produce(new DeclareWinnerEvent(
-                            auction.topBid().get().bidderId.id,
-                            auction.id,
-                            auction.topBid().get().money
-                    ));
-                });
+                .forEach(this::declareWinner);
+    }
+
+    private void declareWinner(Auction auction) {
+        final var declareWinnerEvent = auction.winnerDeclared();
+        auctionRepository.save(auction);
+        eventProducer.produce(declareWinnerEvent);
     }
 }
