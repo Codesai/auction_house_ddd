@@ -196,7 +196,7 @@ definitions:
     required:
       - user_id
     properties:
-      user_id:
+      conqueror_id:
         type: string
         example: "anyUserId"
         description: the user that conquer the auction

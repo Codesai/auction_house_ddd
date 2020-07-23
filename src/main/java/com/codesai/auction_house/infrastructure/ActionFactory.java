@@ -55,7 +55,7 @@ public class ActionFactory {
         return new Calendar() {
             @Override
             public LocalDate yesterday() {
-                return LocalDate.now();
+                return LocalDate.now().minusDays(1);
             }
         };
     }

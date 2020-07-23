@@ -19,6 +19,6 @@ public class InMemoryUserReputationRepository implements UserReputationRepositor
 
     @Override
     public void save(UserReputation userReputation) {
-        users.put(userReputation.anyUserId, userReputation);
+        users.put(userReputation.userId, userReputation);
     }
 }

@@ -16,6 +16,7 @@ public class UserReputationForAuctionWinnerAction implements Action<UserReputati
         var userReputation = userReputationRepository.getById(command.userId);
         userReputation.accountBidWinner(command.winnerBid);
         userReputationRepository.save(userReputation);
+        System.out.println("update user reputation: " + userReputation);
     }
 
     @Override
