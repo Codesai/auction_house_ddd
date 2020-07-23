@@ -11,7 +11,6 @@ public class AuctionService {
     private final Calendar calendar;
 
     public AuctionService(AuctionRepository auctionRepository, EventProducer eventProducer, Calendar calendar) {
-
         this.auctionRepository = auctionRepository;
         this.eventProducer = eventProducer;
         this.calendar = calendar;
@@ -24,7 +23,7 @@ public class AuctionService {
                     auction.winnerDeclared();
                     auctionRepository.save(auction);
                     eventProducer.produce(new DeclareWinnerEvent(
-                            auction.topBid().get().bidderId,
+                            auction.topBid().get().bidderId.id,
                             auction.id,
                             auction.topBid().get().money
                     ));
