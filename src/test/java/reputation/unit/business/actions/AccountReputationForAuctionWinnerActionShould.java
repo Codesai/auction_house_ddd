@@ -26,7 +26,7 @@ public class AccountReputationForAuctionWinnerActionShould {
         accountUserReputation.execute(new UserReputationForAuctionWinnerCommand(ANY_USER_ID, 320));
 
         verify(userReputationRepository).save(captor.capture());
-        assertThat(captor.getValue().reputation).isEqualTo(3);
+        assertThat(captor.getValue().reputation).isEqualTo(4);
     }
 
     private UserReputation aUserWithReputation(int reputation) {
