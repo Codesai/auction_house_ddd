@@ -3,7 +3,6 @@ package auction_house.acceptance;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import io.restassured.RestAssured;
-import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -18,9 +17,6 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class CreateAuctionApiShould extends ApiTest {
-
-    public CreateAuctionApiShould() throws JSONException {
-    }
 
     public static final String ANY_ITEM_NAME = "An Item" + UUID.randomUUID();
     public static final String ANY_DESCRIPTION = "AnyDescription" + UUID.randomUUID();

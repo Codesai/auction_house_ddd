@@ -11,16 +11,20 @@ import java.time.LocalDate;
 import static java.util.Collections.emptyList;
 
 public class JSONParser {
-    static JsonObject createAuctionJsonFrom(String name, String description, double initialBidAmount, double conquerPriceAmount, LocalDate expirationDay, String ownerId) throws JSONException {
-        return new Gson().toJsonTree(new AuctionDTO(
-                name,
-                description,
-                initialBidAmount,
-                conquerPriceAmount,
-                emptyList(),
-                expirationDay.toString(),
-                ownerId
-        )).getAsJsonObject();
+    static JsonObject createAuctionJsonFrom(String name, String description, double initialBidAmount, double conquerPriceAmount, LocalDate expirationDay, String ownerId) {
+        try {
+            return new Gson().toJsonTree(new AuctionDTO(
+                    name,
+                    description,
+                    initialBidAmount,
+                    conquerPriceAmount,
+                    emptyList(),
+                    expirationDay.toString(),
+                    ownerId
+            )).getAsJsonObject();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     static String createBidJsonFrom(String auctionId, double amount, String bidderId) {
