@@ -20,7 +20,7 @@ public class IsolatedBoundedContextFitness {
     }
 
     @Test public void
-    reputation_bounded_context_dont_depende_on_auction_house_bounded_context() {
+    reputation_bounded_context_dont_depends_on_auction_house_bounded_context() {
         var boundedContextIsolatedRule = noClasses().that()
                 .resideInAPackage("..reputation..")
                 .should().accessClassesThat()
