@@ -12,8 +12,8 @@ public class InMemoryEventProducer implements EventProducer {
     @Override
     public void produce(DeclareWinnerEvent declareWinnerEvent) {
         var declareWinnerEventAsJson = asJson(declareWinnerEvent);
-        EventStore.add(declareWinnerEventAsJson);
         System.out.println(String.format("event publish: %s", declareWinnerEventAsJson));
+        EventStore.add(declareWinnerEventAsJson);
     }
 
     private static String asJson(DeclareWinnerEvent declareWinnerEvent) {
