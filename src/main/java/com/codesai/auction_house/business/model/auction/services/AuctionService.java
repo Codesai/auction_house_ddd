@@ -23,8 +23,8 @@ public class AuctionService {
     }
 
     private void declareWinner(Auction auction) {
-        final var declareWinnerEvent = auction.winnerDeclared();
+        final var winnerDeclared = auction.declareWinner();
         auctionRepository.save(auction);
-        eventProducer.produce(declareWinnerEvent);
+        eventProducer.produce(winnerDeclared);
     }
 }

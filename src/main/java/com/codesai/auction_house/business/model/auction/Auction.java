@@ -80,7 +80,7 @@ public class Auction {
         return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
     }
 
-    public DeclareWinnerEvent winnerDeclared() {
+    public DeclareWinnerEvent declareWinner() {
         winnerDeclared = true;
         return new DeclareWinnerEvent(
                 topBid().get().bidderId.id,
